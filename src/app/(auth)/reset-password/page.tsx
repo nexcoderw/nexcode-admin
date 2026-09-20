@@ -15,8 +15,6 @@ import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Reset password',
-  description:
-    'Create a new password for your NEXCODE administrator account.',
 };
 
 const passwordRequirements = [
