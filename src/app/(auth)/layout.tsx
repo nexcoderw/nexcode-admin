@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 
 import styles from './layout.module.css';
 
@@ -26,7 +27,7 @@ export default function AuthLayout({
               className={styles.brandMark}
               aria-hidden="true"
             >
-              N
+              <Image src="/nexcode-icon.svg" alt="" width={40} height={40} />
             </span>
 
             <div className={styles.brandIdentity}>
@@ -78,7 +79,7 @@ export default function AuthLayout({
             className={styles.mobileBrandMark}
             aria-hidden="true"
           >
-            N
+            <Image src="/nexcode-icon.svg" alt="" width={40} height={40} />
           </span>
 
           <div className={styles.brandIdentity}>
