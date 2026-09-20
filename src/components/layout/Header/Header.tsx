@@ -9,6 +9,7 @@ import {
   Settings01Icon,
   UserCircleIcon,
 } from "@hugeicons/core-free-icons";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
@@ -134,7 +135,7 @@ export function Header({
           aria-label="NEXCODE dashboard"
         >
           <span className={styles.brandMark} aria-hidden="true">
-            N
+            <Image src="/nexcode-icon.svg" alt="" width={36} height={36} />
           </span>
 
           <span className={styles.brandName}>NEXCODE</span>
