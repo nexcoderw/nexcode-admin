@@ -6,16 +6,14 @@ import {
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { Button } from '../../../components/ui/Button/Button';
-import { Icon } from '../../../components/ui/Icon/Icon';
-import { Input } from '../../../components/ui/Input/Input';
+import { Button } from '@/components/ui/Button/Button';
+import { Icon } from '@/components/ui/Icon/Icon';
+import { Input } from '@/components/ui/Input/Input';
 
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Forgot password',
-  description:
-    'Request password reset instructions for your NEXCODE administrator account.',
 };
 
 export default function ForgotPasswordPage() {
