@@ -6,7 +6,6 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Sign in",
-  description: "Sign in to the NEXCODE administration portal.",
 };
 
 export default function LoginPage() {
