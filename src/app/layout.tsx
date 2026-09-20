@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     default: "NEXCODE Admin",
     template: "%s | NEXCODE Admin",
   },
-  description: "Administration portal for the NEXCODE platform.",
 };
 
 export default function RootLayout({
