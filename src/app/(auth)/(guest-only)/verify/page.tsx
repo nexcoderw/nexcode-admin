@@ -2,15 +2,13 @@ import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { Icon } from "../../../components/ui/Icon/Icon";
+import { Icon } from "@/components/ui/Icon/Icon";
 
 import styles from "./page.module.css";
 import { VerificationForm } from "@/components/auth/verify/VerificationForm";
 
 export const metadata: Metadata = {
   title: "Verify your identity",
-  description:
-    "Verify your identity to continue to the NEXCODE administration portal.",
 };
 
 export default function VerifyPage() {
