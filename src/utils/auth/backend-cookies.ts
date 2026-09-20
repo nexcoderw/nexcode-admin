@@ -1,10 +1,5 @@
 import "server-only";
 
-interface HeadersWithSetCookie
-    extends Headers {
-    getSetCookie?: () => string[];
-}
-
 export function getSetCookieValue(
     headers: Headers,
     cookieName: string,
@@ -46,11 +41,10 @@ export function getSetCookieValue(
 function getSetCookieHeaders(
     headers: Headers,
 ): string[] {
-    const extendedHeaders =
-        headers as HeadersWithSetCookie;
-
     const values =
-        extendedHeaders.getSetCookie?.();
+        typeof headers.getSetCookie === "function"
+            ? headers.getSetCookie()
+            : undefined;
 
     if (values && values.length > 0) {
         return values;
