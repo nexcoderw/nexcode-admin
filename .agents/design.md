@@ -1095,3 +1095,122 @@ Every screen should favour:
 **clarity, consistency, efficiency, accessibility, and deliberate use of the NEXCODE identity.**
 
 When visual decoration conflicts with administrative usability, usability wins.
+
+## Icon System
+
+NEXCODE Admin uses **Hugeicons exclusively for application interface icons**.
+
+The interface must maintain one consistent icon language across:
+
+* Navigation
+* Buttons
+* Form controls
+* Search
+* Filters
+* Tables
+* Pagination
+* Dropdowns
+* Dialogs
+* Alerts
+* Status indicators
+* Empty states
+* Administrative actions
+
+Do not mix multiple general-purpose icon systems within the application.
+
+### Approved Icon Source
+
+Application UI icons must come from the project's approved **Hugeicons** dependency.
+
+Do not introduce alternative general-purpose icon libraries such as:
+
+* Lucide
+* Heroicons
+* Font Awesome
+* Material Icons
+* Phosphor
+* React Icons
+* Tabler Icons
+* Bootstrap Icons
+* Remix Icons
+
+If an appropriate Hugeicons icon exists, use it instead of manually recreating an equivalent icon.
+
+### Brand Assets
+
+The Hugeicons-only rule applies to **interface icons**, not brand assets.
+
+Assets such as:
+
+* NEXCODE logos
+* Partner logos
+* Company logos
+* Product marks
+* Certification marks
+* Other official brand artwork
+
+may use their official SVG or image assets.
+
+Do not replace official brand artwork with an approximate Hugeicons icon.
+
+### Icon Usage
+
+Icons should support meaning and recognition.
+
+Avoid adding icons purely to decorate every label or piece of text.
+
+Use icons where they improve:
+
+* Navigation recognition
+* Action recognition
+* Status communication
+* Input context
+* Discoverability
+* Information hierarchy
+
+Text should remain present when the meaning of an icon would otherwise be ambiguous.
+
+### Icon Sizes
+
+Use the shared icon-size tokens defined in `src/styles/tokens.css`:
+
+* `--icon-size-sm`
+* `--icon-size-md`
+* `--icon-size-lg`
+* `--icon-size-xl`
+
+Avoid arbitrary icon dimensions unless a component has a legitimate design requirement.
+
+### Icon Colour
+
+Icons should normally inherit the surrounding text or control colour.
+
+The default approach is equivalent to:
+
+```css
+.icon {
+  color: currentColor;
+}
+```
+
+Do not assign arbitrary colours to icons when the component's semantic colour already communicates the correct state.
+
+### Icon-Only Actions
+
+An icon-only interactive control must have an accessible name.
+
+For example, an icon-only button for closing a dialog must expose an accessible label equivalent to:
+
+```text
+Close dialog
+```
+
+Do not rely on the visual icon alone to communicate an action to assistive technology.
+
+### Consistency
+
+Use the same Hugeicons symbol for the same concept throughout the application whenever practical.
+
+For example, avoid using different symbols for the same edit, delete, search, settings, or navigation action across different pages.
+
+Icon consistency is part of the NEXCODE Admin design system.
