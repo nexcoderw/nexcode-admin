@@ -5,29 +5,16 @@
 
   width: calc(100% - (var(--space-4) * 2));
   max-width: var(--content-max-width);
-  margin:
-    var(--space-2)
-    auto
-    0;
+  margin: var(--space-2) auto 0;
 
-  background:
-    color-mix(
-      in srgb,
-      var(--color-surface) 78%,
-      transparent
-    );
+  background: color-mix(in srgb, var(--color-surface) 78%, transparent);
 
   border: var(--border-width) solid
-    color-mix(
-      in srgb,
-      var(--color-border) 65%,
-      transparent
-    );
+    color-mix(in srgb, var(--color-border) 65%, transparent);
 
   border-radius: 1.25rem;
 
-  box-shadow:
-    0 0.5rem 1.75rem rgb(0 0 0 / 16%);
+  box-shadow: 0 0.5rem 1.75rem rgb(0 0 0 / 16%);
 
   backdrop-filter: blur(1.125rem);
   -webkit-backdrop-filter: blur(1.125rem);
@@ -44,9 +31,7 @@
   gap: var(--space-5);
 
   min-height: 4.25rem;
-  padding:
-    var(--space-2)
-    var(--space-3);
+  padding: var(--space-2) var(--space-3);
 }
 
 /* =========================================================
@@ -106,19 +91,10 @@
 
   padding: 0.25rem;
 
-  background:
-    color-mix(
-      in srgb,
-      var(--color-background) 66%,
-      transparent
-    );
+  background: color-mix(in srgb, var(--color-background) 66%, transparent);
 
   border: var(--border-width) solid
-    color-mix(
-      in srgb,
-      var(--color-border-subtle) 72%,
-      transparent
-    );
+    color-mix(in srgb, var(--color-border-subtle) 72%, transparent);
 
   border-radius: var(--radius-round);
 
@@ -137,9 +113,7 @@
   gap: 0.4375rem;
 
   min-height: 2.5rem;
-  padding:
-    0
-    var(--space-4);
+  padding: 0 var(--space-4);
 
   color: var(--color-text-muted);
   background: transparent;
@@ -163,12 +137,7 @@
 
 .navigationItem:hover {
   color: var(--color-text-primary);
-  background:
-    color-mix(
-      in srgb,
-      var(--color-surface-hover) 80%,
-      transparent
-    );
+  background: color-mix(in srgb, var(--color-surface-hover) 80%, transparent);
 
   transform: translateY(-0.0625rem);
 }
@@ -196,8 +165,7 @@
 .chevron {
   margin-left: 0.0625rem;
 
-  transition:
-    transform var(--transition-fast);
+  transition: transform var(--transition-fast);
 }
 
 .chevronOpen {
@@ -220,19 +188,14 @@
   width: 14rem;
   padding: var(--space-2);
 
-  background:
-    color-mix(
-      in srgb,
-      var(--color-surface-elevated) 84%,
-      transparent
-    );
+  background: color-mix(
+    in srgb,
+    var(--color-surface-elevated) 84%,
+    transparent
+  );
 
   border: var(--border-width) solid
-    color-mix(
-      in srgb,
-      var(--color-border) 70%,
-      transparent
-    );
+    color-mix(in srgb, var(--color-border) 70%, transparent);
 
   border-radius: var(--radius-lg);
 
@@ -245,10 +208,7 @@
 
   transform-origin: top center;
 
-  animation:
-    dropdown-enter
-    160ms
-    var(--ease-out);
+  animation: dropdown-enter 160ms var(--ease-out);
 }
 
 .navigationMenuItem {
@@ -257,9 +217,7 @@
   gap: var(--space-3);
 
   min-height: 2.75rem;
-  padding:
-    var(--space-2)
-    var(--space-3);
+  padding: var(--space-2) var(--space-3);
 
   color: var(--color-text-secondary);
 
@@ -276,12 +234,7 @@
 
 .navigationMenuItem:hover {
   color: var(--color-text-primary);
-  background:
-    color-mix(
-      in srgb,
-      var(--color-surface-hover) 86%,
-      transparent
-    );
+  background: color-mix(in srgb, var(--color-surface-hover) 86%, transparent);
 
   transform: translateX(0.125rem);
 }
@@ -342,8 +295,7 @@
   color: var(--color-text-on-primary);
   background: var(--color-primary);
 
-  border: 0.125rem solid
-    var(--color-surface);
+  border: 0.125rem solid var(--color-surface);
   border-radius: var(--radius-round);
 
   font-size: 0.5625rem;
@@ -377,9 +329,7 @@
 .avatarButton:focus-visible {
   outline: none;
 
-  box-shadow:
-    0 0 0 var(--focus-ring-width)
-    var(--color-focus-ring);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--color-focus-ring);
 }
 
 .avatar {
@@ -393,8 +343,7 @@
   color: var(--color-background);
   background: var(--color-text-primary);
 
-  border: var(--border-width) solid
-    var(--color-border-strong);
+  border: var(--border-width) solid var(--color-border-strong);
   border-radius: var(--radius-round);
 
   font-size: 0.6875rem;
@@ -416,19 +365,14 @@
   width: 15rem;
   padding: var(--space-2);
 
-  background:
-    color-mix(
-      in srgb,
-      var(--color-surface-elevated) 84%,
-      transparent
-    );
+  background: color-mix(
+    in srgb,
+    var(--color-surface-elevated) 84%,
+    transparent
+  );
 
   border: var(--border-width) solid
-    color-mix(
-      in srgb,
-      var(--color-border) 70%,
-      transparent
-    );
+    color-mix(in srgb, var(--color-border) 70%, transparent);
 
   border-radius: var(--radius-lg);
 
@@ -439,10 +383,7 @@
 
   transform-origin: top right;
 
-  animation:
-    account-menu-enter
-    160ms
-    var(--ease-out);
+  animation: account-menu-enter 160ms var(--ease-out);
 }
 
 .accountIdentity {
@@ -490,9 +431,7 @@
 
   width: 100%;
   min-height: 2.75rem;
-  padding:
-    var(--space-2)
-    var(--space-3);
+  padding: var(--space-2) var(--space-3);
 
   color: var(--color-text-secondary);
   background: transparent;
@@ -549,19 +488,13 @@
   from {
     opacity: 0;
 
-    transform:
-      translateX(-50%)
-      translateY(-0.375rem)
-      scale(0.98);
+    transform: translateX(-50%) translateY(-0.375rem) scale(0.98);
   }
 
   to {
     opacity: 1;
 
-    transform:
-      translateX(-50%)
-      translateY(0)
-      scale(1);
+    transform: translateX(-50%) translateY(0) scale(1);
   }
 }
 
@@ -569,17 +502,13 @@
   from {
     opacity: 0;
 
-    transform:
-      translateY(-0.375rem)
-      scale(0.98);
+    transform: translateY(-0.375rem) scale(0.98);
   }
 
   to {
     opacity: 1;
 
-    transform:
-      translateY(0)
-      scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -587,17 +516,13 @@
   from {
     opacity: 0;
 
-    transform:
-      translateY(-0.5rem)
-      scale(0.99);
+    transform: translateY(-0.5rem) scale(0.99);
   }
 
   to {
     opacity: 1;
 
-    transform:
-      translateY(0)
-      scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -624,45 +549,25 @@
 
   .mobileNavigation {
     display: grid;
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-5);
 
-    margin:
-      0
-      var(--space-2)
-      var(--space-2);
+    margin: 0 var(--space-2) var(--space-2);
     padding: var(--space-5);
 
-    background:
-      color-mix(
-        in srgb,
-        var(--color-background) 72%,
-        transparent
-      );
+    background: color-mix(in srgb, var(--color-background) 72%, transparent);
 
     border-top: var(--border-width) solid
-      color-mix(
-        in srgb,
-        var(--color-border-subtle) 70%,
-        transparent
-      );
+      color-mix(in srgb, var(--color-border-subtle) 70%, transparent);
 
-    border-radius:
-      0
-      0
-      1rem
-      1rem;
+    border-radius: 0 0 1rem 1rem;
 
     backdrop-filter: blur(1.125rem);
     -webkit-backdrop-filter: blur(1.125rem);
 
     transform-origin: top center;
 
-    animation:
-      mobile-navigation-enter
-      180ms
-      var(--ease-out);
+    animation: mobile-navigation-enter 180ms var(--ease-out);
   }
 
   .mobileGroup {
@@ -685,12 +590,7 @@
     color: var(--color-text-disabled);
 
     font-family:
-      ui-monospace,
-      SFMono-Regular,
-      Menlo,
-      Monaco,
-      Consolas,
-      monospace;
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.5625rem;
   }
 
@@ -715,14 +615,11 @@
     gap: var(--space-3);
 
     min-height: 2.875rem;
-    padding:
-      var(--space-2)
-      var(--space-3);
+    padding: var(--space-2) var(--space-3);
 
     color: var(--color-text-secondary);
 
-    border: var(--border-width) solid
-      transparent;
+    border: var(--border-width) solid transparent;
     border-radius: var(--radius-md);
 
     font-size: var(--font-size-sm);
@@ -767,9 +664,7 @@
   .header {
     top: var(--space-2);
 
-    width: calc(
-      100% - (var(--space-3) * 2)
-    );
+    width: calc(100% - (var(--space-3) * 2));
   }
 
   .primaryRow {
