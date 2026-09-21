@@ -63,6 +63,8 @@ export function Header({
     setMobileNavigationOpen,
   ] = useState(false);
 
+  const [scrolled, setScrolled] = useState(false);
+
   const headerRef = useRef<HTMLElement>(null);
   const mobileNavigationId = useId();
 
@@ -130,11 +132,39 @@ export function Header({
     setMobileNavigationOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    const updateScrollState = () => {
+      setScrolled(window.scrollY > 12);
+    };
+
+    updateScrollState();
+
+    window.addEventListener(
+      'scroll',
+      updateScrollState,
+      {
+        passive: true,
+      },
+    );
+
+    return () => {
+      window.removeEventListener(
+        'scroll',
+        updateScrollState,
+      );
+    };
+  }, []);
+
   return (
     <header
-      ref={headerRef}
-      className={styles.header}
-    >
+  ref={headerRef}
+  className={[
+    styles.header,
+    scrolled ? styles.scrolled : '',
+  ]
+    .filter(Boolean)
+    .join(' ')}
+>
       <div className={styles.primaryRow}>
         <Link
           href={ROUTES.admin.dashboard}
