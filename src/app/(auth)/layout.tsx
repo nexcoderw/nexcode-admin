@@ -1,127 +1,257 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
-import styles from "./layout.module.css";
+import styles from './layout.module.css';
 
 interface AuthLayoutProps {
   children: ReactNode;
 }
 
-export default function AuthLayout({ children }: AuthLayoutProps) {
+export default function AuthLayout({
+  children,
+}: AuthLayoutProps) {
   return (
     <main className={styles.layout}>
-      {" "}
-      <section className={styles.brandPanel} aria-labelledby="auth-brand-title">
-        {" "}
-        <div className={styles.brandContent}>
-          {" "}
+      <section
+        className={styles.brandPanel}
+        aria-labelledby="auth-brand-title"
+      >
+        <div
+          className={styles.grid}
+          aria-hidden="true"
+        />
+
+        <header className={styles.brandHeader}>
           <div className={styles.brand}>
-            {" "}
-            <span className={styles.brandMark} aria-hidden="true">
-              N{" "}
+            <span
+              className={styles.brandMark}
+              aria-hidden="true"
+            >
+              N
             </span>
+
             <div className={styles.brandIdentity}>
-              <span className={styles.brandName}>NEXCODE</span>
+              <span className={styles.brandName}>
+                NEXCODE
+              </span>
 
-              <span className={styles.brandProduct}>Administration</span>
+              <span className={styles.brandProduct}>
+                Administration
+              </span>
             </div>
           </div>
-          <div className={styles.message}>
-            <p className={styles.eyebrow}>Administration portal</p>
 
-            <h1 id="auth-brand-title" className={styles.heading}>
-              Control your platform from one secure workspace.
-            </h1>
+          <div className={styles.environment}>
+            <span
+              className={styles.environmentDot}
+              aria-hidden="true"
+            />
 
-            <p className={styles.description}>
-              Manage NEXCODE operations, users, content, activity, and platform
-              configuration through the administrative workspace.
-            </p>
+            <span>Secure workspace</span>
           </div>
-        </div>
-        <div className={styles.visual} aria-hidden="true">
-          <div className={styles.codeWindow}>
-            <div className={styles.windowHeader}>
-              <span />
-              <span />
-              <span />
+        </header>
 
-              <span className={styles.windowLabel}>nexcode.admin</span>
+        <div className={styles.brandBody}>
+          <div className={styles.introduction}>
+            <div className={styles.sectionIndex}>
+              <span>01</span>
+
+              <span
+                className={styles.indexLine}
+                aria-hidden="true"
+              />
             </div>
 
-            <div className={styles.code}>
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>01</span>
+            <div className={styles.copy}>
+              <p className={styles.eyebrow}>
+                NEXCODE control centre
+              </p>
+
+              <h1
+                id="auth-brand-title"
+                className={styles.heading}
+              >
+                One secure workspace.
+                <span> Complete operational control.</span>
+              </h1>
+
+              <p className={styles.description}>
+                Access the internal administration environment
+                for managing platform operations, users,
+                content, configuration, and activity.
+              </p>
+            </div>
+          </div>
+
+          <div
+            className={styles.console}
+            aria-hidden="true"
+          >
+            <div className={styles.consoleHeader}>
+              <div className={styles.consoleControls}>
+                <span />
+                <span />
+                <span />
+              </div>
+
+              <span className={styles.consolePath}>
+                admin@nexcode:~
+              </span>
+
+              <span className={styles.consoleState}>
+                online
+              </span>
+            </div>
+
+            <div className={styles.consoleBody}>
+              <div className={styles.command}>
+                <span className={styles.prompt}>
+                  $
+                </span>
 
                 <span>
-                  <strong>const</strong> workspace = {"{"}
+                  initialise --workspace admin
                 </span>
               </div>
 
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>02</span>
+              <div className={styles.consoleOutput}>
+                <span className={styles.outputLabel}>
+                  AUTH
+                </span>
 
-                <span className={styles.indent}>
-                  secure: <em>true</em>,
+                <span>Administrator access required</span>
+              </div>
+
+              <div className={styles.consoleOutput}>
+                <span className={styles.outputLabel}>
+                  MODE
+                </span>
+
+                <span>Protected operational environment</span>
+              </div>
+
+              <div className={styles.consoleOutput}>
+                <span className={styles.outputLabel}>
+                  STATE
+                </span>
+
+                <span className={styles.ready}>
+                  Ready for authentication
                 </span>
               </div>
 
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>03</span>
-
-                <span className={styles.indent}>
-                  access: <em>&apos;admin&apos;</em>,
+              <div className={styles.command}>
+                <span className={styles.prompt}>
+                  $
                 </span>
-              </div>
 
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>04</span>
-
-                <span className={styles.indent}>
-                  status: <em>&apos;ready&apos;</em>
+                <span className={styles.cursor}>
+                  _
                 </span>
-              </div>
-
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>05</span>
-
-                <span>{"};"}</span>
-              </div>
-
-              <div className={styles.codeLine}>
-                <span className={styles.lineNumber}>06</span>
-
-                <span className={styles.cursor}>_</span>
               </div>
             </div>
           </div>
         </div>
-        <p className={styles.brandFooter}>NEXCODE administrative access</p>
-      </section>
-      <section className={styles.formPanel}>
-        <div className={styles.mobileBrand}>
-          <span className={styles.mobileBrandMark} aria-hidden="true">
-            N
+
+        <footer className={styles.brandFooter}>
+          <div className={styles.systemInfo}>
+            <div>
+              <span className={styles.systemLabel}>
+                System
+              </span>
+
+              <span className={styles.systemValue}>
+                Admin Portal
+              </span>
+            </div>
+
+            <div>
+              <span className={styles.systemLabel}>
+                Access
+              </span>
+
+              <span className={styles.systemValue}>
+                Restricted
+              </span>
+            </div>
+
+            <div>
+              <span className={styles.systemLabel}>
+                Status
+              </span>
+
+              <span className={styles.systemValue}>
+                Operational
+              </span>
+            </div>
+          </div>
+
+          <span className={styles.version}>
+            NEXCODE / ADMIN
           </span>
+        </footer>
+      </section>
 
-          <div>
-            <span className={styles.mobileBrandName}>NEXCODE</span>
+      <section className={styles.authPanel}>
+        <header className={styles.mobileHeader}>
+          <div className={styles.brand}>
+            <span
+              className={styles.mobileBrandMark}
+              aria-hidden="true"
+            >
+              N
+            </span>
 
-            <span className={styles.mobileBrandProduct}>Admin</span>
+            <div className={styles.brandIdentity}>
+              <span className={styles.brandName}>
+                NEXCODE
+              </span>
+
+              <span className={styles.brandProduct}>
+                Administration
+              </span>
+            </div>
+          </div>
+
+          <span
+            className={styles.mobileStatus}
+            aria-label="System operational"
+          >
+            <span aria-hidden="true" />
+            Online
+          </span>
+        </header>
+
+        <div className={styles.authContent}>
+          <div className={styles.authContainer}>
+            <div
+              className={styles.authAccent}
+              aria-hidden="true"
+            >
+              <span>AUTH</span>
+              <span>01</span>
+            </div>
+
+            <div className={styles.formContainer}>
+              {children}
+            </div>
           </div>
         </div>
 
-        <div className={styles.formContainer}>{children}</div>
-
-        <footer className={styles.formFooter}>
-          <span>© {new Date().getFullYear()} NEXCODE</span>
-
-          <span
-            className={styles.secureAccess}
-            aria-label="Secure administration access"
-          >
-            <span className={styles.statusDot} aria-hidden="true" />
-            Secure access
+        <footer className={styles.authFooter}>
+          <span>
+            © {new Date().getFullYear()} NEXCODE
           </span>
+
+          <div className={styles.authFooterStatus}>
+            <span
+              className={styles.statusDot}
+              aria-hidden="true"
+            />
+
+            <span>
+              Protected administrator access
+            </span>
+          </div>
         </footer>
       </section>
     </main>
