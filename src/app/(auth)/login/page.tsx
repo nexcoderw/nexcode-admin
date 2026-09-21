@@ -1,4 +1,8 @@
-import { LockPasswordIcon, Mail01Icon } from "@hugeicons/core-free-icons";
+import {
+  ArrowRight01Icon,
+  LockPasswordIcon,
+  Mail01Icon,
+} from "@hugeicons/core-free-icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -61,17 +65,15 @@ export default function LoginPage() {
         </div>
 
         <div className={styles.submit}>
-          <Button type="submit" size="lg">
+          <Button
+            type="submit"
+            size="lg"
+            rightIcon={<Icon icon={ArrowRight01Icon} size={18} />}
+          >
             Sign in
           </Button>
         </div>
       </form>
-
-      <div className={styles.accessNote}>
-        <span className={styles.accessLine} aria-hidden="true" />
-
-        <p>Authorised NEXCODE administrators only</p>
-      </div>
     </div>
   );
 }
