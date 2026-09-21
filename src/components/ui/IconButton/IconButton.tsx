@@ -1,5 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
+import { LoadingMark } from "../LoadingIndicator/LoadingIndicator";
+
 import styles from "./IconButton.module.css";
 
 export type IconButtonVariant = "default" | "ghost" | "primary" | "danger";
@@ -10,40 +12,10 @@ export interface IconButtonProps extends Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   "children" | "aria-label"
 > {
-  /**
-
-* Hugeicons icon rendered inside the button.
-  */
   icon: ReactNode;
-
-  /**
-
-* Accessible name describing the action.
-*
-* Required because IconButton has no visible text label.
-  */
   "aria-label": string;
-
-  /**
-
-* Visual treatment of the button.
-*
-* @default "default"
-  */
   variant?: IconButtonVariant;
-
-  /**
-
-* Controls the dimensions and icon size.
-*
-* @default "md"
-  */
   size?: IconButtonSize;
-
-  /**
-
-* Displays a loading state and prevents interaction.
-  */
   isLoading?: boolean;
 }
 
@@ -77,16 +49,13 @@ export function IconButton({
       aria-label={ariaLabel}
       aria-busy={isLoading || undefined}
     >
-      <span
-        className={[styles.icon, isLoading ? styles.hiddenIcon : ""]
-          .filter(Boolean)
-          .join(" ")}
-        aria-hidden="true"
-      >
-        {icon}{" "}
-      </span>
-
-      {isLoading && <span className={styles.spinner} aria-hidden="true" />}
+      {isLoading ? (
+        <LoadingMark size="sm" />
+      ) : (
+        <span className={styles.icon} aria-hidden="true">
+          {icon}{" "}
+        </span>
+      )}{" "}
     </button>
   );
 }
