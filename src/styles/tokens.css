@@ -1,0 +1,410 @@
+/*
+
+* NEXCODE Admin Design Tokens
+*
+* Central source of truth for reusable visual values.
+*
+* Visual direction:
+* .agents/design.md
+*
+* Styling implementation:
+* .agents/styling.md
+*
+* Components should prefer semantic tokens rather than raw values.
+  */
+
+:root {
+  /* =========================================================
+
+* Brand
+* ======================================================= */
+
+  --color-brand-primary: #d0ff71;
+  --color-brand-background: #0d0d0d;
+  --color-brand-dark: #100f0f;
+  --color-brand-surface: #1e1d1e;
+
+  /* =========================================================
+
+* Primitive neutrals
+*
+* These exist to construct semantic tokens below.
+* Components should normally use semantic tokens instead.
+* ======================================================= */
+
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #e1e1e1;
+  --color-neutral-300: #a4a4a4;
+  --color-neutral-500: #4d4949;
+  --color-neutral-600: #393939;
+  --color-neutral-700: #212121;
+  --color-neutral-750: #1e1d1e;
+  --color-neutral-800: #1d1d1d;
+  --color-neutral-900: #111111;
+  --color-neutral-950: #0d0d0d;
+
+  /* =========================================================
+
+* Primary
+* ======================================================= */
+
+  --color-primary: var(--color-brand-primary);
+  --color-primary-hover: #c4f263;
+  --color-primary-active: #b8e655;
+  --color-primary-subtle: rgba(208, 255, 113, 0.12);
+  --color-primary-muted: rgba(208, 255, 113, 0.2);
+  --color-primary-border: rgba(208, 255, 113, 0.4);
+
+  /*
+
+* The primary green is bright, so dark text provides stronger
+* contrast than white text on primary actions.
+  */
+  --color-text-on-primary: #0d0d0d;
+
+  /* =========================================================
+
+* Application surfaces
+* ======================================================= */
+
+  --color-background: var(--color-brand-background);
+
+  --color-surface-sidebar: var(--color-brand-dark);
+  --color-surface: var(--color-brand-surface);
+  --color-surface-secondary: var(--color-neutral-800);
+  --color-surface-tertiary: var(--color-neutral-700);
+  --color-surface-elevated: #242424;
+  --color-surface-hover: #292929;
+  --color-surface-active: #303030;
+
+  --color-surface-disabled: rgba(255, 255, 255, 0.06);
+  --color-surface-overlay: rgba(0, 0, 0, 0.68);
+
+  /* =========================================================
+
+* Text
+* ======================================================= */
+
+  --color-text-primary: var(--color-neutral-0);
+  --color-text-secondary: var(--color-neutral-50);
+  --color-text-muted: var(--color-neutral-300);
+  --color-text-disabled: rgba(255, 255, 255, 0.38);
+  --color-text-inverse: var(--color-neutral-950);
+
+  /* =========================================================
+
+* Borders
+* ======================================================= */
+
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-border-strong: rgba(255, 255, 255, 0.2);
+
+  /* =========================================================
+
+* Focus
+* ======================================================= */
+
+  --color-focus: var(--color-primary);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
+  /* =========================================================
+
+* Semantic colours
+*
+* These colours communicate application state and must not
+* be replaced with the brand green simply for consistency.
+* ======================================================= */
+
+  --color-success: #75d99a;
+  --color-success-hover: #65ca8a;
+  --color-success-subtle: rgba(117, 217, 154, 0.12);
+  --color-success-border: rgba(117, 217, 154, 0.35);
+
+  --color-warning: #f4c95d;
+  --color-warning-hover: #e6b94e;
+  --color-warning-subtle: rgba(244, 201, 93, 0.12);
+  --color-warning-border: rgba(244, 201, 93, 0.35);
+
+  --color-error: #ff7373;
+  --color-error-hover: #ed6262;
+  --color-error-subtle: rgba(255, 115, 115, 0.12);
+  --color-error-border: rgba(255, 115, 115, 0.35);
+
+  --color-info: #75bfff;
+  --color-info-hover: #63afea;
+  --color-info-subtle: rgba(117, 191, 255, 0.12);
+  --color-info-border: rgba(117, 191, 255, 0.35);
+
+  /* =========================================================
+
+* Typography — font families
+*
+* The --font-* variables are provided by next/font from the
+* root layout.
+* ======================================================= */
+
+  --font-family-primary:
+    var(--font-outfit), "Outfit", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+
+  --font-family-display: var(--font-six-caps), "Six Caps", Impact, sans-serif;
+
+  --font-family-decorative: var(--font-sacramento), "Sacramento", cursive;
+
+  --font-family-monospace:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  /* =========================================================
+
+* Typography — font weights
+* ======================================================= */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* =========================================================
+
+* Typography — font sizes
+*
+* 1rem = browser/user default font size.
+* ======================================================= */
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+
+  /* =========================================================
+
+* Typography — line heights
+* ======================================================= */
+
+  --line-height-tight: 1.2;
+  --line-height-snug: 1.35;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.65;
+
+  /* =========================================================
+
+* Typography — letter spacing
+* ======================================================= */
+
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.04em;
+
+  /* =========================================================
+
+* Spacing
+*
+* Base scale follows a 4px rhythm.
+* ======================================================= */
+
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /*
+
+* Semantic spacing aliases.
+  */
+  --space-xs: var(--space-1);
+  --space-sm: var(--space-2);
+  --space-md: var(--space-4);
+  --space-lg: var(--space-6);
+  --space-xl: var(--space-8);
+  --space-2xl: var(--space-12);
+  --space-section: var(--space-12);
+
+  /* =========================================================
+
+* Border radius
+* ======================================================= */
+
+  --radius-none: 0;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-round: 9999px;
+
+  /* =========================================================
+
+* Border widths
+* ======================================================= */
+
+  --border-width: 1px;
+  --border-width-strong: 2px;
+
+  /* =========================================================
+
+* Shadows
+*
+* Keep elevation restrained in the dark interface.
+* ======================================================= */
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.22);
+
+  --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.32);
+
+  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.42);
+
+  /* =========================================================
+
+* Controls
+* ======================================================= */
+
+  --control-height-sm: 2rem;
+  --control-height-md: 2.5rem;
+  --control-height-lg: 3rem;
+
+  --control-padding-inline-sm: var(--space-3);
+  --control-padding-inline-md: var(--space-4);
+  --control-padding-inline-lg: var(--space-5);
+
+  /* =========================================================
+
+* Icons
+* ======================================================= */
+
+  --icon-size-sm: 1rem;
+  --icon-size-md: 1.25rem;
+  --icon-size-lg: 1.5rem;
+  --icon-size-xl: 2rem;
+
+  /* =========================================================
+
+* Layout
+* ======================================================= */
+
+  --sidebar-width: 17rem;
+  --sidebar-width-collapsed: 4.5rem;
+
+  --header-height: 4rem;
+
+  --content-max-width: 100rem;
+
+  --page-padding-inline: var(--space-8);
+  --page-padding-block: var(--space-8);
+
+  /* =========================================================
+
+* Transitions
+* ======================================================= */
+
+  --duration-fast: 120ms;
+  --duration-normal: 180ms;
+  --duration-slow: 280ms;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+  --transition-fast: var(--duration-fast) var(--ease-standard);
+  --transition-normal: var(--duration-normal) var(--ease-standard);
+  --transition-slow: var(--duration-slow) var(--ease-emphasized);
+
+  /* =========================================================
+
+* Z-index
+*
+* Do not introduce arbitrary z-index values in components.
+* ======================================================= */
+
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 100;
+  --z-dropdown: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+
+  /* =========================================================
+
+* Opacity
+* ======================================================= */
+
+  --opacity-muted: 0.72;
+  --opacity-disabled: 0.48;
+
+  /* =========================================================
+
+* Common component dimensions
+* ======================================================= */
+
+  --avatar-size-sm: 2rem;
+  --avatar-size-md: 2.5rem;
+  --avatar-size-lg: 3rem;
+
+  --table-row-height: 3.5rem;
+
+  /* =========================================================
+
+* Content
+* ======================================================= */
+
+  --content-width-sm: 30rem;
+  --content-width-md: 42rem;
+  --content-width-lg: 64rem;
+}
+
+/* =========================================================
+
+* Responsive token adjustments
+*
+* Component-specific responsive behaviour should remain
+* inside the relevant CSS Module.
+* ======================================================= */
+
+@media (max-width: 1024px) {
+  :root {
+    --page-padding-inline: var(--space-6);
+    --page-padding-block: var(--space-6);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --page-padding-inline: var(--space-4);
+    --page-padding-block: var(--space-5);
+    --space-section: var(--space-8);
+  }
+}
+
+/* =========================================================
+
+* Reduced motion
+*
+* Components must still provide their own reduced-motion
+* handling when an animation requires more than duration
+* reduction.
+* ======================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+  }
+}
