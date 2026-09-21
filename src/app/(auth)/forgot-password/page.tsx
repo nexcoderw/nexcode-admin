@@ -1,71 +1,89 @@
-import { ArrowLeft01Icon, Mail01Icon } from "@hugeicons/core-free-icons";
-import type { Metadata } from "next";
-import Link from "next/link";
+import {
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+  Mail01Icon,
+} from '@hugeicons/core-free-icons';
+import type { Metadata } from 'next';
+import Link from 'next/link';
 
-import { Button } from "../../../components/ui/Button/Button";
-import { Icon } from "../../../components/ui/Icon/Icon";
-import { Input } from "../../../components/ui/Input/Input";
+import { Button } from '../../../components/ui/Button/Button';
+import { Icon } from '../../../components/ui/Icon/Icon';
+import { Input } from '../../../components/ui/Input/Input';
 
-import styles from "./page.module.css";
+import styles from './page.module.css';
 
 export const metadata: Metadata = {
-  title: "Forgot password",
+  title: 'Forgot password',
   description:
-    "Request a password reset for your NEXCODE administrator account.",
+    'Request password reset instructions for your NEXCODE administrator account.',
 };
 
 export default function ForgotPasswordPage() {
   return (
     <div className={styles.page}>
-      {" "}
-      <Link href="/login" className={styles.backLink}>
-        {" "}
-        <Icon icon={ArrowLeft01Icon} />
+      <Link
+        href="/login"
+        className={styles.backLink}
+      >
+        <Icon
+          icon={ArrowLeft01Icon}
+          size={16}
+        />
+
         <span>Back to sign in</span>
       </Link>
+
       <header className={styles.header}>
-        <div className={styles.iconContainer} aria-hidden="true">
-          <Icon icon={Mail01Icon} size={24} />
-        </div>
+        <span className={styles.sectionLabel}>
+          Password recovery
+        </span>
 
-        <div className={styles.heading}>
-          <p className={styles.eyebrow}>Account recovery</p>
+        <h2 className={styles.title}>
+          Reset your password
+        </h2>
 
-          <h2 className={styles.title}>Forgot your password?</h2>
-
-          <p className={styles.description}>
-            Enter the email address associated with your administrator account.
-            If an eligible account exists, password reset instructions will be
-            sent to that address.
-          </p>
-        </div>
+        <p className={styles.description}>
+          Enter the email address associated with your
+          administrator account and we&apos;ll send you
+          instructions to reset your password.
+        </p>
       </header>
-      <form className={styles.form} action="#">
+
+      <form
+        className={styles.form}
+        action="#"
+      >
         <Input
           type="email"
           name="email"
           label="Email address"
-          placeholder="admin@example.com"
+          placeholder="Enter your email address"
           autoComplete="email"
           inputMode="email"
-          leftIcon={<Icon icon={Mail01Icon} />}
+          leftIcon={
+            <Icon
+              icon={Mail01Icon}
+              size={18}
+            />
+          }
           required
         />
 
-        <Button type="submit" size="lg" fullWidth>
-          Send reset instructions
-        </Button>
+        <div className={styles.submit}>
+          <Button
+            type="submit"
+            size="lg"
+            rightIcon={
+              <Icon
+                icon={ArrowRight01Icon}
+                size={18}
+              />
+            }
+          >
+            Send instructions
+          </Button>
+        </div>
       </form>
-      <div className={styles.notice}>
-        <span className={styles.noticeMark} aria-hidden="true">
-          i
-        </span>
-
-        <p>
-          For security, password recovery does not confirm whether an email
-          address is registered.
-        </p>
-      </div>
     </div>
   );
 }
