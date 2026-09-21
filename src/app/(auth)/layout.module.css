@@ -1,0 +1,492 @@
+.layout {
+  display: grid;
+  grid-template-columns:
+    minmax(24rem, 0.9fr)
+    minmax(30rem, 1.1fr);
+
+  width: 100%;
+  min-height: 100dvh;
+
+  color: var(--color-text-primary);
+  background: var(--color-background);
+}
+
+/* =========================================================
+
+* Brand panel
+* ======================================================= */
+
+.brandPanel {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-width: 0;
+  min-height: 100dvh;
+  padding: clamp(var(--space-6), 5vw, var(--space-10));
+
+  overflow: hidden;
+
+  background: var(--color-brand-dark);
+
+  border-right: var(--border-width) solid var(--color-border-subtle);
+}
+
+/*
+
+* Restrained technical grid rather than a decorative
+* multicolour gradient.
+  */
+.brandPanel::before {
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(rgb(208 255 113 / 4%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(208 255 113 / 4%) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+
+  content: "";
+
+  opacity: 0.5;
+
+  pointer-events: none;
+}
+
+.brandPanel::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 0.1875rem;
+  height: 100%;
+
+  background: var(--color-primary);
+
+  content: "";
+
+  opacity: 0.85;
+}
+
+.brandContent,
+.visual,
+.brandFooter {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+
+* Brand
+* ======================================================= */
+
+.brandContent {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(var(--space-10), 10vh, 7rem);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.brandMark,
+.mobileBrandMark {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+
+  width: 2.5rem;
+  height: 2.5rem;
+
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+
+  border-radius: var(--radius-md);
+
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+.brandIdentity {
+  display: flex;
+  flex-direction: column;
+}
+
+.brandName,
+.mobileBrandName {
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.1;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.brandProduct,
+.mobileBrandProduct {
+  margin-top: 0.125rem;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.1;
+}
+
+/* =========================================================
+
+* Message
+* ======================================================= */
+
+.message {
+  max-width: 35rem;
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-3);
+
+  color: var(--color-primary);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.heading {
+  max-width: 34rem;
+  margin: 0;
+
+  color: var(--color-text-primary);
+
+  font-size: clamp(var(--font-size-2xl), 3.25vw, var(--font-size-4xl));
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.08;
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.description {
+  max-width: 32rem;
+  margin: var(--space-5) 0 0;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-relaxed);
+}
+
+/* =========================================================
+
+* Technical visual
+* ======================================================= */
+
+.visual {
+  width: 100%;
+  max-width: 32rem;
+  margin-block: var(--space-8);
+}
+
+.codeWindow {
+  overflow: hidden;
+
+  background: rgb(13 13 13 / 76%);
+
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-lg);
+}
+
+.windowHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  min-height: 2.5rem;
+  padding-inline: var(--space-4);
+
+  background: var(--color-surface-secondary);
+
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+}
+
+.windowHeader > span:not(.windowLabel) {
+  width: 0.4375rem;
+  height: 0.4375rem;
+
+  background: var(--color-text-disabled);
+
+  border-radius: var(--radius-round);
+}
+
+.windowHeader > span:first-child {
+  background: var(--color-primary);
+}
+
+.windowLabel {
+  margin-left: auto;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.code {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  padding: var(--space-5);
+
+  color: var(--color-text-secondary);
+
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.codeLine {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr;
+  gap: var(--space-3);
+}
+
+.lineNumber {
+  color: var(--color-text-disabled);
+
+  user-select: none;
+}
+
+.code strong {
+  color: var(--color-primary);
+
+  font-weight: var(--font-weight-medium);
+}
+
+.code em {
+  color: var(--color-info);
+
+  font-style: normal;
+}
+
+.indent {
+  padding-left: var(--space-4);
+}
+
+.cursor {
+  display: inline-block;
+
+  width: fit-content;
+
+  color: var(--color-primary);
+
+  animation: auth-cursor 900ms steps(1, end) infinite;
+}
+
+/* =========================================================
+
+* Brand footer
+* ======================================================= */
+
+.brandFooter {
+  margin: 0;
+
+  color: var(--color-text-disabled);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+/* =========================================================
+
+* Form panel
+* ======================================================= */
+
+.formPanel {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  min-height: 100dvh;
+
+  background: var(--color-background);
+}
+
+.formContainer {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  padding: clamp(var(--space-6), 6vw, var(--space-10)) var(--space-6);
+}
+
+.formContainer > * {
+  width: 100%;
+  max-width: 28rem;
+}
+
+/* =========================================================
+
+* Mobile brand
+* ======================================================= */
+
+.mobileBrand {
+  display: none;
+  align-items: center;
+  gap: var(--space-3);
+
+  padding: var(--space-5);
+
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+}
+
+.mobileBrandMark {
+  width: 2rem;
+  height: 2rem;
+
+  font-size: var(--font-size-md);
+}
+
+.mobileBrand > div {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================
+
+* Form footer
+* ======================================================= */
+
+.formFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+
+  width: 100%;
+  padding: var(--space-5) var(--space-6);
+
+  color: var(--color-text-disabled);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.secureAccess {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.statusDot {
+  width: 0.375rem;
+  height: 0.375rem;
+
+  background: var(--color-success);
+
+  border-radius: var(--radius-round);
+
+  box-shadow: 0 0 0 0.1875rem var(--color-success-subtle);
+}
+
+/* =========================================================
+
+* Animation
+* ======================================================= */
+
+@keyframes auth-cursor {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+
+* Responsive
+* ======================================================= */
+
+@media (max-width: 64rem) {
+  .layout {
+    grid-template-columns:
+      minmax(20rem, 0.8fr)
+      minmax(26rem, 1.2fr);
+  }
+
+  .visual {
+    display: none;
+  }
+
+  .brandContent {
+    gap: var(--space-10);
+  }
+}
+
+@media (max-width: 48rem) {
+  .layout {
+    display: block;
+  }
+
+  .brandPanel {
+    display: none;
+  }
+
+  .formPanel {
+    min-height: 100dvh;
+  }
+
+  .mobileBrand {
+    display: flex;
+  }
+
+  .formContainer {
+    align-items: flex-start;
+
+    padding: clamp(var(--space-8), 10vh, var(--space-10)) var(--space-5);
+  }
+}
+
+@media (max-width: 30rem) {
+  .mobileBrand {
+    padding: var(--space-4);
+  }
+
+  .formContainer {
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .formFooter {
+    flex-direction: column;
+    align-items: flex-start;
+
+    padding: var(--space-4);
+  }
+}
+
+/* =========================================================
+
+* Reduced motion
+* ======================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}
