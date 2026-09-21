@@ -116,42 +116,13 @@
     var(--color-focus-ring);
 }
 
-/* =========================================================
- * Access note
- * ======================================================= */
-
-.accessNote {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-
-  width: 100%;
-  margin-top: var(--space-8);
-}
-
-.accessLine {
-  width: 2rem;
-  height: var(--border-width);
-
-  background: var(--color-border-strong);
-}
-
-.accessNote p {
-  margin: 0;
-
-  color: var(--color-text-disabled);
-
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-normal);
-}
-
 .submit {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 
   width: 100%;
+  padding-top: var(--space-1);
 }
 
 /* =========================================================
