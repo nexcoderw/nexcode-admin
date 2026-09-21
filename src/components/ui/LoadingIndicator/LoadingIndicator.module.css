@@ -1,0 +1,273 @@
+.loader {
+  --loader-unit: 0.25rem;
+  --loader-icon-size: var(--icon-size-md);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+
+  color: var(--color-primary);
+}
+
+/* =========================================================
+
+* Presentation
+* ======================================================= */
+
+.inline {
+  width: fit-content;
+}
+
+.section {
+  width: 100%;
+  min-height: 12rem;
+  padding: var(--space-8);
+}
+
+.fullscreen {
+  width: 100%;
+  min-height: 100dvh;
+  padding: var(--space-8);
+
+  background:
+    radial-gradient(
+      circle at center,
+      var(--color-primary-subtle) 0,
+      transparent 18rem
+    ),
+    var(--color-background);
+}
+
+/* =========================================================
+
+* Sizes
+* ======================================================= */
+
+.sm {
+  --loader-unit: 0.1875rem;
+  --loader-icon-size: var(--icon-size-sm);
+
+  gap: var(--space-2);
+}
+
+.md {
+  --loader-unit: 0.25rem;
+  --loader-icon-size: var(--icon-size-md);
+}
+
+.lg {
+  --loader-unit: 0.3125rem;
+  --loader-icon-size: var(--icon-size-lg);
+
+  gap: var(--space-4);
+}
+
+/* =========================================================
+
+* NEXCODE loading mark
+* ======================================================= */
+
+.mark {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--loader-unit) * 1.5);
+
+  height: calc(var(--loader-unit) * 7);
+
+  color: var(--color-primary);
+}
+
+/*
+
+* The angle brackets reference code without turning the loader
+* into a literal logo. The central bars behave like a moving
+* processing signal.
+  */
+.bracket {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+
+  color: var(--color-primary);
+
+  font-family: var(--font-family-primary);
+  font-size: calc(var(--loader-unit) * 5);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+
+  opacity: 0.45;
+
+  animation: nexcode-bracket-pulse 1.4s ease-in-out infinite;
+}
+
+.bracket:nth-of-type(3) {
+  animation-delay: 700ms;
+}
+
+/* =========================================================
+
+* Processing signal
+* ======================================================= */
+
+.signal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--loader-unit);
+
+  height: calc(var(--loader-unit) * 6);
+}
+
+.bar {
+  display: block;
+
+  width: var(--loader-unit);
+  height: calc(var(--loader-unit) * 3);
+
+  background: currentColor;
+  border-radius: var(--radius-round);
+
+  transform-origin: center;
+
+  animation: nexcode-signal 900ms ease-in-out infinite;
+}
+
+.bar:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.bar:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+/* =========================================================
+
+* Cursor
+* ======================================================= */
+
+.cursor {
+  position: absolute;
+  right: calc(var(--loader-unit) * -2.5);
+  bottom: calc(var(--loader-unit) * 0.25);
+
+  width: calc(var(--loader-unit) * 1.5);
+  height: var(--loader-unit);
+
+  background: currentColor;
+  border-radius: var(--radius-sm);
+
+  animation: nexcode-cursor 800ms steps(1, end) infinite;
+}
+
+/* =========================================================
+
+* Label
+* ======================================================= */
+
+.label {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+}
+
+.lg .label {
+  font-size: var(--font-size-md);
+}
+
+/* =========================================================
+
+* Screen reader only
+* ======================================================= */
+
+.srOnly {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+
+  border: 0;
+}
+
+/* =========================================================
+
+* Animation
+* ======================================================= */
+
+@keyframes nexcode-signal {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scaleY(0.65);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleY(1.65);
+  }
+}
+
+@keyframes nexcode-bracket-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateX(0);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: translateX(calc(var(--loader-unit) * -0.5));
+  }
+}
+
+@keyframes nexcode-cursor {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+
+* Reduced motion
+* ======================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .bracket,
+  .cursor {
+    animation: none;
+  }
+
+  .bar {
+    opacity: 1;
+    transform: none;
+  }
+
+  .bracket {
+    opacity: 0.75;
+    transform: none;
+  }
+
+  .cursor {
+    opacity: 1;
+  }
+}
