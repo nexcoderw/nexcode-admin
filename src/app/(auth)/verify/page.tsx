@@ -1,11 +1,11 @@
-import { ArrowLeft01Icon, SecurityCheckIcon } from "@hugeicons/core-free-icons";
+import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Icon } from "../../../components/ui/Icon/Icon";
 
 import styles from "./page.module.css";
-import { VerificationForm } from "@/components/auth/verify/VerificationForm";
+import { VerificationForm } from "@/components/auth/VerificationForm";
 
 export const metadata: Metadata = {
   title: "Verify your identity",
@@ -17,26 +17,20 @@ export default function VerifyPage() {
   return (
     <div className={styles.page}>
       <Link href="/login" className={styles.backLink}>
-        <Icon icon={ArrowLeft01Icon} />
+        <Icon icon={ArrowLeft01Icon} size={16} />
 
         <span>Back to sign in</span>
       </Link>
 
       <header className={styles.header}>
-        <div className={styles.iconContainer} aria-hidden="true">
-          <Icon icon={SecurityCheckIcon} size={24} />
-        </div>
+        <span className={styles.sectionLabel}>Security verification</span>
 
-        <div className={styles.heading}>
-          <p className={styles.eyebrow}>Security verification</p>
+        <h2 className={styles.title}>Enter your verification code</h2>
 
-          <h2 className={styles.title}>Verify your identity</h2>
-
-          <p className={styles.description}>
-            Enter the 6-digit verification code sent to your registered email
-            address.
-          </p>
-        </div>
+        <p className={styles.description}>
+          Enter the 6-digit code sent to your registered email address to
+          continue.
+        </p>
       </header>
 
       <VerificationForm />
