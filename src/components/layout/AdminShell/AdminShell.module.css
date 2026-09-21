@@ -1,54 +1,23 @@
 .shell {
   display: flex;
+  flex-direction: column;
 
   width: 100%;
-  min-width: 0;
   min-height: 100dvh;
 
   color: var(--color-text-primary);
   background: var(--color-background);
 }
 
-/* =========================================================
-
-* Desktop Sidebar
-* ======================================================= */
-
-.desktopSidebar {
-  position: relative;
-  z-index: var(--z-index-sticky);
-
-  flex: 0 0 auto;
-}
-
-/* =========================================================
-
-* Workspace
-* ======================================================= */
-
-.workspace {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-
-  min-width: 0;
-  min-height: 100dvh;
-
-  background: var(--color-background);
-}
-
-/* =========================================================
-
-* Main content
-* ======================================================= */
-
 .main {
   flex: 1;
 
+  width: 100%;
   min-width: 0;
-  padding: var(--page-padding);
-
-  background: var(--color-background);
+  padding:
+    var(--space-6)
+    var(--page-padding)
+    var(--page-padding);
 }
 
 .content {
@@ -57,385 +26,26 @@
   margin-inline: auto;
 }
 
-/* =========================================================
-
-* Mobile navigation
-* ======================================================= */
-
-.mobileNavigation {
-  position: fixed;
-  z-index: var(--z-index-modal);
-  inset: 0;
-
-  display: none;
-
-  visibility: hidden;
-
-  pointer-events: none;
-}
-
-.mobileNavigationOpen {
-  visibility: visible;
-
-  pointer-events: auto;
-}
-
-/* =========================================================
-
-* Backdrop
-* ======================================================= */
-
-.backdrop {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-  padding: 0;
-
-  background: var(--color-overlay);
-
-  border: 0;
-
-  opacity: 0;
-
-  cursor: default;
-
-  transition: opacity var(--transition-normal);
-}
-
-.mobileNavigationOpen .backdrop {
-  opacity: 1;
-}
-
-/* =========================================================
-
-* Drawer
-* ======================================================= */
-
-.drawer {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  bottom: 0;
-  left: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  width: min(20rem, calc(100vw - 3rem));
-  height: 100dvh;
-
-  color: var(--color-text-primary);
-  background: var(--color-brand-dark);
-
-  border-right: var(--border-width) solid var(--color-border);
-
-  box-shadow: var(--shadow-lg);
-
-  transform: translateX(-100%);
-
-  transition: transform var(--transition-normal) var(--ease-out);
-}
-
-.mobileNavigationOpen .drawer {
-  transform: translateX(0);
-}
-
-/* =========================================================
-
-* Drawer header
-* ======================================================= */
-
-.drawerHeader {
-  display: flex;
-  flex: 0 0 var(--header-height);
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-
-  height: var(--header-height);
-  padding-inline: var(--space-4);
-
-  border-bottom: var(--border-width) solid var(--color-border-subtle);
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-
-  min-width: 0;
-
-  color: var(--color-text-primary);
-}
-
-.brandMark {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-
-  width: 2rem;
-  height: 2rem;
-
-  color: var(--color-text-on-primary);
-  background: var(--color-primary);
-
-  border-radius: var(--radius-md);
-
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  line-height: 1;
-}
-
-.brandText {
-  display: flex;
-  flex-direction: column;
-
-  min-width: 0;
-}
-
-.brandText strong {
-  color: var(--color-text-primary);
-
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.1;
-  letter-spacing: var(--letter-spacing-wide);
-}
-
-.brandText span {
-  margin-top: 0.125rem;
-
-  color: var(--color-text-muted);
-
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  line-height: 1;
-}
-
-/* =========================================================
-
-* Drawer navigation
-* ======================================================= */
-
-.drawerNavigation {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: var(--space-5);
-
-  min-height: 0;
-  padding: var(--space-4);
-
-  overflow-y: auto;
-
-  scrollbar-color: var(--color-border-strong) transparent;
-  scrollbar-width: thin;
-}
-
-.drawerGroup {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.drawerGroupLabel {
-  padding-inline: var(--space-3);
-
-  color: var(--color-text-muted);
-
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-snug);
-  letter-spacing: var(--letter-spacing-wide);
-  text-transform: uppercase;
-}
-
-.drawerList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-
-  padding: 0;
-  margin: 0;
-}
-
-/* =========================================================
-
-* Drawer item
-* ======================================================= */
-
-.drawerItem {
-  position: relative;
-
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-
-  width: 100%;
-  min-height: var(--control-height-md);
-  padding: var(--space-2) var(--space-3);
-
-  color: var(--color-text-secondary);
-  background: transparent;
-
-  border: var(--border-width) solid transparent;
-  border-radius: var(--radius-md);
-
-  font-family: inherit;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-snug);
-  text-align: left;
-
-  cursor: pointer;
-
-  transition:
-    color var(--transition-fast),
-    background-color var(--transition-fast),
-    border-color var(--transition-fast);
-}
-
-.drawerItem:hover {
-  color: var(--color-text-primary);
-  background: var(--color-surface-hover);
-}
-
-.drawerItem:focus-visible {
-  outline: none;
-
-  box-shadow: 0 0 0 var(--focus-ring-width) var(--color-focus-ring);
-}
-
-.drawerItemActive {
-  color: var(--color-primary);
-  background: var(--color-primary-subtle);
-
-  border-color: var(--color-primary-border);
-}
-
-.drawerItemActive::before {
-  position: absolute;
-  top: 50%;
-  left: 0;
-
-  width: 0.1875rem;
-  height: 1.25rem;
-
-  background: var(--color-primary);
-
-  border-radius: 0 var(--radius-round) var(--radius-round) 0;
-
-  content: "";
-
-  transform: translateY(-50%);
-}
-
-.drawerItemIcon {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-
-  width: var(--icon-size-md);
-  height: var(--icon-size-md);
-
-  color: currentColor;
-}
-
-.drawerItemIcon > svg {
-  width: 100%;
-  height: 100%;
-}
-
-.drawerItemLabel {
-  flex: 1;
-
-  min-width: 0;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.drawerItemBadge {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-}
-
-/* =========================================================
-
-* Drawer footer
-* ======================================================= */
-
-.drawerFooter {
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: var(--space-1);
-
-  padding: var(--space-4);
-
-  border-top: var(--border-width) solid var(--color-border-subtle);
-}
-
-.signOut {
-  color: var(--color-error);
-}
-
-.signOut:hover {
-  color: var(--color-error);
-  background: var(--color-error-subtle);
-}
-
-/* =========================================================
-
-* Responsive
-* ======================================================= */
-
 @media (max-width: 64rem) {
   .main {
-    padding: var(--space-5);
+    padding:
+      var(--space-5)
+      var(--space-5);
   }
 }
 
 @media (max-width: 48rem) {
-  .desktopSidebar {
-    display: none;
-  }
-
-  .mobileNavigation {
-    display: block;
-  }
-
   .main {
-    padding: var(--space-4);
+    padding:
+      var(--space-5)
+      var(--space-4);
   }
 }
 
 @media (max-width: 30rem) {
   .main {
-    padding: var(--space-3);
-  }
-
-  .drawer {
-    width: min(19rem, calc(100vw - 2rem));
-  }
-}
-
-/* =========================================================
-
-* Reduced motion
-* ======================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .backdrop,
-  .drawer,
-  .drawerItem {
-    transition: none;
+    padding:
+      var(--space-4)
+      var(--space-3);
   }
 }
