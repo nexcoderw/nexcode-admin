@@ -1,0 +1,386 @@
+.header {
+  position: sticky;
+  z-index: var(--z-index-sticky);
+  top: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+
+  min-width: 0;
+  height: var(--header-height);
+  padding-inline: var(--space-6);
+
+  background: rgb(13 13 13 / 92%);
+
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+
+  backdrop-filter: blur(0.75rem);
+}
+
+/* =========================================================
+
+* Leading
+* ======================================================= */
+
+.leading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  min-width: 0;
+}
+
+.mobileMenu {
+  display: none;
+  flex: 0 0 auto;
+}
+
+.pageContext {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+
+  min-width: 0;
+}
+
+.eyebrow {
+  overflow: hidden;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  min-width: 0;
+}
+
+.title {
+  min-width: 0;
+  margin: 0;
+
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.titleAccessory {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+/* =========================================================
+
+* Trailing
+* ======================================================= */
+
+.trailing {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-2);
+
+  min-width: 0;
+}
+
+.search {
+  width: min(22rem, 28vw);
+  margin-right: var(--space-2);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.compactSearch {
+  display: none;
+}
+
+.divider {
+  width: var(--border-width);
+  height: 1.75rem;
+  margin-inline: var(--space-1);
+
+  background: var(--color-border-subtle);
+}
+
+/* =========================================================
+
+* Notifications
+* ======================================================= */
+
+.notificationWrapper {
+  display: inline-flex;
+  position: relative;
+}
+
+.notificationBadge {
+  position: absolute;
+  top: -0.1875rem;
+  right: -0.25rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 1rem;
+  height: 1rem;
+  padding-inline: 0.25rem;
+
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+
+  border: 0.125rem solid var(--color-background);
+  border-radius: var(--radius-round);
+
+  font-size: 0.625rem;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+/* =========================================================
+
+* Account
+* ======================================================= */
+
+.accountTrigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  min-width: 0;
+  padding: var(--space-1);
+  padding-right: var(--space-2);
+
+  color: var(--color-text-primary);
+  background: transparent;
+
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-md);
+
+  cursor: pointer;
+
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.accountTrigger:hover {
+  background: var(--color-surface-hover);
+}
+
+.accountTrigger:focus-visible {
+  outline: none;
+
+  border-color: var(--color-primary-border);
+
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--color-focus-ring);
+}
+
+.avatar {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--avatar-size-sm);
+  height: var(--avatar-size-sm);
+
+  overflow: hidden;
+
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+
+  border-radius: var(--radius-round);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.accountDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  min-width: 0;
+}
+
+.accountName {
+  max-width: 9rem;
+
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.2;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accountRole {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.2;
+}
+
+/* =========================================================
+
+* Account dropdown content
+* ======================================================= */
+
+.menuIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1875rem;
+
+  min-width: 0;
+
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.menuIdentityName {
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menuIdentityEmail {
+  overflow: hidden;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menuLink {
+  display: flex;
+  flex: 1;
+  align-items: center;
+
+  min-width: 0;
+
+  color: inherit;
+}
+
+/* =========================================================
+
+* Responsive
+* ======================================================= */
+
+@media (max-width: 64rem) {
+  .header {
+    padding-inline: var(--space-5);
+  }
+
+  .search {
+    display: none;
+  }
+
+  .compactSearch {
+    display: inline-flex;
+  }
+
+  .accountRole {
+    display: none;
+  }
+}
+
+@media (max-width: 48rem) {
+  .header {
+    gap: var(--space-3);
+
+    padding-inline: var(--space-4);
+  }
+
+  .mobileMenu {
+    display: flex;
+  }
+
+  .eyebrow,
+  .accountDetails,
+  .divider {
+    display: none;
+  }
+
+  .title {
+    font-size: var(--font-size-md);
+  }
+
+  .actions {
+    display: none;
+  }
+
+  .trailing {
+    gap: var(--space-1);
+  }
+
+  .accountTrigger {
+    padding-right: var(--space-1);
+  }
+}
+
+@media (max-width: 30rem) {
+  .compactSearch {
+    display: none;
+  }
+
+  .header {
+    padding-inline: var(--space-3);
+  }
+}
+
+/* =========================================================
+
+* Reduced motion
+* ======================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .accountTrigger {
+    transition: none;
+  }
+}
