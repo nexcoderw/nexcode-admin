@@ -1,0 +1,231 @@
+.dropdown {
+  display: inline-flex;
+  position: relative;
+}
+
+/* =========================================================
+
+* Menu
+* ======================================================= */
+
+.menu {
+  position: absolute;
+  z-index: var(--z-index-dropdown);
+  top: calc(100% + var(--space-2));
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 12rem;
+  max-width: min(20rem, calc(100vw - var(--space-6)));
+  padding: var(--space-2);
+
+  color: var(--color-text-primary);
+  background: var(--color-surface-elevated);
+
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-lg);
+
+  transform-origin: top;
+
+  animation: dropdown-enter var(--transition-fast) var(--ease-out);
+}
+
+.start {
+  left: 0;
+
+  transform-origin: top left;
+}
+
+.end {
+  right: 0;
+
+  transform-origin: top right;
+}
+
+/* =========================================================
+
+* Item
+* ======================================================= */
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  width: 100%;
+  min-height: var(--control-height-sm);
+  padding: var(--space-2) var(--space-3);
+
+  color: var(--color-text-secondary);
+  background: transparent;
+
+  border: 0;
+  border-radius: var(--radius-md);
+
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.item:hover:not(:disabled),
+.item:focus-visible {
+  color: var(--color-text-primary);
+  background: var(--color-surface-hover);
+
+  outline: none;
+}
+
+.item:focus-visible {
+  box-shadow: inset 0 0 0 var(--focus-ring-width) var(--color-primary-border);
+}
+
+.item:disabled {
+  color: var(--color-text-disabled);
+
+  cursor: not-allowed;
+  opacity: var(--opacity-disabled);
+}
+
+/* =========================================================
+
+* Destructive item
+* ======================================================= */
+
+.destructive {
+  color: var(--color-error);
+}
+
+.destructive:hover:not(:disabled),
+.destructive:focus-visible {
+  color: var(--color-error);
+  background: var(--color-error-subtle);
+}
+
+/* =========================================================
+
+* Icon
+* ======================================================= */
+
+.icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+
+  color: currentColor;
+}
+
+.icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* =========================================================
+
+* Label
+* ======================================================= */
+
+.itemLabel {
+  flex: 1;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================
+
+* Shortcut
+* ======================================================= */
+
+.shortcut {
+  flex: 0 0 auto;
+
+  margin-left: var(--space-4);
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+}
+
+/* =========================================================
+
+* Menu label
+* ======================================================= */
+
+.menuLabel {
+  padding: var(--space-2) var(--space-3);
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+/* =========================================================
+
+* Separator
+* ======================================================= */
+
+.separator {
+  width: 100%;
+  height: var(--border-width);
+  margin-block: var(--space-2);
+
+  background: var(--color-border-subtle);
+}
+
+/* =========================================================
+
+* Animation
+* ======================================================= */
+
+@keyframes dropdown-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================================
+
+* Reduced motion
+* ======================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .menu {
+    animation: none;
+  }
+
+  .item {
+    transition: none;
+  }
+}
