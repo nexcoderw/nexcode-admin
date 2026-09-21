@@ -1,58 +1,41 @@
 "use client";
 
 import type {
-  FocusEvent,
+  FocusEventHandler,
   HTMLAttributes,
-  PointerEvent,
+  PointerEventHandler,
   ReactElement,
   ReactNode,
 } from "react";
-import { cloneElement, useEffect, useId, useRef, useState } from "react";
+import {
+  cloneElement,
+  isValidElement,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 
 import styles from "./Tooltip.module.css";
 
-export type TooltipPlacement = "top" | "right" | "bottom" | "left";
+type TooltipPlacement = "top" | "right" | "bottom" | "left";
+
+interface TooltipTriggerProps {
+  "aria-describedby"?: string;
+  onFocus?: FocusEventHandler<HTMLElement>;
+  onBlur?: FocusEventHandler<HTMLElement>;
+  onPointerEnter?: PointerEventHandler<HTMLElement>;
+  onPointerLeave?: PointerEventHandler<HTMLElement>;
+}
 
 export interface TooltipProps extends Omit<
   HTMLAttributes<HTMLSpanElement>,
-  "content"
+  "children" | "content"
 > {
-  /**
-
-* Element that receives the tooltip interaction.
-*
-* Prefer an interactive element such as Button or IconButton.
-  */
   children: ReactElement;
-
-  /**
-
-* Text or content displayed inside the tooltip.
-  */
   content: ReactNode;
-
-  /**
-
-* Position relative to the trigger.
-*
-* @default "top"
-  */
   placement?: TooltipPlacement;
-
-  /**
-
-* Delay before displaying the tooltip in milliseconds.
-*
-* @default 350
-  */
   delay?: number;
-
-  /**
-
-* Prevents the tooltip from opening.
-*
-* @default false
-  */
   disabled?: boolean;
 }
 
@@ -67,10 +50,8 @@ export function Tooltip({
 }: TooltipProps) {
   const [open, setOpen] = useState(false);
 
+  const tooltipId = useId();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const generatedId = useId();
-  const tooltipId = `${generatedId}-tooltip`;
 
   const clearOpenTimeout = () => {
     if (timeoutRef.current) {
@@ -80,17 +61,11 @@ export function Tooltip({
   };
 
   const openTooltip = () => {
-    if (disabled) {
-      return;
-    }
+    clearOpenTimeout();
 
-    ```
-clearOpenTimeout();
-
-timeoutRef.current = setTimeout(() => {
-  setOpen(true);
-}, delay);
-```;
+    timeoutRef.current = setTimeout(() => {
+      setOpen(true);
+    }, delay);
   };
 
   const closeTooltip = () => {
@@ -122,70 +97,74 @@ timeoutRef.current = setTimeout(() => {
     };
   }, [open]);
 
-  const child = cloneElement(
-    children as ReactElement<{
-      "aria-describedby"?: string;
-      onFocus?: (event: FocusEvent<HTMLElement>) => void;
-      onBlur?: (event: FocusEvent<HTMLElement>) => void;
-      onPointerEnter?: (event: PointerEvent<HTMLElement>) => void;
-      onPointerLeave?: (event: PointerEvent<HTMLElement>) => void;
-    }>,
-    {
-      "aria-describedby":
-        open && !disabled
-          ? [children.props["aria-describedby"], tooltipId]
-              .filter(Boolean)
-              .join(" ")
-          : children.props["aria-describedby"],
+  /*
+   * A disabled tooltip should behave exactly like its
+   * original child. No cloning or extra wrapper is needed.
+   */
+  if (disabled) {
+    return children;
+  }
 
-      onFocus: (event) => {
-        children.props.onFocus?.(event);
-        openTooltip();
-      },
+  /*
+   * ReactNode values such as strings, fragments, null or
+   * arrays do not expose trigger props. Tooltip requires a
+   * single valid React element.
+   */
+  if (!isValidElement<TooltipTriggerProps>(children)) {
+    return null;
+  }
 
-      onBlur: (event) => {
-        children.props.onBlur?.(event);
-        closeTooltip();
-      },
+  const trigger = children;
 
-      onPointerEnter: (event) => {
-        children.props.onPointerEnter?.(event);
-        openTooltip();
-      },
+  const existingDescribedBy = trigger.props["aria-describedby"];
 
-      onPointerLeave: (event) => {
-        children.props.onPointerLeave?.(event);
-        closeTooltip();
-      },
+  const describedBy = open
+    ? [existingDescribedBy, tooltipId].filter(Boolean).join(" ")
+    : existingDescribedBy;
+
+  const triggerElement = cloneElement(trigger, {
+    "aria-describedby": describedBy,
+
+    onFocus: (event) => {
+      trigger.props.onFocus?.(event);
+      openTooltip();
     },
-  );
 
-  const tooltipClasses = [
-    styles.tooltip,
-    styles[placement],
-    open ? styles.visible : "",
-    className ?? "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+    onBlur: (event) => {
+      trigger.props.onBlur?.(event);
+      closeTooltip();
+    },
+
+    onPointerEnter: (event) => {
+      trigger.props.onPointerEnter?.(event);
+      openTooltip();
+    },
+
+    onPointerLeave: (event) => {
+      trigger.props.onPointerLeave?.(event);
+      closeTooltip();
+    },
+  });
 
   return (
-    <span className={styles.root}>
-      {child}
+    <span
+      {...props}
+      className={[styles.root, className].filter(Boolean).join(" ")}
+    >
+      {triggerElement}
 
-      {!disabled && (
-        <span
-          {...props}
-          id={tooltipId}
-          role="tooltip"
-          className={tooltipClasses}
-          aria-hidden={!open}
-        >
-          <span className={styles.content}>{content}</span>
+      <span
+        id={tooltipId}
+        role="tooltip"
+        aria-hidden={!open}
+        className={[styles.tooltip, styles[placement], open ? styles.open : ""]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        <span className={styles.content}>{content}</span>
 
-          <span className={styles.arrow} aria-hidden="true" />
-        </span>
-      )}
+        <span className={styles.arrow} aria-hidden="true" />
+      </span>
     </span>
   );
 }
