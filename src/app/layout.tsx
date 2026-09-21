@@ -31,18 +31,17 @@ export const metadata: Metadata = {
   description: "Administration portal for the NEXCODE platform.",
 };
 
-type RootLayoutProps = Readonly<{
+export default function RootLayout({
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}>;
-
-export default function RootLayout({ children }: RootLayoutProps) {
+}>) {
   return (
     <html
       lang="en"
       className={`${outfit.variable} ${sixCaps.variable} ${sacramento.variable}`}
     >
-      {" "}
-      <body>{children}</body>{" "}
+      <body>{children}</body>
     </html>
   );
 }
