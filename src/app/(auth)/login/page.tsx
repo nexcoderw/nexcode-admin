@@ -1,8 +1,10 @@
+import { LockPasswordIcon, Mail01Icon } from "@hugeicons/core-free-icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Button } from "../../../components/ui/Button/Button";
 import { Checkbox } from "../../../components/ui/Checkbox/Checkbox";
+import { Icon } from "../../../components/ui/Icon/Icon";
 import { Input } from "../../../components/ui/Input/Input";
 import { PasswordInput } from "../../../components/ui/PasswordInput/PasswordInput";
 
@@ -16,25 +18,27 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <div className={styles.login}>
-      {" "}
       <header className={styles.header}>
-        {" "}
-        <p className={styles.eyebrow}>Welcome back </p>
-        <h2 className={styles.title}>Sign in to NEXCODE</h2>
+        <span className={styles.sectionLabel}>Administrator access</span>
+
+        <h2 className={styles.title}>Welcome back</h2>
+
         <p className={styles.description}>
-          Enter your administrator credentials to continue to the management
+          Sign in with your administrator credentials to continue to the NEXCODE
           workspace.
         </p>
       </header>
+
       <form className={styles.form} action="#">
         <div className={styles.fields}>
           <Input
             type="email"
             name="email"
             label="Email address"
-            placeholder="admin@example.com"
+            placeholder="Enter your email address"
             autoComplete="email"
             inputMode="email"
+            leftIcon={<Icon icon={Mail01Icon} size={18} />}
             required
           />
 
@@ -43,6 +47,7 @@ export default function LoginPage() {
             label="Password"
             placeholder="Enter your password"
             autoComplete="current-password"
+            leftIcon={<Icon icon={LockPasswordIcon} size={18} />}
             required
           />
         </div>
@@ -59,12 +64,11 @@ export default function LoginPage() {
           Sign in
         </Button>
       </form>
-      <div className={styles.security}>
-        <span className={styles.securityLine} aria-hidden="true" />
 
-        <p>Access is restricted to authorised NEXCODE administrators.</p>
+      <div className={styles.accessNote}>
+        <span className={styles.accessLine} aria-hidden="true" />
 
-        <span className={styles.securityLine} aria-hidden="true" />
+        <p>Authorised NEXCODE administrators only</p>
       </div>
     </div>
   );
