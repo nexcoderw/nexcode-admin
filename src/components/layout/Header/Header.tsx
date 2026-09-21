@@ -1,285 +1,434 @@
-"use client";
+'use client';
 
 import {
+  ArrowDown01Icon,
   Logout01Icon,
-  Menu01Icon,
   Notification02Icon,
-  Search01Icon,
   Settings01Icon,
   UserCircleIcon,
-} from "@hugeicons/core-free-icons";
-import Link from "next/link";
-import type { ReactNode } from "react";
+} from '@hugeicons/core-free-icons';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import type {
+  ReactNode,
+} from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import {
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-} from "../../ui/DropdownMenu/DropdownMenu";
-import { Icon } from "../../ui/Icon/Icon";
-import { IconButton } from "../../ui/IconButton/IconButton";
-import { Tooltip } from "../../ui/Tooltip/Tooltip";
+  ADMIN_NAVIGATION,
+  type AdminNavigationGroup,
+  type AdminNavigationItem,
+} from '../../../constants/admin-navigation';
+import { ROUTES } from '../../../constants/routes';
+import { Icon } from '../../ui/Icon/Icon';
+import { IconButton } from '../../ui/IconButton/IconButton';
 
-import styles from "./Header.module.css";
+import styles from './Header.module.css';
 
 export interface HeaderAdmin {
   name: string;
   email?: string;
-  avatarUrl?: string;
 }
 
 export interface HeaderProps {
-  /**
-
-* Current page title.
-  */
-  title: string;
-
-  /**
-
-* Optional contextual information displayed before the title.
-  */
-  eyebrow?: string;
-
-  /**
-
-* Optional content displayed beside the title.
-  */
-  titleAccessory?: ReactNode;
-
-  /**
-
-* Optional custom search control.
-*
-* The Header does not own search state.
-  */
-  search?: ReactNode;
-
-  /**
-
-* Current administrator information.
-  */
   admin: HeaderAdmin;
-
-  /**
-
-* Number displayed on the notification control.
-  */
   notificationCount?: number;
-
-  /**
-
-* Called when the notification button is selected.
-  */
   onNotificationsClick?: () => void;
-
-  /**
-
-* Opens the mobile navigation drawer.
-  */
-  onMenuClick?: () => void;
-
-  /**
-
-* Called when Sign out is selected.
-  */
   onSignOut?: () => void;
-
-  /**
-
-* Profile destination.
-*
-* @default "/profile"
-  */
-  profileHref?: string;
-
-  /**
-
-* Settings destination.
-*
-* @default "/settings"
-  */
-  settingsHref?: string;
-
-  /**
-
-* Optional actions displayed between search and utility controls.
-  */
   actions?: ReactNode;
 }
 
 export function Header({
-  title,
-  eyebrow,
-  titleAccessory,
-  search,
   admin,
   notificationCount = 0,
   onNotificationsClick,
-  onMenuClick,
   onSignOut,
-  profileHref = "/profile",
-  settingsHref = "/settings",
   actions,
 }: HeaderProps) {
+  const pathname = usePathname();
+
+  const [openGroup, setOpenGroup] =
+    useState<string | null>(null);
+
+  const [accountOpen, setAccountOpen] =
+    useState(false);
+
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const handlePointerDown = (
+      event: PointerEvent,
+    ) => {
+      if (
+        headerRef.current &&
+        !headerRef.current.contains(
+          event.target as Node,
+        )
+      ) {
+        setOpenGroup(null);
+        setAccountOpen(false);
+      }
+    };
+
+    const handleEscape = (
+      event: KeyboardEvent,
+    ) => {
+      if (event.key === 'Escape') {
+        setOpenGroup(null);
+        setAccountOpen(false);
+      }
+    };
+
+    document.addEventListener(
+      'pointerdown',
+      handlePointerDown,
+    );
+
+    document.addEventListener(
+      'keydown',
+      handleEscape,
+    );
+
+    return () => {
+      document.removeEventListener(
+        'pointerdown',
+        handlePointerDown,
+      );
+
+      document.removeEventListener(
+        'keydown',
+        handleEscape,
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    setOpenGroup(null);
+    setAccountOpen(false);
+  }, [pathname]);
+
   const initials = getInitials(admin.name);
 
   const visibleNotificationCount =
-    notificationCount > 99 ? "99+" : notificationCount;
+    notificationCount > 99
+      ? '99+'
+      : notificationCount;
 
   return (
-    <header className={styles.header}>
-      {" "}
-      <div className={styles.leading}>
-        {onMenuClick && (
-          <div className={styles.mobileMenu}>
-            <IconButton
-              icon={<Icon icon={Menu01Icon} />}
-              aria-label="Open navigation"
-              variant="ghost"
-              onClick={onMenuClick}
-            />{" "}
-          </div>
-        )}
-
-        <div className={styles.pageContext}>
-          {eyebrow && <span className={styles.eyebrow}>{eyebrow}</span>}
-
-          <div className={styles.titleRow}>
-            <h1 className={styles.title}>{title}</h1>
-
-            {titleAccessory && (
-              <div className={styles.titleAccessory}>{titleAccessory}</div>
-            )}
-          </div>
-        </div>
-      </div>
-      <div className={styles.trailing}>
-        {search && <div className={styles.search}>{search}</div>}
-
-        {actions && <div className={styles.actions}>{actions}</div>}
-
-        {!search && (
-          <Tooltip content="Search" placement="bottom">
-            <IconButton
-              icon={<Icon icon={Search01Icon} />}
-              aria-label="Search"
-              variant="ghost"
-              className={styles.compactSearch}
-            />
-          </Tooltip>
-        )}
-
-        <Tooltip content="Notifications" placement="bottom">
-          <span className={styles.notificationWrapper}>
-            <IconButton
-              icon={<Icon icon={Notification02Icon} />}
-              aria-label={
-                notificationCount > 0
-                  ? `${notificationCount} unread notifications`
-                  : "Notifications"
-              }
-              variant="ghost"
-              onClick={onNotificationsClick}
-            />
-
-            {notificationCount > 0 && (
-              <span className={styles.notificationBadge} aria-hidden="true">
-                {visibleNotificationCount}
-              </span>
-            )}
-          </span>
-        </Tooltip>
-
-        <div className={styles.divider} aria-hidden="true" />
-
-        <DropdownMenu
-          label="Administrator account"
-          align="end"
-          trigger={
-            <button
-              type="button"
-              className={styles.accountTrigger}
-              aria-label={`Open account menu for ${admin.name}`}
-            >
-              <Avatar
-                name={admin.name}
-                avatarUrl={admin.avatarUrl}
-                initials={initials}
-              />
-
-              <span className={styles.accountDetails}>
-                <span className={styles.accountName}>{admin.name}</span>
-
-                <span className={styles.accountRole}>Administrator</span>
-              </span>
-            </button>
-          }
+    <header
+      ref={headerRef}
+      className={styles.header}
+    >
+      <Link
+        href={ROUTES.admin.dashboard}
+        className={styles.brand}
+        aria-label="NEXCODE dashboard"
+      >
+        <span
+          className={styles.brandMark}
+          aria-hidden="true"
         >
-          <DropdownMenuLabel>
-            <span className={styles.menuIdentity}>
-              <span className={styles.menuIdentityName}>{admin.name}</span>
+          N
+        </span>
 
-              {admin.email && (
-                <span className={styles.menuIdentityEmail}>{admin.email}</span>
-              )}
+        <span className={styles.brandName}>
+          NEXCODE
+        </span>
+      </Link>
+
+      <nav
+        className={styles.navigation}
+        aria-label="Administration"
+      >
+        <div className={styles.navigationRail}>
+          {ADMIN_NAVIGATION.map((group) => (
+            <HeaderNavigationGroup
+              key={group.label}
+              group={group}
+              pathname={pathname}
+              open={openGroup === group.label}
+              onToggle={() => {
+                setAccountOpen(false);
+
+                setOpenGroup((current) =>
+                  current === group.label
+                    ? null
+                    : group.label,
+                );
+              }}
+            />
+          ))}
+        </div>
+      </nav>
+
+      <div className={styles.utilities}>
+        {actions}
+
+        <div className={styles.notification}>
+          <IconButton
+            icon={
+              <Icon
+                icon={Notification02Icon}
+                size={19}
+              />
+            }
+            aria-label={
+              notificationCount > 0
+                ? `${notificationCount} unread notifications`
+                : 'Notifications'
+            }
+            variant="ghost"
+            size="sm"
+            onClick={onNotificationsClick}
+          />
+
+          {notificationCount > 0 && (
+            <span
+              className={styles.notificationCount}
+              aria-hidden="true"
+            >
+              {visibleNotificationCount}
             </span>
-          </DropdownMenuLabel>
-
-          <DropdownMenuSeparator />
-
-          <DropdownMenuItem icon={<Icon icon={UserCircleIcon} />}>
-            <Link href={profileHref} className={styles.menuLink}>
-              Profile
-            </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem icon={<Icon icon={Settings01Icon} />}>
-            <Link href={settingsHref} className={styles.menuLink}>
-              Settings
-            </Link>
-          </DropdownMenuItem>
-
-          {onSignOut && (
-            <>
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem
-                icon={<Icon icon={Logout01Icon} />}
-                destructive
-                onSelect={onSignOut}
-              >
-                Sign out
-              </DropdownMenuItem>
-            </>
           )}
-        </DropdownMenu>
+        </div>
+
+        <div className={styles.account}>
+          <button
+            type="button"
+            className={styles.avatarButton}
+            aria-label={`Open account menu for ${admin.name}`}
+            aria-haspopup="menu"
+            aria-expanded={accountOpen}
+            onClick={() => {
+              setOpenGroup(null);
+
+              setAccountOpen((current) => !current);
+            }}
+          >
+            <span className={styles.avatar}>
+              {initials}
+            </span>
+          </button>
+
+          {accountOpen && (
+            <div
+              className={styles.accountMenu}
+              role="menu"
+            >
+              <div className={styles.accountIdentity}>
+                <strong>{admin.name}</strong>
+
+                {admin.email && (
+                  <span>{admin.email}</span>
+                )}
+              </div>
+
+              <div className={styles.menuDivider} />
+
+              <Link
+                href="/profile"
+                className={styles.accountMenuItem}
+                role="menuitem"
+              >
+                <Icon
+                  icon={UserCircleIcon}
+                  size={18}
+                />
+
+                <span>Profile</span>
+              </Link>
+
+              <Link
+                href={ROUTES.admin.settings}
+                className={styles.accountMenuItem}
+                role="menuitem"
+              >
+                <Icon
+                  icon={Settings01Icon}
+                  size={18}
+                />
+
+                <span>Settings</span>
+              </Link>
+
+              {onSignOut && (
+                <>
+                  <div
+                    className={styles.menuDivider}
+                  />
+
+                  <button
+                    type="button"
+                    className={[
+                      styles.accountMenuItem,
+                      styles.signOut,
+                    ].join(' ')}
+                    role="menuitem"
+                    onClick={onSignOut}
+                  >
+                    <Icon
+                      icon={Logout01Icon}
+                      size={18}
+                    />
+
+                    <span>Sign out</span>
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
 }
 
-interface AvatarProps {
-  name: string;
-  avatarUrl?: string;
-  initials: string;
+interface HeaderNavigationGroupProps {
+  group: AdminNavigationGroup;
+  pathname: string;
+  open: boolean;
+  onToggle: () => void;
 }
 
-function Avatar({ name, avatarUrl, initials }: AvatarProps) {
-  if (avatarUrl) {
+function HeaderNavigationGroup({
+  group,
+  pathname,
+  open,
+  onToggle,
+}: HeaderNavigationGroupProps) {
+  const groupActive = group.items.some(
+    (item) =>
+      isNavigationItemActive(
+        pathname,
+        item,
+      ),
+  );
+
+  if (group.items.length === 1) {
+    const item = group.items[0];
+
     return (
-      <span className={styles.avatar}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}{" "}
-        <img src={avatarUrl} alt="" className={styles.avatarImage} />{" "}
-      </span>
+      <Link
+        href={item.href}
+        className={[
+          styles.navigationItem,
+          groupActive
+            ? styles.navigationItemActive
+            : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        aria-current={
+          groupActive ? 'page' : undefined
+        }
+      >
+        <span
+          className={styles.navigationIcon}
+          aria-hidden="true"
+        >
+          {group.icon}
+        </span>
+
+        <span>{group.label}</span>
+      </Link>
     );
   }
 
   return (
-    <span className={styles.avatar} aria-hidden="true" title={name}>
-      {initials}{" "}
-    </span>
+    <div className={styles.navigationGroup}>
+      <button
+        type="button"
+        className={[
+          styles.navigationItem,
+          groupActive
+            ? styles.navigationItemActive
+            : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={onToggle}
+      >
+        <span
+          className={styles.navigationIcon}
+          aria-hidden="true"
+        >
+          {group.icon}
+        </span>
+
+        <span>{group.label}</span>
+
+        <Icon
+          icon={ArrowDown01Icon}
+          size={13}
+          className={[
+            styles.chevron,
+            open ? styles.chevronOpen : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        />
+      </button>
+
+      {open && (
+        <div
+          className={styles.navigationMenu}
+          role="menu"
+        >
+          {group.items.map((item) => {
+            const active =
+              isNavigationItemActive(
+                pathname,
+                item,
+              );
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                role="menuitem"
+                className={[
+                  styles.navigationMenuItem,
+                  active
+                    ? styles.navigationMenuItemActive
+                    : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
+                <span
+                  className={styles.menuIcon}
+                  aria-hidden="true"
+                >
+                  {item.icon}
+                </span>
+
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function isNavigationItemActive(
+  pathname: string,
+  item: AdminNavigationItem,
+) {
+  if (item.exact || item.href === '/') {
+    return pathname === item.href;
+  }
+
+  return (
+    pathname === item.href ||
+    pathname.startsWith(`${item.href}/`)
   );
 }
 
@@ -289,6 +438,6 @@ function getInitials(name: string) {
     .split(/\s+/)
     .slice(0, 2)
     .map((part) => part.charAt(0))
-    .join("")
+    .join('')
     .toUpperCase();
 }
