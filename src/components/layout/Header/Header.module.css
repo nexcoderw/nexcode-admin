@@ -1,32 +1,52 @@
 .header {
   position: sticky;
   z-index: var(--z-index-sticky);
-  top: var(--space-3);
+  top: var(--space-2);
 
+  width: calc(100% - (var(--space-4) * 2));
+  max-width: var(--content-max-width);
+  margin:
+    var(--space-2)
+    auto
+    0;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--color-surface) 78%,
+      transparent
+    );
+
+  border: var(--border-width) solid
+    color-mix(
+      in srgb,
+      var(--color-border) 65%,
+      transparent
+    );
+
+  border-radius: 1.25rem;
+
+  box-shadow:
+    0 0.5rem 1.75rem rgb(0 0 0 / 16%);
+
+  backdrop-filter: blur(1.125rem);
+  -webkit-backdrop-filter: blur(1.125rem);
+}
+
+/* =========================================================
+ * Primary row
+ * ======================================================= */
+
+.primaryRow {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: var(--space-5);
 
-  width: calc(100% - (var(--space-6) * 2));
-  max-width: var(--content-max-width);
-  min-height: 4.75rem;
-  margin:
-    var(--space-3)
-    auto
-    0;
+  min-height: 4.25rem;
   padding:
-    var(--space-3)
-    var(--space-4);
-
-  background: var(--color-surface);
-
-  border: var(--border-width) solid
-    var(--color-border-subtle);
-  border-radius: 1.25rem;
-
-  box-shadow:
-    0 0.625rem 2rem rgb(0 0 0 / 18%);
+    var(--space-2)
+    var(--space-3);
 }
 
 /* =========================================================
@@ -69,10 +89,10 @@
 }
 
 /* =========================================================
- * Main navigation
+ * Desktop navigation
  * ======================================================= */
 
-.navigation {
+.desktopNavigation {
   display: flex;
   justify-content: center;
 
@@ -82,18 +102,28 @@
 .navigationRail {
   display: flex;
   align-items: center;
-  gap: 0.125rem;
+  gap: var(--space-2);
 
   padding: 0.25rem;
 
-  background: var(--color-background);
+  background:
+    color-mix(
+      in srgb,
+      var(--color-background) 66%,
+      transparent
+    );
 
   border: var(--border-width) solid
-    var(--color-border-subtle);
+    color-mix(
+      in srgb,
+      var(--color-border-subtle) 72%,
+      transparent
+    );
+
   border-radius: var(--radius-round);
 
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 2%);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
 }
 
 .navigationGroup {
@@ -127,12 +157,20 @@
 
   transition:
     color var(--transition-fast),
-    background-color var(--transition-fast);
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .navigationItem:hover {
   color: var(--color-text-primary);
-  background: var(--color-surface-hover);
+  background:
+    color-mix(
+      in srgb,
+      var(--color-surface-hover) 80%,
+      transparent
+    );
+
+  transform: translateY(-0.0625rem);
 }
 
 .navigationItemActive {
@@ -158,7 +196,8 @@
 .chevron {
   margin-left: 0.0625rem;
 
-  transition: transform var(--transition-fast);
+  transition:
+    transform var(--transition-fast);
 }
 
 .chevronOpen {
@@ -176,20 +215,40 @@
 
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--space-1);
 
-  width: 13.5rem;
+  width: 14rem;
   padding: var(--space-2);
 
-  background: var(--color-surface-elevated);
+  background:
+    color-mix(
+      in srgb,
+      var(--color-surface-elevated) 84%,
+      transparent
+    );
 
   border: var(--border-width) solid
-    var(--color-border);
+    color-mix(
+      in srgb,
+      var(--color-border) 70%,
+      transparent
+    );
+
   border-radius: var(--radius-lg);
 
   box-shadow: var(--shadow-lg);
 
+  backdrop-filter: blur(1.125rem);
+  -webkit-backdrop-filter: blur(1.125rem);
+
   transform: translateX(-50%);
+
+  transform-origin: top center;
+
+  animation:
+    dropdown-enter
+    160ms
+    var(--ease-out);
 }
 
 .navigationMenuItem {
@@ -211,12 +270,20 @@
 
   transition:
     color var(--transition-fast),
-    background-color var(--transition-fast);
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .navigationMenuItem:hover {
   color: var(--color-text-primary);
-  background: var(--color-surface-hover);
+  background:
+    color-mix(
+      in srgb,
+      var(--color-surface-hover) 86%,
+      transparent
+    );
+
+  transform: translateX(0.125rem);
 }
 
 .navigationMenuItemActive {
@@ -245,6 +312,12 @@
   gap: var(--space-2);
 
   min-width: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .notification {
@@ -328,6 +401,10 @@
   font-weight: var(--font-weight-bold);
 }
 
+/* =========================================================
+ * Account menu
+ * ======================================================= */
+
 .accountMenu {
   position: absolute;
   top: calc(100% + var(--space-3));
@@ -339,13 +416,33 @@
   width: 15rem;
   padding: var(--space-2);
 
-  background: var(--color-surface-elevated);
+  background:
+    color-mix(
+      in srgb,
+      var(--color-surface-elevated) 84%,
+      transparent
+    );
 
   border: var(--border-width) solid
-    var(--color-border);
+    color-mix(
+      in srgb,
+      var(--color-border) 70%,
+      transparent
+    );
+
   border-radius: var(--radius-lg);
 
   box-shadow: var(--shadow-lg);
+
+  backdrop-filter: blur(1.125rem);
+  -webkit-backdrop-filter: blur(1.125rem);
+
+  transform-origin: top right;
+
+  animation:
+    account-menu-enter
+    160ms
+    var(--ease-out);
 }
 
 .accountIdentity {
@@ -353,9 +450,7 @@
   flex-direction: column;
   gap: 0.1875rem;
 
-  padding:
-    var(--space-3)
-    var(--space-3);
+  padding: var(--space-3);
 }
 
 .accountIdentity strong {
@@ -383,9 +478,7 @@
 
 .menuDivider {
   height: var(--border-width);
-  margin:
-    var(--space-1)
-    0;
+  margin: var(--space-1) 0;
 
   background: var(--color-border-subtle);
 }
@@ -413,11 +506,18 @@
   text-align: left;
 
   cursor: pointer;
+
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .accountMenuItem:hover {
   color: var(--color-text-primary);
   background: var(--color-surface-hover);
+
+  transform: translateX(0.125rem);
 }
 
 .signOut:hover {
@@ -426,75 +526,300 @@
 }
 
 /* =========================================================
- * Responsive
+ * Mobile navigation toggle
  * ======================================================= */
 
-@media (max-width: 75rem) {
-  .header {
-    grid-template-columns: auto 1fr auto;
+.mobileToggle {
+  display: none;
+}
+
+/* =========================================================
+ * Mobile navigation
+ * ======================================================= */
+
+.mobileNavigation {
+  display: none;
+}
+
+/* =========================================================
+ * Animations
+ * ======================================================= */
+
+@keyframes dropdown-enter {
+  from {
+    opacity: 0;
+
+    transform:
+      translateX(-50%)
+      translateY(-0.375rem)
+      scale(0.98);
   }
 
-  .navigation {
-    justify-content: flex-start;
+  to {
+    opacity: 1;
 
-    overflow-x: auto;
+    transform:
+      translateX(-50%)
+      translateY(0)
+      scale(1);
+  }
+}
 
-    scrollbar-width: none;
+@keyframes account-menu-enter {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-0.375rem)
+      scale(0.98);
   }
 
-  .navigation::-webkit-scrollbar {
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+@keyframes mobile-navigation-enter {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-0.5rem)
+      scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+/* =========================================================
+ * Tablet
+ * ======================================================= */
+
+@media (max-width: 68rem) {
+  .desktopNavigation {
     display: none;
   }
+
+  .primaryRow {
+    grid-template-columns:
+      1fr
+      auto;
+
+    gap: var(--space-3);
+  }
+
+  .mobileToggle {
+    display: flex;
+  }
+
+  .mobileNavigation {
+    display: grid;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+
+    margin:
+      0
+      var(--space-2)
+      var(--space-2);
+    padding: var(--space-5);
+
+    background:
+      color-mix(
+        in srgb,
+        var(--color-background) 72%,
+        transparent
+      );
+
+    border-top: var(--border-width) solid
+      color-mix(
+        in srgb,
+        var(--color-border-subtle) 70%,
+        transparent
+      );
+
+    border-radius:
+      0
+      0
+      1rem
+      1rem;
+
+    backdrop-filter: blur(1.125rem);
+    -webkit-backdrop-filter: blur(1.125rem);
+
+    transform-origin: top center;
+
+    animation:
+      mobile-navigation-enter
+      180ms
+      var(--ease-out);
+  }
+
+  .mobileGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+
+    min-width: 0;
+  }
+
+  .mobileGroupHeading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    padding-inline: var(--space-2);
+  }
+
+  .mobileGroupHeading > span {
+    color: var(--color-text-disabled);
+
+    font-family:
+      ui-monospace,
+      SFMono-Regular,
+      Menlo,
+      Monaco,
+      Consolas,
+      monospace;
+    font-size: 0.5625rem;
+  }
+
+  .mobileGroupHeading strong {
+    color: var(--color-text-muted);
+
+    font-size: 0.625rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .mobileLinks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .mobileLink {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+
+    min-height: 2.875rem;
+    padding:
+      var(--space-2)
+      var(--space-3);
+
+    color: var(--color-text-secondary);
+
+    border: var(--border-width) solid
+      transparent;
+    border-radius: var(--radius-md);
+
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      border-color var(--transition-fast);
+  }
+
+  .mobileLink:hover {
+    color: var(--color-text-primary);
+
+    background: var(--color-surface-hover);
+  }
+
+  .mobileLinkActive {
+    color: var(--color-primary);
+
+    background: var(--color-primary-subtle);
+
+    border-color: var(--color-primary-border);
+  }
+
+  .mobileLinkIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 1.25rem;
+
+    color: currentColor;
+  }
 }
 
-@media (max-width: 52rem) {
+/* =========================================================
+ * Mobile
+ * ======================================================= */
+
+@media (max-width: 40rem) {
   .header {
-    grid-template-columns: 1fr auto;
+    top: var(--space-2);
 
-    width: calc(100% - (var(--space-4) * 2));
-    padding: var(--space-3);
+    width: calc(
+      100% - (var(--space-3) * 2)
+    );
   }
 
-  .navigation {
-    grid-column: 1 / -1;
-    grid-row: 2;
-
-    width: 100%;
+  .primaryRow {
+    min-height: 3.875rem;
   }
 
-  .navigationRail {
-    width: max-content;
-    min-width: 100%;
-  }
-
-  .navigationItem {
-    flex: 1;
-  }
-}
-
-@media (max-width: 34rem) {
   .brandName {
     display: none;
   }
 
-  .header {
-    width: calc(100% - (var(--space-3) * 2));
-    margin-top: var(--space-2);
+  .actions {
+    display: none;
   }
 
-  .navigationItem {
-    padding-inline: var(--space-3);
+  .utilities {
+    gap: var(--space-1);
   }
 
-  .navigationItem > span:not(.navigationIcon) {
-    font-size: 0.6875rem;
+  .mobileNavigation {
+    grid-template-columns: 1fr;
+
+    max-height: calc(100dvh - 7rem);
+    padding: var(--space-4);
+
+    overflow-y: auto;
   }
 }
+
+/* =========================================================
+ * Reduced motion
+ * ======================================================= */
 
 @media (prefers-reduced-motion: reduce) {
   .navigationItem,
   .navigationMenuItem,
-  .chevron {
+  .accountMenuItem,
+  .chevron,
+  .mobileLink {
     transition: none;
+  }
+
+  .navigationMenu,
+  .accountMenu,
+  .mobileNavigation {
+    animation: none;
+  }
+
+  .navigationItem:hover,
+  .navigationMenuItem:hover,
+  .accountMenuItem:hover {
+    transform: none;
   }
 }
