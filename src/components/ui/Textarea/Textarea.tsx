@@ -77,7 +77,6 @@ export function Textarea({
         {" "}
         <label className={styles.label} htmlFor={textareaId}>
           {label}
-          ```
           {required && (
             <>
               <span className={styles.required} aria-hidden="true">

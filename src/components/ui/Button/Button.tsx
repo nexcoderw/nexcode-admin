@@ -103,7 +103,6 @@ export function Button({
           <span className={styles.srOnly}>{loadingLabel}</span>
         </>
       )}
-      ```
       {!isLoading && leftIcon && (
         <span className={styles.icon} aria-hidden="true">
           {leftIcon}

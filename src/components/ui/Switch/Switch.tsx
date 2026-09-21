@@ -71,7 +71,6 @@ export function Switch({
         <span className={styles.content}>
           {" "}
           <span className={styles.label}>{label}</span>
-          ```
           {description && !error && (
             <span id={descriptionId} className={styles.description}>
               {description}

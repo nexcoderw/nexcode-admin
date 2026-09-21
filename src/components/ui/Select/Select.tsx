@@ -122,7 +122,6 @@ export function Select({
         {" "}
         <label className={styles.label} htmlFor={selectId}>
           {label}
-          ```
           {required && (
             <>
               <span className={styles.required} aria-hidden="true">

@@ -103,7 +103,6 @@ export function Input({
         {" "}
         <label className={styles.label} htmlFor={inputId}>
           {label}
-          ```
           {required && (
             <>
               <span className={styles.required} aria-hidden="true">

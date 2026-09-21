@@ -78,7 +78,6 @@ export function Checkbox({
             aria-invalid={error ? true : undefined}
             aria-describedby={descriptionIds}
           />
-          ```
           <span className={styles.visual} aria-hidden="true">
             <span className={styles.checkmark} />
           </span>
