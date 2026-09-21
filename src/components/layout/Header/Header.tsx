@@ -2,18 +2,19 @@
 
 import {
   ArrowDown01Icon,
+  Cancel01Icon,
   Logout01Icon,
+  Menu01Icon,
   Notification02Icon,
   Settings01Icon,
   UserCircleIcon,
 } from '@hugeicons/core-free-icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type {
-  ReactNode,
-} from 'react';
+import type { ReactNode } from 'react';
 import {
   useEffect,
+  useId,
   useRef,
   useState,
 } from 'react';
@@ -57,7 +58,20 @@ export function Header({
   const [accountOpen, setAccountOpen] =
     useState(false);
 
+  const [
+    mobileNavigationOpen,
+    setMobileNavigationOpen,
+  ] = useState(false);
+
   const headerRef = useRef<HTMLElement>(null);
+  const mobileNavigationId = useId();
+
+  const initials = getInitials(admin.name);
+
+  const visibleNotificationCount =
+    notificationCount > 99
+      ? '99+'
+      : notificationCount;
 
   useEffect(() => {
     const handlePointerDown = (
@@ -71,16 +85,20 @@ export function Header({
       ) {
         setOpenGroup(null);
         setAccountOpen(false);
+        setMobileNavigationOpen(false);
       }
     };
 
     const handleEscape = (
       event: KeyboardEvent,
     ) => {
-      if (event.key === 'Escape') {
-        setOpenGroup(null);
-        setAccountOpen(false);
+      if (event.key !== 'Escape') {
+        return;
       }
+
+      setOpenGroup(null);
+      setAccountOpen(false);
+      setMobileNavigationOpen(false);
     };
 
     document.addEventListener(
@@ -109,180 +127,165 @@ export function Header({
   useEffect(() => {
     setOpenGroup(null);
     setAccountOpen(false);
+    setMobileNavigationOpen(false);
   }, [pathname]);
-
-  const initials = getInitials(admin.name);
-
-  const visibleNotificationCount =
-    notificationCount > 99
-      ? '99+'
-      : notificationCount;
 
   return (
     <header
       ref={headerRef}
       className={styles.header}
     >
-      <Link
-        href={ROUTES.admin.dashboard}
-        className={styles.brand}
-        aria-label="NEXCODE dashboard"
-      >
-        <span
-          className={styles.brandMark}
-          aria-hidden="true"
+      <div className={styles.primaryRow}>
+        <Link
+          href={ROUTES.admin.dashboard}
+          className={styles.brand}
+          aria-label="NEXCODE dashboard"
         >
-          N
-        </span>
+          <span
+            className={styles.brandMark}
+            aria-hidden="true"
+          >
+            N
+          </span>
 
-        <span className={styles.brandName}>
-          NEXCODE
-        </span>
-      </Link>
+          <span className={styles.brandName}>
+            NEXCODE
+          </span>
+        </Link>
 
-      <nav
-        className={styles.navigation}
-        aria-label="Administration"
-      >
-        <div className={styles.navigationRail}>
-          {ADMIN_NAVIGATION.map((group) => (
-            <HeaderNavigationGroup
-              key={group.label}
-              group={group}
-              pathname={pathname}
-              open={openGroup === group.label}
-              onToggle={() => {
+        <nav
+          className={styles.desktopNavigation}
+          aria-label="Administration"
+        >
+          <div className={styles.navigationRail}>
+            {ADMIN_NAVIGATION.map((group) => (
+              <HeaderNavigationGroup
+                key={group.label}
+                group={group}
+                pathname={pathname}
+                open={openGroup === group.label}
+                onToggle={() => {
+                  setAccountOpen(false);
+
+                  setOpenGroup((current) =>
+                    current === group.label
+                      ? null
+                      : group.label,
+                  );
+                }}
+              />
+            ))}
+          </div>
+        </nav>
+
+        <div className={styles.utilities}>
+          {actions && (
+            <div className={styles.actions}>
+              {actions}
+            </div>
+          )}
+
+          <div className={styles.notification}>
+            <IconButton
+              icon={
+                <Icon
+                  icon={Notification02Icon}
+                  size={19}
+                />
+              }
+              aria-label={
+                notificationCount > 0
+                  ? `${notificationCount} unread notifications`
+                  : 'Notifications'
+              }
+              variant="ghost"
+              size="sm"
+              onClick={onNotificationsClick}
+            />
+
+            {notificationCount > 0 && (
+              <span
+                className={styles.notificationCount}
+                aria-hidden="true"
+              >
+                {visibleNotificationCount}
+              </span>
+            )}
+          </div>
+
+          <div className={styles.account}>
+            <button
+              type="button"
+              className={styles.avatarButton}
+              aria-label={`Open account menu for ${admin.name}`}
+              aria-haspopup="menu"
+              aria-expanded={accountOpen}
+              onClick={() => {
+                setOpenGroup(null);
+                setMobileNavigationOpen(false);
+
+                setAccountOpen(
+                  (current) => !current,
+                );
+              }}
+            >
+              <span className={styles.avatar}>
+                {initials}
+              </span>
+            </button>
+
+            {accountOpen && (
+              <AccountMenu
+                admin={admin}
+                onSignOut={onSignOut}
+              />
+            )}
+          </div>
+
+          <div className={styles.mobileToggle}>
+            <IconButton
+              icon={
+                <Icon
+                  icon={
+                    mobileNavigationOpen
+                      ? Cancel01Icon
+                      : Menu01Icon
+                  }
+                  size={20}
+                />
+              }
+              aria-label={
+                mobileNavigationOpen
+                  ? 'Close navigation'
+                  : 'Open navigation'
+              }
+              aria-expanded={
+                mobileNavigationOpen
+              }
+              aria-controls={
+                mobileNavigationId
+              }
+              variant="ghost"
+              size="sm"
+              onClick={() => {
                 setAccountOpen(false);
+                setOpenGroup(null);
 
-                setOpenGroup((current) =>
-                  current === group.label
-                    ? null
-                    : group.label,
+                setMobileNavigationOpen(
+                  (current) => !current,
                 );
               }}
             />
-          ))}
-        </div>
-      </nav>
-
-      <div className={styles.utilities}>
-        {actions}
-
-        <div className={styles.notification}>
-          <IconButton
-            icon={
-              <Icon
-                icon={Notification02Icon}
-                size={19}
-              />
-            }
-            aria-label={
-              notificationCount > 0
-                ? `${notificationCount} unread notifications`
-                : 'Notifications'
-            }
-            variant="ghost"
-            size="sm"
-            onClick={onNotificationsClick}
-          />
-
-          {notificationCount > 0 && (
-            <span
-              className={styles.notificationCount}
-              aria-hidden="true"
-            >
-              {visibleNotificationCount}
-            </span>
-          )}
-        </div>
-
-        <div className={styles.account}>
-          <button
-            type="button"
-            className={styles.avatarButton}
-            aria-label={`Open account menu for ${admin.name}`}
-            aria-haspopup="menu"
-            aria-expanded={accountOpen}
-            onClick={() => {
-              setOpenGroup(null);
-
-              setAccountOpen((current) => !current);
-            }}
-          >
-            <span className={styles.avatar}>
-              {initials}
-            </span>
-          </button>
-
-          {accountOpen && (
-            <div
-              className={styles.accountMenu}
-              role="menu"
-            >
-              <div className={styles.accountIdentity}>
-                <strong>{admin.name}</strong>
-
-                {admin.email && (
-                  <span>{admin.email}</span>
-                )}
-              </div>
-
-              <div className={styles.menuDivider} />
-
-              <Link
-                href="/profile"
-                className={styles.accountMenuItem}
-                role="menuitem"
-              >
-                <Icon
-                  icon={UserCircleIcon}
-                  size={18}
-                />
-
-                <span>Profile</span>
-              </Link>
-
-              <Link
-                href={ROUTES.admin.settings}
-                className={styles.accountMenuItem}
-                role="menuitem"
-              >
-                <Icon
-                  icon={Settings01Icon}
-                  size={18}
-                />
-
-                <span>Settings</span>
-              </Link>
-
-              {onSignOut && (
-                <>
-                  <div
-                    className={styles.menuDivider}
-                  />
-
-                  <button
-                    type="button"
-                    className={[
-                      styles.accountMenuItem,
-                      styles.signOut,
-                    ].join(' ')}
-                    role="menuitem"
-                    onClick={onSignOut}
-                  >
-                    <Icon
-                      icon={Logout01Icon}
-                      size={18}
-                    />
-
-                    <span>Sign out</span>
-                  </button>
-                </>
-              )}
-            </div>
-          )}
+          </div>
         </div>
       </div>
+
+      {mobileNavigationOpen && (
+        <MobileNavigation
+          id={mobileNavigationId}
+          pathname={pathname}
+        />
+      )}
     </header>
   );
 }
@@ -413,6 +416,163 @@ function HeaderNavigationGroup({
             );
           })}
         </div>
+      )}
+    </div>
+  );
+}
+
+interface MobileNavigationProps {
+  id: string;
+  pathname: string;
+}
+
+function MobileNavigation({
+  id,
+  pathname,
+}: MobileNavigationProps) {
+  return (
+    <nav
+      id={id}
+      className={styles.mobileNavigation}
+      aria-label="Mobile administration navigation"
+    >
+      {ADMIN_NAVIGATION.map(
+        (group, groupIndex) => (
+          <section
+            key={group.label}
+            className={styles.mobileGroup}
+          >
+            <div className={styles.mobileGroupHeading}>
+              <span>
+                {String(groupIndex + 1).padStart(
+                  2,
+                  '0',
+                )}
+              </span>
+
+              <strong>{group.label}</strong>
+            </div>
+
+            <div className={styles.mobileLinks}>
+              {group.items.map((item) => {
+                const active =
+                  isNavigationItemActive(
+                    pathname,
+                    item,
+                  );
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={[
+                      styles.mobileLink,
+                      active
+                        ? styles.mobileLinkActive
+                        : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                    aria-current={
+                      active
+                        ? 'page'
+                        : undefined
+                    }
+                  >
+                    <span
+                      className={
+                        styles.mobileLinkIcon
+                      }
+                      aria-hidden="true"
+                    >
+                      {item.icon}
+                    </span>
+
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        ),
+      )}
+    </nav>
+  );
+}
+
+interface AccountMenuProps {
+  admin: HeaderAdmin;
+  onSignOut?: () => void;
+}
+
+function AccountMenu({
+  admin,
+  onSignOut,
+}: AccountMenuProps) {
+  return (
+    <div
+      className={styles.accountMenu}
+      role="menu"
+    >
+      <div className={styles.accountIdentity}>
+        <strong>{admin.name}</strong>
+
+        {admin.email && (
+          <span>{admin.email}</span>
+        )}
+      </div>
+
+      <div className={styles.menuDivider} />
+
+      <Link
+        href="/profile"
+        className={styles.accountMenuItem}
+        role="menuitem"
+      >
+        <Icon
+          icon={UserCircleIcon}
+          size={18}
+        />
+
+        <span>Profile</span>
+      </Link>
+
+      <Link
+        href={ROUTES.admin.settings}
+        className={styles.accountMenuItem}
+        role="menuitem"
+      >
+        <Icon
+          icon={Settings01Icon}
+          size={18}
+        />
+
+        <span>Settings</span>
+      </Link>
+
+      {onSignOut && (
+        <>
+          <div
+            className={styles.menuDivider}
+          />
+
+          <button
+            type="button"
+            className={[
+              styles.accountMenuItem,
+              styles.signOut,
+            ].join(' ')}
+            role="menuitem"
+            onClick={onSignOut}
+          >
+            <Icon
+              icon={Logout01Icon}
+              size={18}
+            />
+
+            <span>Sign out</span>
+          </button>
+        </>
       )}
     </div>
   );
