@@ -10,107 +10,92 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect, useId, useState } from "react";
 
-import type { HeaderAdmin, HeaderProps } from "../Header/Header";
-import { Header } from "../Header/Header";
-import type { SidebarNavigationGroup } from "../Sidebar/Sidebar";
-import { Sidebar } from "../Sidebar/Sidebar";
-
+import { ADMIN_SIDEBAR_NAVIGATION } from "../../../constants/admin-sidebar";
+import { ROUTES } from "../../../constants/routes";
 import { Icon } from "../../ui/Icon/Icon";
 import { IconButton } from "../../ui/IconButton/IconButton";
+import type { HeaderAdmin, HeaderProps } from "../Header/Header";
+import { Header } from "../Header/Header";
+import { Sidebar } from "../Sidebar/Sidebar";
 
 import styles from "./AdminShell.module.css";
 
 export interface AdminShellProps {
+  /**
+   * Page content rendered inside the main admin workspace.
+   */
   children: ReactNode;
 
   /**
-
-* Current page title displayed in the Header.
-  */
+   * Current page title displayed in the Header.
+   */
   title: string;
 
   /**
-
-* Optional context displayed above the page title.
-  */
+   * Optional contextual text displayed above the page title.
+   */
   eyebrow?: string;
 
   /**
-
-* Optional content displayed beside the title.
-  */
+   * Optional content displayed beside the page title.
+   */
   titleAccessory?: ReactNode;
 
   /**
-
-* Admin navigation configuration.
-  */
-  navigation: SidebarNavigationGroup[];
-
-  /**
-
-* Current administrator.
-  */
+   * Current authenticated administrator.
+   */
   admin: HeaderAdmin;
 
   /**
-
-* Optional search component rendered in the Header.
-  */
+   * Optional search control displayed in the Header.
+   *
+   * Search state and behaviour remain owned by the page
+   * or feature using the shell.
+   */
   search?: ReactNode;
 
   /**
-
-* Optional page-level Header actions.
-  */
+   * Optional page-specific Header actions.
+   */
   headerActions?: ReactNode;
 
   /**
-
-* Optional Sidebar footer content.
-  */
+   * Optional content displayed in the Sidebar footer.
+   */
   sidebarFooter?: ReactNode;
 
   /**
-
-* Unread notification count.
-  */
+   * Number of unread notifications.
+   *
+   * @default 0
+   */
   notificationCount?: number;
 
   /**
-
-* Notification interaction.
-  */
+   * Called when the notifications control is selected.
+   */
   onNotificationsClick?: () => void;
 
   /**
-
-* Sign-out interaction.
-  */
+   * Called when the administrator signs out.
+   */
   onSignOut?: () => void;
 
   /**
-
-* Profile destination.
-*
-* @default "/profile"
-  */
+   * Profile destination.
+   *
+   * This can later be moved to ROUTES when the
+   * administrator profile page is implemented.
+   *
+   * @default "/profile"
+   */
   profileHref?: string;
 
   /**
-
-* Settings destination.
-*
-* @default "/settings"
-  */
-  settingsHref?: string;
-
-  /**
-
-* Controls the initial desktop Sidebar state.
-*
-* @default false
-  */
+   * Initial desktop Sidebar collapsed state.
+   *
+   * @default false
+   */
   defaultSidebarCollapsed?: boolean;
 }
 
@@ -119,7 +104,6 @@ export function AdminShell({
   title,
   eyebrow,
   titleAccessory,
-  navigation,
   admin,
   search,
   headerActions,
@@ -128,18 +112,27 @@ export function AdminShell({
   onNotificationsClick,
   onSignOut,
   profileHref = "/profile",
-  settingsHref = "/settings",
   defaultSidebarCollapsed = false,
 }: AdminShellProps) {
-  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
-
   const pathname = usePathname();
   const mobileNavigationId = useId();
 
+  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
+
+  /*
+   * Close mobile navigation automatically whenever
+   * navigation changes to another page.
+   */
   useEffect(() => {
     setMobileNavigationOpen(false);
   }, [pathname]);
 
+  /*
+   * Prevent the document behind the mobile drawer from
+   * scrolling while navigation is open.
+   *
+   * Escape also closes the drawer.
+   */
   useEffect(() => {
     if (!mobileNavigationOpen) {
       return;
@@ -184,22 +177,21 @@ export function AdminShell({
     onMenuClick: openMobileNavigation,
     onSignOut,
     profileHref,
-    settingsHref,
+    settingsHref: ROUTES.admin.settings,
   };
 
   return (
     <div className={styles.shell}>
-      {" "}
       <div className={styles.desktopSidebar}>
-        {" "}
         <Sidebar
-          navigation={navigation}
+          navigation={ADMIN_SIDEBAR_NAVIGATION}
           footerContent={sidebarFooter}
-          settingsHref={settingsHref}
+          settingsHref={ROUTES.admin.settings}
           onSignOut={onSignOut}
           defaultCollapsed={defaultSidebarCollapsed}
-        />{" "}
+        />
       </div>
+
       <div className={styles.workspace}>
         <Header {...headerProps} />
 
@@ -207,12 +199,11 @@ export function AdminShell({
           <div className={styles.content}>{children}</div>
         </main>
       </div>
+
       <MobileNavigation
         id={mobileNavigationId}
         open={mobileNavigationOpen}
-        navigation={navigation}
         pathname={pathname}
-        settingsHref={settingsHref}
         onClose={closeMobileNavigation}
         onSignOut={onSignOut}
       />
@@ -220,12 +211,14 @@ export function AdminShell({
   );
 }
 
+/* =========================================================
+ * Mobile Navigation
+ * ======================================================= */
+
 interface MobileNavigationProps {
   id: string;
   open: boolean;
-  navigation: SidebarNavigationGroup[];
   pathname: string;
-  settingsHref: string;
   onClose: () => void;
   onSignOut?: () => void;
 }
@@ -233,9 +226,7 @@ interface MobileNavigationProps {
 function MobileNavigation({
   id,
   open,
-  navigation,
   pathname,
-  settingsHref,
   onClose,
   onSignOut,
 }: MobileNavigationProps) {
@@ -263,19 +254,24 @@ function MobileNavigation({
         aria-label="Mobile administration navigation"
       >
         <div className={styles.drawerHeader}>
-          <Link href="/" className={styles.brand} onClick={onClose}>
+          <Link
+            href={ROUTES.admin.dashboard}
+            className={styles.brand}
+            onClick={onClose}
+          >
             <span className={styles.brandMark} aria-hidden="true">
               N
             </span>
 
             <span className={styles.brandText}>
               <strong>NEXCODE</strong>
+
               <span>Admin</span>
             </span>
           </Link>
 
           <IconButton
-            icon={<Icon icon={Cancel01Icon} />}
+            icon={<Icon icon={Cancel01Icon} size={20} />}
             aria-label="Close navigation"
             variant="ghost"
             onClick={onClose}
@@ -283,7 +279,7 @@ function MobileNavigation({
         </div>
 
         <nav className={styles.drawerNavigation} aria-label="Mobile navigation">
-          {navigation.map((group, groupIndex) => (
+          {ADMIN_SIDEBAR_NAVIGATION.map((group, groupIndex) => (
             <div
               key={`${group.label ?? "navigation"}-${groupIndex}`}
               className={styles.drawerGroup}
@@ -294,7 +290,11 @@ function MobileNavigation({
 
               <ul className={styles.drawerList}>
                 {group.items.map((item) => {
-                  const active = isActive(pathname, item.href, item.exact);
+                  const active = isNavigationItemActive(
+                    pathname,
+                    item.href,
+                    item.exact,
+                  );
 
                   return (
                     <li key={item.href}>
@@ -336,19 +336,24 @@ function MobileNavigation({
 
         <div className={styles.drawerFooter}>
           <Link
-            href={settingsHref}
+            href={ROUTES.admin.settings}
             className={[
               styles.drawerItem,
-              isActive(pathname, settingsHref, false)
+              isNavigationItemActive(pathname, ROUTES.admin.settings)
                 ? styles.drawerItemActive
                 : "",
             ]
               .filter(Boolean)
               .join(" ")}
+            aria-current={
+              isNavigationItemActive(pathname, ROUTES.admin.settings)
+                ? "page"
+                : undefined
+            }
             onClick={onClose}
           >
             <span className={styles.drawerItemIcon} aria-hidden="true">
-              <Icon icon={Settings01Icon} />
+              <Icon icon={Settings01Icon} size={20} />
             </span>
 
             <span className={styles.drawerItemLabel}>Settings</span>
@@ -364,7 +369,7 @@ function MobileNavigation({
               }}
             >
               <span className={styles.drawerItemIcon} aria-hidden="true">
-                <Icon icon={Logout01Icon} />
+                <Icon icon={Logout01Icon} size={20} />
               </span>
 
               <span className={styles.drawerItemLabel}>Sign out</span>
@@ -376,7 +381,11 @@ function MobileNavigation({
   );
 }
 
-function isActive(pathname: string, href: string, exact = false) {
+/* =========================================================
+ * Helpers
+ * ======================================================= */
+
+function isNavigationItemActive(pathname: string, href: string, exact = false) {
   if (exact || href === "/") {
     return pathname === href;
   }
