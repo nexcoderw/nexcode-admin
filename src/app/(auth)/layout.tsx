@@ -15,6 +15,11 @@ export default function AuthLayout({
         className={styles.brandPanel}
         aria-labelledby="auth-brand-title"
       >
+        <div
+          className={styles.grid}
+          aria-hidden="true"
+        />
+
         <div className={styles.brandContent}>
           <div className={styles.brand}>
             <span
