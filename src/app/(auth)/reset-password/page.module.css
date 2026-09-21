@@ -1,7 +1,6 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: var(--space-7);
 
   width: 100%;
 }
@@ -16,6 +15,7 @@
   gap: var(--space-2);
 
   width: fit-content;
+  margin-bottom: var(--space-8);
 
   color: var(--color-text-muted);
 
@@ -26,11 +26,6 @@
   transition:
     color var(--transition-fast),
     transform var(--transition-fast);
-}
-
-.backLink svg {
-  width: var(--icon-size-sm);
-  height: var(--icon-size-sm);
 }
 
 .backLink:hover {
@@ -54,40 +49,21 @@
 .header {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
 
   width: 100%;
+  margin-bottom: var(--space-8);
 }
 
-.iconContainer {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 3rem;
-  height: 3rem;
-
-  color: var(--color-primary);
-  background: var(--color-primary-subtle);
-
-  border: var(--border-width) solid var(--color-primary-border);
-  border-radius: var(--radius-lg);
-}
-
-.heading {
-  display: flex;
-  flex-direction: column;
-}
-
-.eyebrow {
-  margin: 0 0 var(--space-2);
+.sectionLabel {
+  width: fit-content;
+  margin-bottom: var(--space-3);
 
   color: var(--color-primary);
 
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-snug);
-  letter-spacing: var(--letter-spacing-wide);
+  line-height: 1.2;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -96,10 +72,10 @@
 
   color: var(--color-text-primary);
 
-  font-size: var(--font-size-2xl);
+  font-size: clamp(var(--font-size-2xl), 3vw, var(--font-size-3xl));
   font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-tight);
-  letter-spacing: var(--letter-spacing-tight);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
 }
 
 .description {
@@ -110,7 +86,7 @@
 
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
-  line-height: var(--line-height-relaxed);
+  line-height: 1.65;
 }
 
 /* =========================================================
@@ -120,7 +96,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--space-6);
 
   width: 100%;
 }
@@ -132,34 +108,31 @@
 }
 
 /* =========================================================
- * Password requirements
+ * Requirements
  * ======================================================= */
 
 .requirements {
-  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 
-  background: var(--color-surface-secondary);
-
-  border: var(--border-width) solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
+  padding-top: var(--space-1);
 }
 
 .requirementsTitle {
-  margin: 0 0 var(--space-3);
+  margin: 0;
 
   color: var(--color-text-secondary);
 
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-snug);
-  letter-spacing: var(--letter-spacing-wide);
-  text-transform: uppercase;
 }
 
 .requirementsList {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2) var(--space-4);
+  gap: var(--space-2) var(--space-5);
 
   padding: 0;
   margin: 0;
@@ -181,20 +154,23 @@
   line-height: var(--line-height-normal);
 }
 
-.requirementIcon {
-  display: inline-flex;
+.requirement svg {
   flex: 0 0 auto;
+
+  color: var(--color-text-disabled);
+}
+
+/* =========================================================
+ * Submit
+ * ======================================================= */
+
+.submit {
+  display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 1.125rem;
-  height: 1.125rem;
-
-  color: var(--color-primary);
-  background: var(--color-primary-subtle);
-
-  border: var(--border-width) solid var(--color-primary-border);
-  border-radius: var(--radius-round);
+  width: 100%;
+  padding-top: var(--space-1);
 }
 
 /* =========================================================
@@ -202,16 +178,20 @@
  * ======================================================= */
 
 @media (max-width: 30rem) {
-  .page {
-    gap: var(--space-6);
+  .backLink {
+    margin-bottom: var(--space-7);
   }
 
   .header {
-    gap: var(--space-4);
+    margin-bottom: var(--space-7);
   }
 
   .title {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-2xl);
+  }
+
+  .form {
+    gap: var(--space-5);
   }
 
   .requirementsList {
