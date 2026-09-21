@@ -146,6 +146,14 @@
   line-height: var(--line-height-normal);
 }
 
+.submit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  width: 100%;
+}
+
 /* =========================================================
  * Responsive
  * ======================================================= */
