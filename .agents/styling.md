@@ -1232,3 +1232,98 @@ CSS Modules implement individual interfaces.
 React components define structure and behaviour.
 
 Do not mix these responsibilities unnecessarily.
+
+## Hugeicons
+
+Hugeicons is the exclusive general-purpose icon system for NEXCODE Admin.
+
+Use icons from the Hugeicons dependency already approved for the project.
+
+Do not install or use another general-purpose icon library alongside Hugeicons.
+
+This includes:
+
+* Lucide
+* Heroicons
+* Font Awesome
+* Material Icons
+* Phosphor
+* React Icons
+* Tabler Icons
+* Bootstrap Icons
+* Remix Icons
+
+### Component Imports
+
+Import only the Hugeicons icons required by the component.
+
+Do not create broad icon imports or an application-wide object containing every icon.
+
+Prefer direct, tree-shakeable imports supported by the installed Hugeicons package.
+
+Example usage should follow the API of the installed Hugeicons dependency rather than assuming an API from another icon library.
+
+### Icon Styling
+
+Icons must be styled through the owning component's CSS Module when additional styling is required.
+
+Prefer:
+
+```css
+.icon {
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
+  flex-shrink: 0;
+}
+```
+
+Icons should normally inherit colour from their surrounding control.
+
+Do not scatter hard-coded icon colours throughout component styles.
+
+### Icon Size
+
+Use the shared tokens from `src/styles/tokens.css`:
+
+```css
+--icon-size-sm
+--icon-size-md
+--icon-size-lg
+--icon-size-xl
+```
+
+Component-specific dimensions may be introduced only when the standard sizes do not satisfy the component's functional requirements.
+
+### Interactive Icons
+
+Do not make a bare icon directly responsible for an interactive action.
+
+Use a semantic interactive element such as:
+
+```tsx
+<button type="button" aria-label="Close">
+  {/* Hugeicons icon */}
+</button>
+```
+
+For reusable icon-only actions, use the project's shared `IconButton` component once it exists.
+
+### Decorative Icons
+
+When an icon is purely decorative and adjacent text already communicates its meaning, hide the icon from assistive technology where appropriate.
+
+Do not hide an icon when it is the only representation of meaningful information.
+
+### Manual SVGs
+
+Do not manually create an SVG replacement for a normal application icon when an appropriate Hugeicons icon exists.
+
+Inline or imported SVG assets remain acceptable for genuine brand assets, illustrations, charts, diagrams, or other graphics that are not general-purpose UI icons.
+
+### Dependency Rule
+
+Before using a Hugeicons component, verify the API exported by the version installed in `package.json`.
+
+Do not copy import syntax from unrelated examples without confirming that it matches the installed Hugeicons package and version.
+
+Do not add another icon dependency because a familiar icon is easier to import from another library.
