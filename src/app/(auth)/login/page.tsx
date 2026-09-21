@@ -60,9 +60,11 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <Button type="submit" size="lg" fullWidth>
-          Sign in
-        </Button>
+        <div className={styles.submit}>
+          <Button type="submit" size="lg">
+            Sign in
+          </Button>
+        </div>
       </form>
 
       <div className={styles.accessNote}>
