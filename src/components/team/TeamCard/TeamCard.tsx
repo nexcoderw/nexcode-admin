@@ -3,16 +3,16 @@ import {
   GithubIcon,
   Linkedin01Icon,
   UserIcon,
-  ViewIcon,
 } from "@hugeicons/core-free-icons";
 import Image from "next/image";
-import Link from "next/link";
 
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { ROUTES } from "@/constants/routes";
 import type { TeamMember } from "@/types/team/team";
 import { getTeamImageSource } from "@/utils/team/team-image-source";
+
+import { TeamDetailsDialog } from "../TeamDetailsDialog/TeamDetailsDialog";
 
 import styles from "./TeamCard.module.css";
 
@@ -56,23 +56,11 @@ export function TeamCard({ member }: TeamCardProps) {
             <div className={styles.identity}>
               <span className={styles.eyebrow}>Team member</span>
 
-              <h2 className={styles.name}>
-                <Link href={ROUTES.admin.teamDetail(member.id)}>{name}</Link>
-              </h2>
+              <h2 className={styles.name}>{name}</h2>
             </div>
 
             <div className={styles.actions}>
-              <Button
-                href={ROUTES.admin.teamDetail(member.id)}
-                variant="secondary"
-                size="sm"
-                iconOnly
-                leftIcon={<Icon icon={ViewIcon} size={18} />}
-                aria-label={`View ${name}`}
-                title={`View ${name}`}
-              >
-                View {name}
-              </Button>
+              <TeamDetailsDialog member={member} />
 
               <Button
                 href={ROUTES.admin.teamEdit(member.id)}
