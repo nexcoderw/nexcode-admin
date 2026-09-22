@@ -109,7 +109,7 @@ describe("TeamForm", () => {
     expect(body.get("name")).toBe("Jane Doe");
     expect(body.get("position")).toBe("Engineer");
 
-    expect(push).toHaveBeenCalledWith("/team/detail/17");
+    expect(push).toHaveBeenCalledWith("/team");
     expect(refresh).toHaveBeenCalled();
   });
 
@@ -158,7 +158,7 @@ describe("TeamForm", () => {
     expect(body.get("remove_image")).toBe("true");
     expect(body.get("image")).toBeNull();
 
-    expect(push).toHaveBeenCalledWith("/team/detail/17");
+    expect(push).toHaveBeenCalledWith("/team");
   });
 
   it("maps stable backend fields without displaying raw backend errors", async () => {
