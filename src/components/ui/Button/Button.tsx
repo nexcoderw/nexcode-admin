@@ -1,7 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-import { LoadingMark } from "../LoadingIndicator/LoadingIndicator";
-
 import styles from "./Button.module.css";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
@@ -50,29 +48,29 @@ export function Button({
       className={classes}
       disabled={disabled || isLoading}
       aria-busy={isLoading || undefined}
+      aria-label={isLoading ? loadingLabel : props["aria-label"]}
     >
-      {isLoading ? (
-        <>
-          <LoadingMark size="sm" />
-          <span>{loadingLabel}</span>
-        </>
-      ) : (
-        <>
-          {leftIcon && (
-            <span className={styles.icon} aria-hidden="true">
-              {leftIcon}
-            </span>
-          )}
+      <span
+        className={[styles.content, isLoading ? styles.hiddenContent : ""]
+          .filter(Boolean)
+          .join(" ")}
+        aria-hidden={isLoading || undefined}
+      >
+        {leftIcon && (
+          <span className={styles.icon} aria-hidden="true">
+            {leftIcon}
+          </span>
+        )}
 
-          <span>{children}</span>
+        <span>{children}</span>
 
-          {rightIcon && (
-            <span className={styles.icon} aria-hidden="true">
-              {rightIcon}
-            </span>
-          )}
-        </>
-      )}
+        {rightIcon && (
+          <span className={styles.icon} aria-hidden="true">
+            {rightIcon}
+          </span>
+        )}
+      </span>
+      {isLoading && <span className={styles.loadingDots} aria-hidden="true" />}
     </button>
   );
 }
