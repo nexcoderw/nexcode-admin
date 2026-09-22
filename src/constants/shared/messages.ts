@@ -2,12 +2,24 @@ export const MESSAGE_KEYS = {
     auth: {
         invalidRequest:
             "auth.error.invalid_request",
+
         invalidCredentials:
             "auth.error.invalid_credentials",
+
         tooManyAttempts:
             "auth.error.too_many_attempts",
+
         authenticationRequired:
             "auth.error.authentication_required",
+
+        passwordResetVerificationInvalid:
+            "auth.error.password_reset_verification_invalid",
+
+        passwordResetSessionInvalid:
+            "auth.error.password_reset_session_invalid",
+
+        passwordResetRejected:
+            "auth.error.password_reset_rejected",
     },
 
     common: {
@@ -31,6 +43,14 @@ export const MESSAGES = {
 
     [MESSAGE_KEYS.common.serviceUnavailable]:
         "The service is temporarily unavailable. Please try again.",
+    [MESSAGE_KEYS.auth.passwordResetVerificationInvalid]:
+        "The verification code is invalid or has expired.",
+
+    [MESSAGE_KEYS.auth.passwordResetSessionInvalid]:
+        "Your password reset session has expired. Request a new code and try again.",
+
+    [MESSAGE_KEYS.auth.passwordResetRejected]:
+        "The password could not be changed. Check the password requirements and try again.",
 } as const;
 
 export type MessageKey =
