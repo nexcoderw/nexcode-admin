@@ -1,7 +1,6 @@
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { cookies, headers } from "next/headers";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { TeamEmptyState } from "@/components/team/TeamEmptyState/TeamEmptyState";
@@ -19,6 +18,7 @@ import {
 } from "@/utils/team/team-list-query";
 
 import styles from "./page.module.css";
+import { Button } from "@/components/ui/Button/Button";
 
 export const metadata: Metadata = {
   title: "Team",
@@ -77,11 +77,14 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
           </p>
         </div>
 
-        <Link href={ROUTES.admin.teamAdd} className={styles.addAction}>
-          <span>Add team member</span>
-
-          <Icon icon={ArrowRight01Icon} size={17} />
-        </Link>
+        <div className={styles.addAction}>
+  <Button
+    href={ROUTES.admin.teamAdd}
+    rightIcon={<Icon icon={ArrowRight01Icon} size={17} />}
+  >
+    Add team member
+  </Button>
+</div>
       </header>
 
       <TeamFilters query={query} />
