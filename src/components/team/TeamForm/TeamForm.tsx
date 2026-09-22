@@ -158,16 +158,7 @@ export function TeamForm({ mode, teamMember }: TeamFormProps) {
         return;
       }
 
-      const returnedId = payload?.data?.teamMember?.id ?? teamMember?.id;
-
-      if (!returnedId) {
-        setFormError(
-          "The team member was saved, but the returned record could not be identified.",
-        );
-        return;
-      }
-
-      router.push(ROUTES.admin.teamDetail(returnedId));
+      router.push(ROUTES.admin.team);
       router.refresh();
     } catch {
       setFormError(
@@ -331,11 +322,6 @@ export function TeamForm({ mode, teamMember }: TeamFormProps) {
           variant="secondary"
           disabled={submitting}
           onClick={() => {
-            if (mode === "edit" && teamMember) {
-              router.push(ROUTES.admin.teamDetail(teamMember.id));
-              return;
-            }
-
             router.push(ROUTES.admin.team);
           }}
         >
