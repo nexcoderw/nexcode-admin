@@ -41,4 +41,26 @@ export const API_ROUTES = {
         confirmPasswordReset:
             "/api/auth/password-reset/confirm",
     },
+    team: {
+        list:
+            "/api/team/list",
+
+        add:
+            "/api/team/add",
+
+        detail: (
+            teamId: number,
+        ) =>
+            `/api/team/detail/${teamId}`,
+
+        update: (
+            teamId: number,
+        ) =>
+            `/api/team/update/${teamId}`,
+
+        delete: (
+            teamId: number,
+        ) =>
+            `/api/team/delete/${teamId}`,
+    },
 } as const;
