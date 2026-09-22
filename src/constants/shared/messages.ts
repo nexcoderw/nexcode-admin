@@ -21,6 +21,13 @@ export const MESSAGE_KEYS = {
         passwordResetRejected:
             "auth.error.password_reset_rejected",
     },
+    team: {
+        invalidRequest:
+            "team.error.invalid_request",
+
+        notFound:
+            "team.error.not_found",
+    },
 
     common: {
         serviceUnavailable:
@@ -51,6 +58,11 @@ export const MESSAGES = {
 
     [MESSAGE_KEYS.auth.passwordResetRejected]:
         "The password could not be changed. Check the password requirements and try again.",
+    [MESSAGE_KEYS.team.invalidRequest]:
+        "Check the team member information and try again.",
+
+    [MESSAGE_KEYS.team.notFound]:
+        "The team member could not be found.",
 } as const;
 
 export type MessageKey =
