@@ -78,7 +78,6 @@ export function Radio({
             type="radio"
             className={inputClasses}
             disabled={disabled}
-            aria-invalid={error ? true : undefined}
             aria-describedby={descriptionIds}
           />
           <span className={styles.visual} aria-hidden="true">
