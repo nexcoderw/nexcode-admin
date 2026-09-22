@@ -48,3 +48,27 @@ export function setAdminSessionCookies(
         options,
     );
 }
+
+export function clearAdminSessionCookies(
+    response: NextResponse,
+) {
+    const options = {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict" as const,
+        path: "/",
+        maxAge: 0,
+    };
+
+    response.cookies.set(
+        ADMIN_SESSION_COOKIE_NAME,
+        "",
+        options,
+    );
+
+    response.cookies.set(
+        ADMIN_CSRF_COOKIE_NAME,
+        "",
+        options,
+    );
+}
