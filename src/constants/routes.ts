@@ -25,3 +25,9 @@ export const ROUTES = {
         settings: '/settings',
     },
 } as const;
+
+export const API_ROUTES = {
+    auth: {
+        login: "/api/auth/login",
+    },
+} as const;
