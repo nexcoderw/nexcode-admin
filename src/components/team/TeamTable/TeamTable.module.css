@@ -135,7 +135,6 @@
   gap: var(--space-2);
 }
 
-.viewAction,
 .editAction {
   display: inline-flex;
   align-items: center;
@@ -155,22 +154,6 @@
     color var(--transition-fast),
     background-color var(--transition-fast),
     border-color var(--transition-fast);
-}
-
-.viewAction {
-  color: var(--color-text-secondary);
-
-  background: transparent;
-
-  border: var(--border-width) solid var(--color-border);
-}
-
-.viewAction:hover {
-  color: var(--color-text-primary);
-
-  background: var(--color-surface-active);
-
-  border-color: var(--color-border-strong);
 }
 
 .editAction {
