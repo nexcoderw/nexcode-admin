@@ -35,6 +35,71 @@ export interface BackendResult<T> {
     headers: Headers;
 }
 
+export interface BackendBinaryResult {
+    ok: boolean;
+    status: number;
+    body: ArrayBuffer | null;
+    contentType: string | null;
+}
+
+export async function backendBinaryRequest(
+    path: string,
+): Promise<BackendBinaryResult> {
+    const controller =
+        new AbortController();
+
+    const timeout = setTimeout(
+        () => controller.abort(),
+        BACKEND_REQUEST_TIMEOUT_MS,
+    );
+
+    try {
+        const response = await fetch(
+            buildBackendUrl(path),
+            {
+                method: "GET",
+                headers: {
+                    Accept:
+                        "image/avif,image/webp,image/png,image/jpeg",
+                },
+                cache: "no-store",
+                signal:
+                    controller.signal,
+            },
+        );
+
+        return {
+            ok: response.ok,
+            status: response.status,
+
+            body: response.ok
+                ? await response.arrayBuffer()
+                : null,
+
+            contentType:
+                response.headers.get(
+                    "content-type",
+                ),
+        };
+    } catch (error) {
+        console.error(
+            "Backend media request failed.",
+            {
+                route: path,
+
+                error:
+                    error instanceof Error
+                        ? error.name
+                        : "UnknownError",
+            },
+        );
+
+        throw error;
+    } finally {
+        clearTimeout(timeout);
+    }
+}
+
 const backendApiUrl = getBackendApiUrl();
 
 export async function backendRequest<T>(
