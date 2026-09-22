@@ -145,19 +145,16 @@
   padding: 0;
 
   color: var(--color-text-secondary);
-  background: transparent;
 
-  border: 0;
+  border-radius: var(--radius-sm);
 
   font: inherit;
   font-weight: var(--font-weight-medium);
 
-  cursor: pointer;
-
   transition: color var(--transition-fast);
 }
 
-.resendButton:hover:not(:disabled) {
+.resendButton:hover {
   color: var(--color-primary);
 }
 
@@ -167,12 +164,6 @@
   border-radius: var(--radius-sm);
 
   box-shadow: 0 0 0 var(--focus-ring-width) var(--color-focus-ring);
-}
-
-.resendButton:disabled {
-  color: var(--color-text-disabled);
-
-  cursor: not-allowed;
 }
 
 /* =========================================================
