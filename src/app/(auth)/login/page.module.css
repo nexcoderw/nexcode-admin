@@ -60,72 +60,6 @@
 }
 
 /* =========================================================
- * Form
- * ======================================================= */
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-
-  width: 100%;
-}
-
-.fields {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-/* =========================================================
- * Form options
- * ======================================================= */
-
-.options {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-
-  min-height: 1.5rem;
-}
-
-.forgotPassword {
-  flex: 0 0 auto;
-
-  color: var(--color-text-secondary);
-
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-snug);
-
-  transition: color var(--transition-fast);
-}
-
-.forgotPassword:hover {
-  color: var(--color-primary);
-}
-
-.forgotPassword:focus-visible {
-  outline: none;
-
-  border-radius: var(--radius-sm);
-
-  box-shadow:
-    0 0 0 var(--focus-ring-width)
-    var(--color-focus-ring);
-}
-
-.submit {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 100%;
-  padding-top: var(--space-1);
-}
-
-/* =========================================================
  * Responsive
  * ======================================================= */
 
@@ -136,23 +70,5 @@
 
   .title {
     font-size: var(--font-size-2xl);
-  }
-
-  .options {
-    gap: var(--space-3);
-  }
-
-  .accessNote {
-    margin-top: var(--space-7);
-  }
-}
-
-/* =========================================================
- * Reduced motion
- * ======================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .forgotPassword {
-    transition: none;
   }
 }
