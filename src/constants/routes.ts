@@ -31,5 +31,14 @@ export const API_ROUTES = {
         login: "/api/auth/login",
         me: "/api/auth/me",
         logout: "/api/auth/logout",
+
+        requestPasswordReset:
+            "/api/auth/password-reset/request",
+
+        verifyPasswordReset:
+            "/api/auth/password-reset/verify",
+
+        confirmPasswordReset:
+            "/api/auth/password-reset/confirm",
     },
 } as const;
