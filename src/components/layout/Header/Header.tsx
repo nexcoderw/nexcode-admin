@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   ArrowDown01Icon,
@@ -8,27 +8,22 @@ import {
   Notification02Icon,
   Settings01Icon,
   UserCircleIcon,
-} from '@hugeicons/core-free-icons';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import type { ReactNode } from 'react';
-import {
-  useEffect,
-  useId,
-  useRef,
-  useState,
-} from 'react';
+} from "@hugeicons/core-free-icons";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import {
   ADMIN_NAVIGATION,
   type AdminNavigationGroup,
   type AdminNavigationItem,
-} from '../../../constants/admin-navigation';
-import { ROUTES } from '../../../constants/routes';
-import { Icon } from '../../ui/Icon/Icon';
-import { IconButton } from '../../ui/IconButton/IconButton';
+} from "../../../constants/admin-navigation";
+import { ROUTES } from "../../../constants/routes";
+import { Icon } from "../../ui/Icon/Icon";
+import { IconButton } from "../../ui/IconButton/IconButton";
 
-import styles from './Header.module.css';
+import styles from "./Header.module.css";
 
 export interface HeaderAdmin {
   name: string;
@@ -40,6 +35,7 @@ export interface HeaderProps {
   notificationCount?: number;
   onNotificationsClick?: () => void;
   onSignOut?: () => void;
+  isSigningOut?: boolean;
   actions?: ReactNode;
 }
 
@@ -48,20 +44,16 @@ export function Header({
   notificationCount = 0,
   onNotificationsClick,
   onSignOut,
+  isSigningOut = false,
   actions,
 }: HeaderProps) {
   const pathname = usePathname();
 
-  const [openGroup, setOpenGroup] =
-    useState<string | null>(null);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
 
-  const [accountOpen, setAccountOpen] =
-    useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
 
-  const [
-    mobileNavigationOpen,
-    setMobileNavigationOpen,
-  ] = useState(false);
+  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -71,19 +63,13 @@ export function Header({
   const initials = getInitials(admin.name);
 
   const visibleNotificationCount =
-    notificationCount > 99
-      ? '99+'
-      : notificationCount;
+    notificationCount > 99 ? "99+" : notificationCount;
 
   useEffect(() => {
-    const handlePointerDown = (
-      event: PointerEvent,
-    ) => {
+    const handlePointerDown = (event: PointerEvent) => {
       if (
         headerRef.current &&
-        !headerRef.current.contains(
-          event.target as Node,
-        )
+        !headerRef.current.contains(event.target as Node)
       ) {
         setOpenGroup(null);
         setAccountOpen(false);
@@ -91,10 +77,8 @@ export function Header({
       }
     };
 
-    const handleEscape = (
-      event: KeyboardEvent,
-    ) => {
-      if (event.key !== 'Escape') {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") {
         return;
       }
 
@@ -103,26 +87,14 @@ export function Header({
       setMobileNavigationOpen(false);
     };
 
-    document.addEventListener(
-      'pointerdown',
-      handlePointerDown,
-    );
+    document.addEventListener("pointerdown", handlePointerDown);
 
-    document.addEventListener(
-      'keydown',
-      handleEscape,
-    );
+    document.addEventListener("keydown", handleEscape);
 
     return () => {
-      document.removeEventListener(
-        'pointerdown',
-        handlePointerDown,
-      );
+      document.removeEventListener("pointerdown", handlePointerDown);
 
-      document.removeEventListener(
-        'keydown',
-        handleEscape,
-      );
+      document.removeEventListener("keydown", handleEscape);
     };
   }, []);
 
@@ -139,54 +111,36 @@ export function Header({
 
     updateScrollState();
 
-    window.addEventListener(
-      'scroll',
-      updateScrollState,
-      {
-        passive: true,
-      },
-    );
+    window.addEventListener("scroll", updateScrollState, {
+      passive: true,
+    });
 
     return () => {
-      window.removeEventListener(
-        'scroll',
-        updateScrollState,
-      );
+      window.removeEventListener("scroll", updateScrollState);
     };
   }, []);
 
   return (
     <header
-  ref={headerRef}
-  className={[
-    styles.header,
-    scrolled ? styles.scrolled : '',
-  ]
-    .filter(Boolean)
-    .join(' ')}
->
+      ref={headerRef}
+      className={[styles.header, scrolled ? styles.scrolled : ""]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <div className={styles.primaryRow}>
         <Link
           href={ROUTES.admin.dashboard}
           className={styles.brand}
           aria-label="NEXCODE dashboard"
         >
-          <span
-            className={styles.brandMark}
-            aria-hidden="true"
-          >
+          <span className={styles.brandMark} aria-hidden="true">
             N
           </span>
 
-          <span className={styles.brandName}>
-            NEXCODE
-          </span>
+          <span className={styles.brandName}>NEXCODE</span>
         </Link>
 
-        <nav
-          className={styles.desktopNavigation}
-          aria-label="Administration"
-        >
+        <nav className={styles.desktopNavigation} aria-label="Administration">
           <div className={styles.navigationRail}>
             {ADMIN_NAVIGATION.map((group) => (
               <HeaderNavigationGroup
@@ -198,9 +152,7 @@ export function Header({
                   setAccountOpen(false);
 
                   setOpenGroup((current) =>
-                    current === group.label
-                      ? null
-                      : group.label,
+                    current === group.label ? null : group.label,
                   );
                 }}
               />
@@ -209,24 +161,15 @@ export function Header({
         </nav>
 
         <div className={styles.utilities}>
-          {actions && (
-            <div className={styles.actions}>
-              {actions}
-            </div>
-          )}
+          {actions && <div className={styles.actions}>{actions}</div>}
 
           <div className={styles.notification}>
             <IconButton
-              icon={
-                <Icon
-                  icon={Notification02Icon}
-                  size={19}
-                />
-              }
+              icon={<Icon icon={Notification02Icon} size={19} />}
               aria-label={
                 notificationCount > 0
                   ? `${notificationCount} unread notifications`
-                  : 'Notifications'
+                  : "Notifications"
               }
               variant="ghost"
               size="sm"
@@ -234,10 +177,7 @@ export function Header({
             />
 
             {notificationCount > 0 && (
-              <span
-                className={styles.notificationCount}
-                aria-hidden="true"
-              >
+              <span className={styles.notificationCount} aria-hidden="true">
                 {visibleNotificationCount}
               </span>
             )}
@@ -254,20 +194,17 @@ export function Header({
                 setOpenGroup(null);
                 setMobileNavigationOpen(false);
 
-                setAccountOpen(
-                  (current) => !current,
-                );
+                setAccountOpen((current) => !current);
               }}
             >
-              <span className={styles.avatar}>
-                {initials}
-              </span>
+              <span className={styles.avatar}>{initials}</span>
             </button>
 
             {accountOpen && (
               <AccountMenu
                 admin={admin}
                 onSignOut={onSignOut}
+                isSigningOut={isSigningOut}
               />
             )}
           </div>
@@ -276,34 +213,22 @@ export function Header({
             <IconButton
               icon={
                 <Icon
-                  icon={
-                    mobileNavigationOpen
-                      ? Cancel01Icon
-                      : Menu01Icon
-                  }
+                  icon={mobileNavigationOpen ? Cancel01Icon : Menu01Icon}
                   size={20}
                 />
               }
               aria-label={
-                mobileNavigationOpen
-                  ? 'Close navigation'
-                  : 'Open navigation'
+                mobileNavigationOpen ? "Close navigation" : "Open navigation"
               }
-              aria-expanded={
-                mobileNavigationOpen
-              }
-              aria-controls={
-                mobileNavigationId
-              }
+              aria-expanded={mobileNavigationOpen}
+              aria-controls={mobileNavigationId}
               variant="ghost"
               size="sm"
               onClick={() => {
                 setAccountOpen(false);
                 setOpenGroup(null);
 
-                setMobileNavigationOpen(
-                  (current) => !current,
-                );
+                setMobileNavigationOpen((current) => !current);
               }}
             />
           </div>
@@ -311,10 +236,7 @@ export function Header({
       </div>
 
       {mobileNavigationOpen && (
-        <MobileNavigation
-          id={mobileNavigationId}
-          pathname={pathname}
-        />
+        <MobileNavigation id={mobileNavigationId} pathname={pathname} />
       )}
     </header>
   );
@@ -333,12 +255,8 @@ function HeaderNavigationGroup({
   open,
   onToggle,
 }: HeaderNavigationGroupProps) {
-  const groupActive = group.items.some(
-    (item) =>
-      isNavigationItemActive(
-        pathname,
-        item,
-      ),
+  const groupActive = group.items.some((item) =>
+    isNavigationItemActive(pathname, item),
   );
 
   if (group.items.length === 1) {
@@ -349,20 +267,13 @@ function HeaderNavigationGroup({
         href={item.href}
         className={[
           styles.navigationItem,
-          groupActive
-            ? styles.navigationItemActive
-            : '',
+          groupActive ? styles.navigationItemActive : "",
         ]
           .filter(Boolean)
-          .join(' ')}
-        aria-current={
-          groupActive ? 'page' : undefined
-        }
+          .join(" ")}
+        aria-current={groupActive ? "page" : undefined}
       >
-        <span
-          className={styles.navigationIcon}
-          aria-hidden="true"
-        >
+        <span className={styles.navigationIcon} aria-hidden="true">
           {group.icon}
         </span>
 
@@ -377,20 +288,15 @@ function HeaderNavigationGroup({
         type="button"
         className={[
           styles.navigationItem,
-          groupActive
-            ? styles.navigationItemActive
-            : '',
+          groupActive ? styles.navigationItemActive : "",
         ]
           .filter(Boolean)
-          .join(' ')}
+          .join(" ")}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={onToggle}
       >
-        <span
-          className={styles.navigationIcon}
-          aria-hidden="true"
-        >
+        <span className={styles.navigationIcon} aria-hidden="true">
           {group.icon}
         </span>
 
@@ -399,26 +305,16 @@ function HeaderNavigationGroup({
         <Icon
           icon={ArrowDown01Icon}
           size={13}
-          className={[
-            styles.chevron,
-            open ? styles.chevronOpen : '',
-          ]
+          className={[styles.chevron, open ? styles.chevronOpen : ""]
             .filter(Boolean)
-            .join(' ')}
+            .join(" ")}
         />
       </button>
 
       {open && (
-        <div
-          className={styles.navigationMenu}
-          role="menu"
-        >
+        <div className={styles.navigationMenu} role="menu">
           {group.items.map((item) => {
-            const active =
-              isNavigationItemActive(
-                pathname,
-                item,
-              );
+            const active = isNavigationItemActive(pathname, item);
 
             return (
               <Link
@@ -427,17 +323,12 @@ function HeaderNavigationGroup({
                 role="menuitem"
                 className={[
                   styles.navigationMenuItem,
-                  active
-                    ? styles.navigationMenuItemActive
-                    : '',
+                  active ? styles.navigationMenuItemActive : "",
                 ]
                   .filter(Boolean)
-                  .join(' ')}
+                  .join(" ")}
               >
-                <span
-                  className={styles.menuIcon}
-                  aria-hidden="true"
-                >
+                <span className={styles.menuIcon} aria-hidden="true">
                   {item.icon}
                 </span>
 
@@ -456,76 +347,48 @@ interface MobileNavigationProps {
   pathname: string;
 }
 
-function MobileNavigation({
-  id,
-  pathname,
-}: MobileNavigationProps) {
+function MobileNavigation({ id, pathname }: MobileNavigationProps) {
   return (
     <nav
       id={id}
       className={styles.mobileNavigation}
       aria-label="Mobile administration navigation"
     >
-      {ADMIN_NAVIGATION.map(
-        (group, groupIndex) => (
-          <section
-            key={group.label}
-            className={styles.mobileGroup}
-          >
-            <div className={styles.mobileGroupHeading}>
-              <span>
-                {String(groupIndex + 1).padStart(
-                  2,
-                  '0',
-                )}
-              </span>
+      {ADMIN_NAVIGATION.map((group, groupIndex) => (
+        <section key={group.label} className={styles.mobileGroup}>
+          <div className={styles.mobileGroupHeading}>
+            <span>{String(groupIndex + 1).padStart(2, "0")}</span>
 
-              <strong>{group.label}</strong>
-            </div>
+            <strong>{group.label}</strong>
+          </div>
 
-            <div className={styles.mobileLinks}>
-              {group.items.map((item) => {
-                const active =
-                  isNavigationItemActive(
-                    pathname,
-                    item,
-                  );
+          <div className={styles.mobileLinks}>
+            {group.items.map((item) => {
+              const active = isNavigationItemActive(pathname, item);
 
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={[
-                      styles.mobileLink,
-                      active
-                        ? styles.mobileLinkActive
-                        : '',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                    aria-current={
-                      active
-                        ? 'page'
-                        : undefined
-                    }
-                  >
-                    <span
-                      className={
-                        styles.mobileLinkIcon
-                      }
-                      aria-hidden="true"
-                    >
-                      {item.icon}
-                    </span>
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={[
+                    styles.mobileLink,
+                    active ? styles.mobileLinkActive : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                  aria-current={active ? "page" : undefined}
+                >
+                  <span className={styles.mobileLinkIcon} aria-hidden="true">
+                    {item.icon}
+                  </span>
 
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-        ),
-      )}
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      ))}
     </nav>
   );
 }
@@ -533,36 +396,26 @@ function MobileNavigation({
 interface AccountMenuProps {
   admin: HeaderAdmin;
   onSignOut?: () => void;
+  isSigningOut?: boolean;
 }
 
 function AccountMenu({
   admin,
   onSignOut,
+  isSigningOut = false,
 }: AccountMenuProps) {
   return (
-    <div
-      className={styles.accountMenu}
-      role="menu"
-    >
+    <div className={styles.accountMenu} role="menu">
       <div className={styles.accountIdentity}>
         <strong>{admin.name}</strong>
 
-        {admin.email && (
-          <span>{admin.email}</span>
-        )}
+        {admin.email && <span>{admin.email}</span>}
       </div>
 
       <div className={styles.menuDivider} />
 
-      <Link
-        href="/profile"
-        className={styles.accountMenuItem}
-        role="menuitem"
-      >
-        <Icon
-          icon={UserCircleIcon}
-          size={18}
-        />
+      <Link href="/profile" className={styles.accountMenuItem} role="menuitem">
+        <Icon icon={UserCircleIcon} size={18} />
 
         <span>Profile</span>
       </Link>
@@ -572,35 +425,26 @@ function AccountMenu({
         className={styles.accountMenuItem}
         role="menuitem"
       >
-        <Icon
-          icon={Settings01Icon}
-          size={18}
-        />
+        <Icon icon={Settings01Icon} size={18} />
 
         <span>Settings</span>
       </Link>
 
       {onSignOut && (
         <>
-          <div
-            className={styles.menuDivider}
-          />
+          <div className={styles.menuDivider} />
 
           <button
             type="button"
-            className={[
-              styles.accountMenuItem,
-              styles.signOut,
-            ].join(' ')}
+            className={[styles.accountMenuItem, styles.signOut].join(" ")}
             role="menuitem"
             onClick={onSignOut}
+            disabled={isSigningOut}
+            aria-busy={isSigningOut || undefined}
           >
-            <Icon
-              icon={Logout01Icon}
-              size={18}
-            />
+            <Icon icon={Logout01Icon} size={18} />
 
-            <span>Sign out</span>
+            <span>{isSigningOut ? "Signing out…" : "Sign out"}</span>
           </button>
         </>
       )}
@@ -608,18 +452,12 @@ function AccountMenu({
   );
 }
 
-function isNavigationItemActive(
-  pathname: string,
-  item: AdminNavigationItem,
-) {
-  if (item.exact || item.href === '/') {
+function isNavigationItemActive(pathname: string, item: AdminNavigationItem) {
+  if (item.exact || item.href === "/") {
     return pathname === item.href;
   }
 
-  return (
-    pathname === item.href ||
-    pathname.startsWith(`${item.href}/`)
-  );
+  return pathname === item.href || pathname.startsWith(`${item.href}/`);
 }
 
 function getInitials(name: string) {
@@ -628,6 +466,6 @@ function getInitials(name: string) {
     .split(/\s+/)
     .slice(0, 2)
     .map((part) => part.charAt(0))
-    .join('')
+    .join("")
     .toUpperCase();
 }
