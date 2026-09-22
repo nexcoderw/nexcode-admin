@@ -4,19 +4,14 @@ import {
   Linkedin01Icon,
   UserIcon,
   ViewIcon,
-  WorkIcon,
 } from "@hugeicons/core-free-icons";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Badge } from "@/components/ui/Badge/Badge";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { Tooltip } from "@/components/ui/Tooltip/Tooltip";
 import { ROUTES } from "@/constants/routes";
 import type { TeamMember } from "@/types/team/team";
 import { getTeamImageSource } from "@/utils/team/team-image-source";
-
-import { TeamCardMotion } from "../TeamCardMotion/TeamCardMotion";
 
 import styles from "./TeamCard.module.css";
 
@@ -27,114 +22,130 @@ interface TeamCardProps {
 export function TeamCard({ member }: TeamCardProps) {
   const name = member.name ?? "Unnamed member";
   const image = getTeamImageSource(member.imagePng);
-  const hasDetails = Boolean(
-    member.position || member.linkedin || member.github,
-  );
+  const hasProfiles = Boolean(member.linkedin || member.github);
 
   return (
     <article className={styles.card}>
-      <TeamCardMotion />
+      <div className={styles.main}>
+        <div className={styles.portrait}>
+          {image ? (
+            <Image
+              src={image}
+              alt={`${name} transparent profile portrait`}
+              fill
+              sizes="(max-width: 52rem) 100vw, (max-width: 78rem) 50vw, 33vw"
+              className={styles.image}
+              unoptimized={image.startsWith("/api/team/media")}
+            />
+          ) : (
+            <div className={styles.fallback}>
+              <Icon icon={UserIcon} size={32} />
 
-      <div className={styles.actions}>
-        <Tooltip content={`View ${name}`} placement="bottom">
-          <Link
-            href={ROUTES.admin.teamDetail(member.id)}
-            className={styles.action}
-            aria-label={`View ${name}`}
-          >
-            <Icon icon={ViewIcon} size={18} />
-          </Link>
-        </Tooltip>
+              <span>Transparent portrait unavailable</span>
+            </div>
+          )}
+        </div>
 
-        <Tooltip content={`Edit ${name}`} placement="bottom">
-          <Link
-            href={ROUTES.admin.teamEdit(member.id)}
-            className={styles.action}
-            aria-label={`Edit ${name}`}
-          >
-            <Icon icon={Edit02Icon} size={18} />
-          </Link>
-        </Tooltip>
-      </div>
+        <div className={styles.content}>
+          <header className={styles.header}>
+            <div className={styles.identity}>
+              <span className={styles.eyebrow}>Team member</span>
 
-      <div className={styles.portrait}>
-        {image ? (
-          <Image
-            src={image}
-            alt={`${name} transparent profile portrait`}
-            fill
-            sizes="(max-width: 36rem) 100vw, (max-width: 58rem) 50vw, (max-width: 78rem) 33vw, 25vw"
-            className={styles.image}
-            unoptimized={image.startsWith("/api/team/media")}
-          />
-        ) : (
-          <div className={styles.fallback}>
-            <Icon icon={UserIcon} size={32} />
-            <span>Transparent portrait unavailable</span>
-          </div>
-        )}
-      </div>
+              <h2 className={styles.name}>
+                <Link href={ROUTES.admin.teamDetail(member.id)}>{name}</Link>
+              </h2>
+            </div>
 
-      <div
-        className={[styles.content, hasDetails ? "" : styles.contentStatic]
-          .filter(Boolean)
-          .join(" ")}
-      >
-        <h2 className={styles.name}>
-          <Link href={ROUTES.admin.teamDetail(member.id)}>{name}</Link>
-        </h2>
-
-        {hasDetails && (
-          <div className={styles.details}>
-            {member.position && (
-              <Badge
-                size="sm"
-                variant="neutral"
-                icon={<Icon icon={WorkIcon} size={14} />}
-                className={styles.position}
-                title={member.position}
+            <div className={styles.actions}>
+              <Link
+                href={ROUTES.admin.teamDetail(member.id)}
+                className={styles.action}
+                aria-label={`View ${name}`}
+                title={`View ${name}`}
               >
-                {member.position}
-              </Badge>
+                <Icon icon={ViewIcon} size={18} />
+              </Link>
+
+              <Link
+                href={ROUTES.admin.teamEdit(member.id)}
+                className={styles.action}
+                aria-label={`Edit ${name}`}
+                title={`Edit ${name}`}
+              >
+                <Icon icon={Edit02Icon} size={18} />
+              </Link>
+            </div>
+          </header>
+
+          <dl className={styles.details}>
+            {member.position && (
+              <div className={styles.detailRow}>
+                <dt>Role</dt>
+                <dd>{member.position}</dd>
+              </div>
             )}
 
-            {(member.linkedin || member.github) && (
-              <div
-                className={styles.profiles}
-                aria-label="Professional profiles"
-              >
-                {member.linkedin && (
-                  <Tooltip content="Open LinkedIn profile">
+            {hasProfiles && (
+              <div className={styles.detailRow}>
+                <dt>Profiles</dt>
+
+                <dd className={styles.profiles}>
+                  {member.linkedin && (
                     <a
                       href={member.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.profileLink}
                       aria-label={`${name} on LinkedIn`}
+                      title="Open LinkedIn profile"
                     >
-                      <Icon icon={Linkedin01Icon} size={18} />
+                      <Icon icon={Linkedin01Icon} size={17} />
                     </a>
-                  </Tooltip>
-                )}
+                  )}
 
-                {member.github && (
-                  <Tooltip content="Open GitHub profile">
+                  {member.github && (
                     <a
                       href={member.github}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.profileLink}
                       aria-label={`${name} on GitHub`}
+                      title="Open GitHub profile"
                     >
-                      <Icon icon={GithubIcon} size={18} />
+                      <Icon icon={GithubIcon} size={17} />
                     </a>
-                  </Tooltip>
-                )}
+                  )}
+                </dd>
               </div>
             )}
-          </div>
-        )}
+
+            <div className={styles.detailRow}>
+              <dt>Joined</dt>
+              <dd>{formatDate(member.createdAt)}</dd>
+            </div>
+          </dl>
+        </div>
       </div>
+
+      <footer className={styles.footer}>
+        <span className={styles.slug}>@{member.slug}</span>
+
+        <span>Updated {formatDate(member.updatedAt)}</span>
+      </footer>
     </article>
   );
+}
+
+function formatDate(value: string) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
+
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(date);
 }
