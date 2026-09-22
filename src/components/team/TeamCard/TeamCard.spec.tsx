@@ -1,9 +1,17 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import type { TeamMember } from "@/types/team/team";
 
 import { TeamCard } from "./TeamCard";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    replace: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}));
 
 vi.mock("next/image", () => ({
   default: (
@@ -37,6 +45,16 @@ const member: TeamMember = {
   updatedAt: "2026-09-20T10:00:00Z",
 };
 
+beforeAll(() => {
+  HTMLDialogElement.prototype.showModal = function showModal() {
+    this.setAttribute("open", "");
+  };
+
+  HTMLDialogElement.prototype.close = function close() {
+    this.removeAttribute("open");
+  };
+});
+
 describe("TeamCard", () => {
   it("renders the standard non-transparent profile image", () => {
     render(<TeamCard member={member} />);
@@ -53,15 +71,29 @@ describe("TeamCard", () => {
     expect(portrait.getAttribute("src")).not.toContain("cutout.png");
   });
 
-  it("renders View and Edit using accessible actions", () => {
+  it("opens member details in a dialog and keeps editing available", async () => {
     render(<TeamCard member={member} />);
 
-    expect(screen.getByRole("link", { name: "View Jane Doe" })).toHaveAttribute(
-      "href",
-      "/team/detail/17",
+    expect(
+      screen.queryByRole("link", { name: "View Jane Doe" }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "View Jane Doe" }),
     );
 
+    expect(
+      screen.getByRole("dialog", { name: "Jane Doe" }),
+    ).toBeInTheDocument();
+
+    expect(screen.getByText("Profile information")).toBeInTheDocument();
+
     expect(screen.getByRole("link", { name: "Edit Jane Doe" })).toHaveAttribute(
+      "href",
+      "/team/edit/17",
+    );
+
+    expect(screen.getByRole("link", { name: "Edit profile" })).toHaveAttribute(
       "href",
       "/team/edit/17",
     );
