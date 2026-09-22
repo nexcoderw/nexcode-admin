@@ -12,9 +12,19 @@ const FORWARDED_HEADERS = [
 ] as const;
 
 export interface BackendRequestOptions {
-    method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+    method?:
+    | "GET"
+    | "POST"
+    | "PUT"
+    | "PATCH"
+    | "DELETE";
+
     body?: unknown;
+
+    formData?: FormData;
+
     forwarded?: Headers;
+
     headers?: HeadersInit;
 }
 
@@ -31,9 +41,23 @@ export async function backendRequest<T>(
     path: string,
     options: BackendRequestOptions = {},
 ): Promise<BackendResult<T>> {
-    const headers = new Headers(options.headers);
+    if (
+        options.body !== undefined &&
+        options.formData !== undefined
+    ) {
+        throw new Error(
+            "A backend request cannot contain both JSON and FormData.",
+        );
+    }
 
-    headers.set("Accept", "application/json");
+    const headers = new Headers(
+        options.headers,
+    );
+
+    headers.set(
+        "Accept",
+        "application/json",
+    );
 
     if (options.body !== undefined) {
         headers.set(
@@ -49,34 +73,49 @@ export async function backendRequest<T>(
         );
     }
 
-    const controller = new AbortController();
+    const controller =
+        new AbortController();
 
-    const timeout = setTimeout(() => {
-        controller.abort();
-    }, BACKEND_REQUEST_TIMEOUT_MS);
+    const timeout = setTimeout(
+        () => controller.abort(),
+        BACKEND_REQUEST_TIMEOUT_MS,
+    );
 
     try {
         const response = await fetch(
             buildBackendUrl(path),
             {
-                method: options.method ?? "GET",
+                method:
+                    options.method ?? "GET",
+
                 headers,
+
                 body:
-                    options.body === undefined
-                        ? undefined
-                        : JSON.stringify(options.body),
+                    options.formData ??
+                    (
+                        options.body === undefined
+                            ? undefined
+                            : JSON.stringify(
+                                options.body,
+                            )
+                    ),
+
                 cache: "no-store",
-                signal: controller.signal,
+
+                signal:
+                    controller.signal,
             },
         );
 
         return {
             ok: response.ok,
             status: response.status,
-            data: await readJsonResponse<T>(
-                response,
-            ),
-            headers: response.headers,
+            data:
+                await readJsonResponse<T>(
+                    response,
+                ),
+            headers:
+                response.headers,
         };
     } catch (error) {
         console.error(
