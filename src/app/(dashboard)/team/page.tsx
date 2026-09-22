@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 
 import { TeamEmptyState } from "@/components/team/TeamEmptyState/TeamEmptyState";
 import { TeamFilters } from "@/components/team/TeamFilters/TeamFilters";
+import { TeamGrid } from "@/components/team/TeamGrid/TeamGrid";
 import { TeamPagination } from "@/components/team/TeamPagination/TeamPagination";
-import { TeamTable } from "@/components/team/TeamTable/TeamTable";
 import { Alert } from "@/components/ui/Alert/Alert";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { ROUTES } from "@/constants/routes";
@@ -94,9 +94,11 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
         <TeamEmptyState filtered={filtered} />
       ) : (
         <>
-          <TeamTable items={data.items} />
+          <TeamGrid items={data.items} />
 
-          <TeamPagination pagination={data.pagination} query={query} />
+          {data.pagination.totalItems > data.pagination.pageSize && (
+            <TeamPagination pagination={data.pagination} query={query} />
+          )}
         </>
       )}
     </div>

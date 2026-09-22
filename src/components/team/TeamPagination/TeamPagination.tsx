@@ -1,5 +1,10 @@
+import {
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+} from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
+import { Icon } from "@/components/ui/Icon/Icon";
 import type { TeamPagination as PaginationData } from "@/types/team/team";
 import {
   buildTeamListHref,
@@ -14,7 +19,10 @@ interface TeamPaginationProps {
 }
 
 export function TeamPagination({ pagination, query }: TeamPaginationProps) {
-  if (pagination.totalItems === 0) {
+  if (
+    pagination.totalItems <= pagination.pageSize ||
+    pagination.totalPages <= 1
+  ) {
     return null;
   }
 
@@ -37,10 +45,12 @@ export function TeamPagination({ pagination, query }: TeamPaginationProps) {
             href={buildTeamListHref(query, pagination.page - 1)}
             className={styles.control}
           >
+            <Icon icon={ArrowLeft01Icon} size={16} />
             Previous
           </Link>
         ) : (
           <span className={[styles.control, styles.disabled].join(" ")}>
+            <Icon icon={ArrowLeft01Icon} size={16} />
             Previous
           </span>
         )}
@@ -55,10 +65,12 @@ export function TeamPagination({ pagination, query }: TeamPaginationProps) {
             className={styles.control}
           >
             Next
+            <Icon icon={ArrowRight01Icon} size={16} />
           </Link>
         ) : (
           <span className={[styles.control, styles.disabled].join(" ")}>
             Next
+            <Icon icon={ArrowRight01Icon} size={16} />
           </span>
         )}
       </div>
