@@ -4,6 +4,7 @@ import { ROUTES } from "@/constants/routes";
 import type { TeamMember } from "@/types/team/team";
 
 import { TeamAvatar } from "../TeamAvatar/TeamAvatar";
+import { TeamDetailsDialog } from "../TeamDetailsDialog/TeamDetailsDialog";
 
 import styles from "./TeamTable.module.css";
 
@@ -88,12 +89,7 @@ function TeamRow({ member }: { member: TeamMember }) {
 
       <td>
         <div className={styles.actions}>
-          <Link
-            href={ROUTES.admin.teamDetail(member.id)}
-            className={styles.viewAction}
-          >
-            View
-          </Link>
+          <TeamDetailsDialog member={member} showTriggerLabel />
 
           <Link
             href={ROUTES.admin.teamEdit(member.id)}
