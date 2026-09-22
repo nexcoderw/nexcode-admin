@@ -6,6 +6,8 @@ export const MESSAGE_KEYS = {
             "auth.error.invalid_credentials",
         tooManyAttempts:
             "auth.error.too_many_attempts",
+        authenticationRequired:
+            "auth.error.authentication_required",
     },
 
     common: {
@@ -23,6 +25,9 @@ export const MESSAGES = {
 
     [MESSAGE_KEYS.auth.tooManyAttempts]:
         "Too many sign-in attempts. Please try again later.",
+
+    [MESSAGE_KEYS.auth.authenticationRequired]:
+        "Your session has expired. Please sign in again.",
 
     [MESSAGE_KEYS.common.serviceUnavailable]:
         "The service is temporarily unavailable. Please try again.",
