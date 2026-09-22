@@ -10,6 +10,7 @@ import type {
 import {
   cloneElement,
   isValidElement,
+  useCallback,
   useEffect,
   useId,
   useRef,
@@ -53,12 +54,12 @@ export function Tooltip({
   const tooltipId = useId();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const clearOpenTimeout = () => {
+  const clearOpenTimeout = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
-  };
+  }, []);
 
   const openTooltip = () => {
     clearOpenTimeout();
@@ -68,16 +69,16 @@ export function Tooltip({
     }, delay);
   };
 
-  const closeTooltip = () => {
+  const closeTooltip = useCallback(() => {
     clearOpenTimeout();
     setOpen(false);
-  };
+  }, [clearOpenTimeout]);
 
   useEffect(() => {
     return () => {
       clearOpenTimeout();
     };
-  }, []);
+  }, [clearOpenTimeout]);
 
   useEffect(() => {
     if (!open) {
@@ -95,7 +96,7 @@ export function Tooltip({
     return () => {
       document.removeEventListener("keydown", handleEscape);
     };
-  }, [open]);
+  }, [open, closeTooltip]);
 
   /*
    * A disabled tooltip should behave exactly like its
@@ -122,6 +123,8 @@ export function Tooltip({
     ? [existingDescribedBy, tooltipId].filter(Boolean).join(" ")
     : existingDescribedBy;
 
+  // React preserves the trigger ref when cloning; it is never read here.
+  // eslint-disable-next-line react-hooks/refs
   const triggerElement = cloneElement(trigger, {
     "aria-describedby": describedBy,
 
@@ -157,7 +160,7 @@ export function Tooltip({
         id={tooltipId}
         role="tooltip"
         aria-hidden={!open}
-        className={[styles.tooltip, styles[placement], open ? styles.open : ""]
+        className={[styles.tooltip, styles[placement], open ? styles.visible : ""]
           .filter(Boolean)
           .join(" ")}
       >
