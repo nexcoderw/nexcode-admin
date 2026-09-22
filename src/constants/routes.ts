@@ -1,28 +1,46 @@
 export const ROUTES = {
     auth: {
-        login: '/login',
-        forgotPassword: '/forgot-password',
-        resetPassword: '/reset-password',
-        verify: '/verify',
+        login: "/login",
+        forgotPassword:
+            "/forgot-password",
+        resetPassword:
+            "/reset-password",
+        verify: "/verify",
     },
 
     admin: {
-        dashboard: '/',
+        dashboard: "/",
 
-        portfolios: '/portfolios',
-        clients: '/clients',
-        team: '/team',
+        portfolios: "/portfolios",
+        clients: "/clients",
 
-        blogs: '/blogs',
-        trainings: '/trainings',
-        testimonials: '/testimonials',
+        team: "/team",
 
-        contacts: '/contacts',
+        teamAdd:
+            "/team/add",
 
-        payments: '/payments',
-        paymentStatuses: '/payments/statuses',
+        teamDetail: (
+            teamId: number,
+        ) =>
+            `/team/detail/${teamId}`,
 
-        settings: '/settings',
+        teamEdit: (
+            teamId: number,
+        ) =>
+            `/team/edit/${teamId}`,
+
+        blogs: "/blogs",
+        trainings: "/trainings",
+        testimonials:
+            "/testimonials",
+
+        contacts: "/contacts",
+
+        payments: "/payments",
+        paymentStatuses:
+            "/payments/statuses",
+
+        settings: "/settings",
     },
 } as const;
 
@@ -62,5 +80,8 @@ export const API_ROUTES = {
             teamId: number,
         ) =>
             `/api/team/delete/${teamId}`,
+
+        media:
+            "/api/team/media",
     },
 } as const;
