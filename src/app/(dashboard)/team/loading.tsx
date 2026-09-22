@@ -11,13 +11,13 @@ export default function TeamLoading() {
 
       <div className={styles.filters} />
 
-      <div className={styles.table}>
+      <div className={styles.grid}>
         {Array.from(
           {
             length: 6,
           },
           (_, index) => (
-            <span key={index} className={styles.row} />
+            <span key={index} className={styles.card} />
           ),
         )}
       </div>
