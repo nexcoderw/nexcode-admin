@@ -1,158 +1,231 @@
 .filters {
-  padding: var(--space-4);
+  position: relative;
 
-  background: var(--color-surface);
+  width: 100%;
+
+  padding: var(--space-5);
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(135deg, var(--color-primary-subtle), transparent 28%),
+    color-mix(in srgb, var(--color-surface) 78%, transparent);
 
   border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
 
-  border-radius: var(--radius-lg);
-}
+  box-shadow: var(--shadow-sm);
 
-.form {
-  display: grid;
-  grid-template-columns:
-    minmax(16rem, 1fr)
-    minmax(13rem, 0.35fr)
-    auto;
-
-  gap: var(--space-4);
-
-  align-items: end;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-
-  min-width: 0;
-}
-
-.label {
-  color: var(--color-text-secondary);
-
-  font-size: var(--font-size-xs);
-
-  font-weight: var(--font-weight-semibold);
-}
-
-.input,
-.select {
-  width: 100%;
-  min-height: var(--control-height-md);
-
-  padding-inline: var(--control-padding-inline-md);
-
-  color: var(--color-text-primary);
-
-  background: var(--color-surface-secondary);
-
-  border: var(--border-width) solid var(--color-border);
-
-  border-radius: var(--radius-md);
-
-  font-size: var(--font-size-sm);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
 
   transition:
     border-color var(--transition-fast),
-    background-color var(--transition-fast);
+    box-shadow var(--transition-fast);
 }
 
-.input::placeholder {
-  color: var(--color-text-muted);
+.filters::before {
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-text-primary) 4%, transparent),
+    transparent 34%
+  );
+
+  pointer-events: none;
+
+  content: "";
 }
 
-.input:hover,
-.select:hover {
-  border-color: var(--color-border-strong);
+.hasActiveFilters {
+  border-color: var(--color-primary-border);
 }
 
-.input:focus,
-.select:focus {
-  border-color: var(--color-primary);
+.form {
+  position: relative;
+  z-index: var(--z-base);
 
-  outline: none;
+  display: flex;
+  align-items: flex-end;
+
+  width: 100%;
+
+  gap: var(--space-5);
+}
+
+.searchField {
+  flex: 0 0 30%;
+
+  width: 30%;
+  min-width: 0;
+}
+
+.spacer {
+  flex: 1 1 auto;
+
+  min-width: var(--space-4);
+}
+
+.controls {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: flex-end;
+
+  gap: var(--space-3);
+}
+
+.sortField {
+  width: 14rem;
+
+  flex: 0 0 14rem;
 }
 
 .actions {
   display: flex;
   align-items: center;
+
   gap: var(--space-2);
 }
 
-.apply,
-.reset {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-height: var(--control-height-md);
-
-  padding-inline: var(--control-padding-inline-md);
-
-  border-radius: var(--radius-round);
-
-  font-size: var(--font-size-sm);
-
-  font-weight: var(--font-weight-semibold);
+.applyAction {
+  flex: 0 0 auto;
 
   white-space: nowrap;
 }
 
-.apply {
-  color: var(--color-text-on-primary);
+.resetAction {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
 
-  background: var(--color-primary);
+  min-height: var(--control-height-lg);
 
-  border: var(--border-width) solid var(--color-primary);
+  padding-inline: var(--control-padding-inline-lg);
 
-  cursor: pointer;
+  color: var(--color-text-secondary);
+
+  background: color-mix(
+    in srgb,
+    var(--color-surface-secondary) 70%,
+    transparent
+  );
+
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-round);
+
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+
+  white-space: nowrap;
 
   transition:
+    color var(--transition-fast),
     background-color var(--transition-fast),
     border-color var(--transition-fast);
 }
 
-.apply:hover {
-  background: var(--color-primary-hover);
-
-  border-color: var(--color-primary-hover);
-}
-
-.reset {
-  color: var(--color-text-secondary);
-
-  background: transparent;
-
-  border: var(--border-width) solid transparent;
-
-  transition:
-    color var(--transition-fast),
-    background-color var(--transition-fast);
-}
-
-.reset:hover {
+.resetAction:hover {
   color: var(--color-text-primary);
 
   background: var(--color-surface-hover);
+
+  border-color: var(--color-border-strong);
 }
 
-@media (max-width: 48rem) {
+.resetAction:active {
+  background: var(--color-surface-active);
+}
+
+.resetAction:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/*
+ * Keep the desktop toolbar structure intact for as long as
+ * there is enough room:
+ *
+ * Search (30%) → flexible empty space → filters/actions.
+ */
+@media (max-width: 64rem) {
   .form {
-    grid-template-columns: 1fr 1fr;
+    flex-wrap: wrap;
+  }
+
+  .searchField {
+    flex-basis: 100%;
+
+    width: 100%;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  .controls {
+    justify-content: space-between;
+
+    width: 100%;
+  }
+}
+
+@media (max-width: 42rem) {
+  .filters {
+    padding: var(--space-4);
+  }
+
+  .controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .sortField {
+    width: 100%;
+
+    flex-basis: auto;
   }
 
   .actions {
-    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .applyAction,
+  .resetAction {
+    flex: 1 1 0;
+
+    width: 100%;
   }
 }
 
-@media (max-width: 36rem) {
-  .form {
-    grid-template-columns: 1fr;
+@media (max-width: 30rem) {
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filters,
+  .resetAction {
+    transition: none;
+  }
+}
+
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .filters {
+    background: var(--color-surface);
   }
 
-  .actions {
-    grid-column: auto;
+  .resetAction {
+    background: var(--color-surface-secondary);
   }
 }
