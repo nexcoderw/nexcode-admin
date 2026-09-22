@@ -1,178 +1,182 @@
-import {
-    ROUTES,
-} from "@/constants/routes";
+import { ROUTES } from "@/constants/routes";
 import type {
-    TeamListQuery,
-    TeamOrdering,
+  TeamListQuery,
+  TeamOrdering,
 } from "@/types/team/team";
 
-
-const DEFAULT_ORDERING:
-    TeamOrdering =
-    "-created_at";
+const DEFAULT_ORDERING: TeamOrdering =
+  "-created_at";
 
 const DEFAULT_PAGE_SIZE = 20;
 
 const ORDERINGS =
-    new Set<TeamOrdering>([
-        "name",
-        "-name",
-        "position",
-        "-position",
-        "created_at",
-        "-created_at",
-        "updated_at",
-        "-updated_at",
-    ]);
-
+  new Set<TeamOrdering>([
+    "name",
+    "-name",
+    "position",
+    "-position",
+    "created_at",
+    "-created_at",
+    "updated_at",
+    "-updated_at",
+  ]);
 
 export interface ResolvedTeamListQuery {
-    search: string;
-    ordering: TeamOrdering;
-    page: number;
-    pageSize: number;
+  search: string;
+  ordering: TeamOrdering;
+  page: number;
+  pageSize: number;
 }
-
 
 export function parseTeamListQuery(
-    params: Record<
-        string,
-        string |
-        string[] |
-        undefined
-    >,
+  params: Record<
+    string,
+    string | string[] | undefined
+  >,
 ): ResolvedTeamListQuery {
-    const search =
-        firstValue(
-            params.search,
-        )
-            ?.trim()
-            .slice(0, 100) ?? "";
+  const search =
+    firstValue(
+      params.search,
+    )
+      ?.trim()
+      .slice(0, 100) ?? "";
 
-    const orderingValue =
-        firstValue(
-            params.ordering,
-        );
+  const orderingValue =
+    firstValue(
+      params.ordering,
+    );
 
-    const ordering =
-        orderingValue &&
-            ORDERINGS.has(
-                orderingValue as TeamOrdering,
-            )
-            ? orderingValue
-          as TeamOrdering
-    : DEFAULT_ORDERING;
+  const ordering =
+    resolveOrdering(
+      orderingValue,
+    );
 
-    const page =
-        parsePositiveInteger(
-            firstValue(
-                params.page,
-            ),
-            1,
-        );
+  const page =
+    parsePositiveInteger(
+      firstValue(
+        params.page,
+      ),
+      1,
+    );
 
-    return {
-        search,
-        ordering,
-        page,
-        pageSize:
-            DEFAULT_PAGE_SIZE,
-    };
+  return {
+    search,
+    ordering,
+    page,
+    pageSize:
+      DEFAULT_PAGE_SIZE,
+  };
 }
-
 
 export function toTeamEndpointQuery(
-    query: ResolvedTeamListQuery,
+  query: ResolvedTeamListQuery,
 ): TeamListQuery {
-    return {
-        search:
-            query.search ||
-            undefined,
+  return {
+    search:
+      query.search ||
+      undefined,
 
-        ordering:
-            query.ordering,
+    ordering:
+      query.ordering,
 
-        page:
-            query.page,
+    page:
+      query.page,
 
-        pageSize:
-            query.pageSize,
-    };
+    pageSize:
+      query.pageSize,
+  };
 }
-
 
 export function buildTeamListHref(
-    query: ResolvedTeamListQuery,
-    page: number,
+  query: ResolvedTeamListQuery,
+  page: number,
 ) {
-    const params =
-        new URLSearchParams();
+  const params =
+    new URLSearchParams();
 
-    if (query.search) {
-        params.set(
-            "search",
-            query.search,
-        );
-    }
+  if (query.search) {
+    params.set(
+      "search",
+      query.search,
+    );
+  }
 
-    if (
-        query.ordering !==
-        DEFAULT_ORDERING
-    ) {
-        params.set(
-            "ordering",
-            query.ordering,
-        );
-    }
+  if (
+    query.ordering !==
+    DEFAULT_ORDERING
+  ) {
+    params.set(
+      "ordering",
+      query.ordering,
+    );
+  }
 
-    if (page > 1) {
-        params.set(
-            "page",
-            String(page),
-        );
-    }
+  if (page > 1) {
+    params.set(
+      "page",
+      String(page),
+    );
+  }
 
-    const queryString =
-        params.toString();
+  const queryString =
+    params.toString();
 
-    return queryString
-        ? `${ROUTES.admin.team}?${queryString}`
-        : ROUTES.admin.team;
+  return queryString
+    ? `${ROUTES.admin.team}?${queryString}`
+    : ROUTES.admin.team;
 }
 
+function resolveOrdering(
+  value: string | undefined,
+): TeamOrdering {
+  if (!value) {
+    return DEFAULT_ORDERING;
+  }
+
+  if (
+    ORDERINGS.has(
+      value as TeamOrdering,
+    )
+  ) {
+    return value as TeamOrdering;
+  }
+
+  return DEFAULT_ORDERING;
+}
 
 function firstValue(
-    value:
-        | string
-        | string[]
-        | undefined,
-) {
-    return Array.isArray(value)
-        ? value[0]
-        : value;
+  value:
+    | string
+    | string[]
+    | undefined,
+): string | undefined {
+  return Array.isArray(value)
+    ? value[0]
+    : value;
 }
 
-
 function parsePositiveInteger(
-    value: string | undefined,
-    fallback: number,
-) {
-    if (
-        !value ||
-        !/^\d+$/.test(value)
-    ) {
-        return fallback;
-    }
+  value: string | undefined,
+  fallback: number,
+): number {
+  if (
+    !value ||
+    !/^\d+$/.test(value)
+  ) {
+    return fallback;
+  }
 
-    const parsed =
-        Number(value);
+  const parsed =
+    Number(value);
 
-    return (
-        Number.isSafeInteger(
-            parsed,
-        ) &&
-        parsed > 0
-    )
-        ? parsed
-        : fallback;
+  if (
+    !Number.isSafeInteger(
+      parsed,
+    ) ||
+    parsed < 1
+  ) {
+    return fallback;
+  }
+
+  return parsed;
 }
