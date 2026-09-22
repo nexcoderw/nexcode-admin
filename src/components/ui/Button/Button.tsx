@@ -70,7 +70,11 @@ export function Button({
           </span>
         )}
       </span>
-      {isLoading && <span className={styles.loadingDots} aria-hidden="true" />}
+      {isLoading && (
+        <span className={styles.loadingDots} aria-hidden="true">
+          <span className={styles.loadingLink} />
+        </span>
+      )}
     </button>
   );
 }
