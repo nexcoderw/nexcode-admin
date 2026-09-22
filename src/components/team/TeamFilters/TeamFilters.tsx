@@ -1,5 +1,10 @@
+import { Search01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
+import { Button } from "@/components/ui/Button/Button";
+import { Icon } from "@/components/ui/Icon/Icon";
+import { Input } from "@/components/ui/Input/Input";
+import { Select, type SelectOption } from "@/components/ui/Select/Select";
 import { ROUTES } from "@/constants/routes";
 import type { ResolvedTeamListQuery } from "@/utils/team/team-list-query";
 
@@ -9,63 +14,82 @@ interface TeamFiltersProps {
   query: ResolvedTeamListQuery;
 }
 
+const ORDERING_OPTIONS: SelectOption[] = [
+  {
+    value: "-created_at",
+    label: "Newest first",
+  },
+  {
+    value: "created_at",
+    label: "Oldest first",
+  },
+  {
+    value: "name",
+    label: "Name A–Z",
+  },
+  {
+    value: "-name",
+    label: "Name Z–A",
+  },
+  {
+    value: "position",
+    label: "Position A–Z",
+  },
+  {
+    value: "-position",
+    label: "Position Z–A",
+  },
+];
+
 export function TeamFilters({ query }: TeamFiltersProps) {
   const filtered = Boolean(query.search) || query.ordering !== "-created_at";
 
   return (
-    <section className={styles.filters} aria-label={"Team filters"}>
+    <section
+      className={[styles.filters, filtered ? styles.hasActiveFilters : ""]
+        .filter(Boolean)
+        .join(" ")}
+      aria-label="Team filters"
+    >
       <form method="get" action={ROUTES.admin.team} className={styles.form}>
-        <div className={styles.field}>
-          <label htmlFor="team-search" className={styles.label}>
-            Search
-          </label>
-
-          <input
+        <div className={styles.searchField}>
+          <Input
             id="team-search"
             type="search"
             name="search"
+            label="Search team"
             defaultValue={query.search}
-            className={styles.input}
-            placeholder={"Name, position or profile"}
+            placeholder="Search by name, position or profile"
             maxLength={100}
+            autoComplete="off"
+            leftIcon={<Icon icon={Search01Icon} size={18} />}
           />
         </div>
 
-        <div className={styles.field}>
-          <label htmlFor="team-ordering" className={styles.label}>
-            Sort by
-          </label>
+        <div className={styles.spacer} aria-hidden="true" />
 
-          <select
-            id="team-ordering"
-            name="ordering"
-            defaultValue={query.ordering}
-            className={styles.select}
-          >
-            <option value="-created_at">Newest first</option>
+        <div className={styles.controls}>
+          <div className={styles.sortField}>
+            <Select
+              id="team-ordering"
+              name="ordering"
+              label="Sort by"
+              defaultValue={query.ordering}
+              options={ORDERING_OPTIONS}
+            />
+          </div>
 
-            <option value="created_at">Oldest first</option>
+          <div className={styles.actions}>
+            <Button type="submit" size="lg" className={styles.applyAction}>
+              Apply filters
+            </Button>
 
-            <option value="name">Name A–Z</option>
-
-            <option value="-name">Name Z–A</option>
-
-            <option value="position">Position A–Z</option>
-
-            <option value="-position">Position Z–A</option>
-          </select>
-        </div>
-
-        <div className={styles.actions}>
-          <button type="submit" className={styles.apply}>
-            Apply filters
-          </button>
-
-          {filtered && (
-            <Link href={ROUTES.admin.team} className={styles.reset}>
-              Reset
-            </Link>
-          )}
+            {filtered && (
+              <Link href={ROUTES.admin.team} className={styles.resetAction}>
+                Reset
+              </Link>
+            )}
+          </div>
         </div>
       </form>
     </section>
