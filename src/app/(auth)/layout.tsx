@@ -27,7 +27,7 @@ export default function AuthLayout({
               className={styles.brandMark}
               aria-hidden="true"
             >
-              <Image src="/nexcode-icon.svg" alt="" width={40} height={40} />
+              <Image src="/svg/nexcode-icon-white.svg" alt="" width={40} height={40} />
             </span>
 
             <div className={styles.brandIdentity}>
@@ -79,7 +79,7 @@ export default function AuthLayout({
             className={styles.mobileBrandMark}
             aria-hidden="true"
           >
-            <Image src="/nexcode-icon.svg" alt="" width={40} height={40} />
+            <Image src="/svg/nexcode-icon-white.svg" alt="" width={40} height={40} />
           </span>
 
           <div className={styles.brandIdentity}>
