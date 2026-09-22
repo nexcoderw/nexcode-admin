@@ -69,6 +69,8 @@
 * ======================================================= */
 
 .mark {
+  --loader-unit: 0.25rem;
+
   display: inline-flex;
   position: relative;
   align-items: center;
@@ -77,7 +79,15 @@
 
   height: calc(var(--loader-unit) * 7);
 
-  color: var(--color-primary);
+  color: var(--loading-mark-color, var(--color-primary));
+}
+
+.markSm {
+  --loader-unit: 0.1875rem;
+}
+
+.markLg {
+  --loader-unit: 0.3125rem;
 }
 
 /*
@@ -93,7 +103,7 @@
 
   height: 100%;
 
-  color: var(--color-primary);
+  color: inherit;
 
   font-family: var(--font-family-primary);
   font-size: calc(var(--loader-unit) * 5);
