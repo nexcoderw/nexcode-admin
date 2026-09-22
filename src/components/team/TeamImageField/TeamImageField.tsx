@@ -6,7 +6,7 @@ import {
   Upload01Icon,
 } from "@hugeicons/core-free-icons";
 import Image from "next/image";
-import { type ChangeEvent, useEffect, useId, useState } from "react";
+import { type ChangeEvent, useEffect, useId, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
@@ -43,29 +43,35 @@ export function TeamImageField({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
   const [removed, setRemoved] = useState(false);
+  const objectUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!selectedFile) {
-      setObjectUrl(null);
-      return;
-    }
-
-    const nextUrl = URL.createObjectURL(selectedFile);
-
-    setObjectUrl(nextUrl);
-
     return () => {
-      URL.revokeObjectURL(nextUrl);
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+      }
     };
-  }, [selectedFile]);
+  }, []);
 
   const currentSource = getTeamImageSource(currentImage);
 
   const previewSource = removed ? null : (objectUrl ?? currentSource);
 
+  function replaceObjectUrl(file: File | null) {
+    if (objectUrlRef.current) {
+      URL.revokeObjectURL(objectUrlRef.current);
+    }
+
+    const nextUrl = file ? URL.createObjectURL(file) : null;
+
+    objectUrlRef.current = nextUrl;
+    setObjectUrl(nextUrl);
+  }
+
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0] ?? null;
 
+    replaceObjectUrl(file);
     setSelectedFile(file);
     setRemoved(false);
 
@@ -74,6 +80,7 @@ export function TeamImageField({
   }
 
   function handleRemove() {
+    replaceObjectUrl(null);
     setSelectedFile(null);
     setRemoved(true);
 
