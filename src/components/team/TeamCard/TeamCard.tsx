@@ -8,6 +8,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
+import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { ROUTES } from "@/constants/routes";
 import type { TeamMember } from "@/types/team/team";
@@ -21,7 +22,11 @@ interface TeamCardProps {
 
 export function TeamCard({ member }: TeamCardProps) {
   const name = member.name ?? "Unnamed member";
-  const image = getTeamImageSource(member.imagePng);
+
+  // The Team card uses the standard profile image,
+  // not the transparent PNG cutout.
+  const image = getTeamImageSource(member.image);
+
   const hasProfiles = Boolean(member.linkedin || member.github);
 
   return (
@@ -31,7 +36,7 @@ export function TeamCard({ member }: TeamCardProps) {
           {image ? (
             <Image
               src={image}
-              alt={`${name} transparent profile portrait`}
+              alt={`${name} profile portrait`}
               fill
               sizes="(max-width: 52rem) 100vw, (max-width: 78rem) 50vw, 33vw"
               className={styles.image}
@@ -41,7 +46,7 @@ export function TeamCard({ member }: TeamCardProps) {
             <div className={styles.fallback}>
               <Icon icon={UserIcon} size={32} />
 
-              <span>Transparent portrait unavailable</span>
+              <span>Profile image unavailable</span>
             </div>
           )}
         </div>
@@ -57,23 +62,29 @@ export function TeamCard({ member }: TeamCardProps) {
             </div>
 
             <div className={styles.actions}>
-              <Link
+              <Button
                 href={ROUTES.admin.teamDetail(member.id)}
-                className={styles.action}
+                variant="secondary"
+                size="sm"
+                iconOnly
+                leftIcon={<Icon icon={ViewIcon} size={18} />}
                 aria-label={`View ${name}`}
                 title={`View ${name}`}
               >
-                <Icon icon={ViewIcon} size={18} />
-              </Link>
+                View {name}
+              </Button>
 
-              <Link
+              <Button
                 href={ROUTES.admin.teamEdit(member.id)}
-                className={styles.action}
+                variant="secondary"
+                size="sm"
+                iconOnly
+                leftIcon={<Icon icon={Edit02Icon} size={18} />}
                 aria-label={`Edit ${name}`}
                 title={`Edit ${name}`}
               >
-                <Icon icon={Edit02Icon} size={18} />
-              </Link>
+                Edit {name}
+              </Button>
             </div>
           </header>
 
@@ -91,29 +102,35 @@ export function TeamCard({ member }: TeamCardProps) {
 
                 <dd className={styles.profiles}>
                   {member.linkedin && (
-                    <a
+                    <Button
                       href={member.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={styles.profileLink}
+                      variant="ghost"
+                      size="sm"
+                      iconOnly
+                      leftIcon={<Icon icon={Linkedin01Icon} size={17} />}
                       aria-label={`${name} on LinkedIn`}
                       title="Open LinkedIn profile"
                     >
-                      <Icon icon={Linkedin01Icon} size={17} />
-                    </a>
+                      Open {name} on LinkedIn
+                    </Button>
                   )}
 
                   {member.github && (
-                    <a
+                    <Button
                       href={member.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={styles.profileLink}
+                      variant="ghost"
+                      size="sm"
+                      iconOnly
+                      leftIcon={<Icon icon={GithubIcon} size={17} />}
                       aria-label={`${name} on GitHub`}
                       title="Open GitHub profile"
                     >
-                      <Icon icon={GithubIcon} size={17} />
-                    </a>
+                      Open {name} on GitHub
+                    </Button>
                   )}
                 </dd>
               </div>
