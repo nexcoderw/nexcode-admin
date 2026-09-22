@@ -164,6 +164,44 @@
 }
 
 /* =========================================================
+ * Icon-only
+ * ======================================================= */
+
+.iconOnly {
+  padding-inline: 0;
+}
+
+.sm.iconOnly {
+  width: var(--control-height-sm);
+  height: var(--control-height-sm);
+}
+
+.md.iconOnly {
+  width: var(--control-height-md);
+  height: var(--control-height-md);
+}
+
+.lg.iconOnly {
+  width: var(--control-height-lg);
+  height: var(--control-height-lg);
+}
+
+.visuallyHidden {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+
+  border: 0;
+}
+
+/* =========================================================
 
 * Full width
 * ======================================================= */
