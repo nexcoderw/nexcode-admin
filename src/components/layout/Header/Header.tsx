@@ -40,15 +40,25 @@ export interface HeaderProps {
   actions?: ReactNode;
 }
 
-export function Header({
+export function Header(props: HeaderProps) {
+  const pathname = usePathname();
+
+  return <HeaderContent key={pathname} {...props} pathname={pathname} />;
+}
+
+interface HeaderContentProps extends HeaderProps {
+  pathname: string;
+}
+
+function HeaderContent({
   admin,
   notificationCount = 0,
   onNotificationsClick,
   onSignOut,
   isSigningOut = false,
   actions,
-}: HeaderProps) {
-  const pathname = usePathname();
+  pathname,
+}: HeaderContentProps) {
 
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
@@ -98,12 +108,6 @@ export function Header({
       document.removeEventListener("keydown", handleEscape);
     };
   }, []);
-
-  useEffect(() => {
-    setOpenGroup(null);
-    setAccountOpen(false);
-    setMobileNavigationOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     const updateScrollState = () => {
