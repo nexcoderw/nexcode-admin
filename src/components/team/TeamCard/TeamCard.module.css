@@ -110,16 +110,6 @@
   white-space: nowrap;
 }
 
-.name a {
-  color: inherit;
-}
-
-.name a:focus-visible {
-  outline: var(--focus-ring-width) solid var(--color-focus);
-  outline-offset: var(--focus-ring-offset);
-  border-radius: var(--radius-sm);
-}
-
 .actions {
   display: flex;
   flex: 0 0 auto;
