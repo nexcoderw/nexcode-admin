@@ -5,93 +5,77 @@
 
   padding: var(--space-5);
 
-  overflow: hidden;
-
-  background:
-    linear-gradient(135deg, var(--color-primary-subtle), transparent 28%),
-    color-mix(in srgb, var(--color-surface) 78%, transparent);
+  /*
+   * Use the normal surface first as a safe fallback.
+   * The colour-mix layer provides the restrained translucent
+   * treatment where supported.
+   */
+  background: var(--color-surface);
+  background: color-mix(in srgb, var(--color-surface) 78%, transparent);
 
   border: var(--border-width) solid var(--color-border-subtle);
   border-radius: var(--radius-xl);
 
   box-shadow: var(--shadow-sm);
 
-  backdrop-filter: blur(18px) saturate(120%);
-  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
 
   transition:
     border-color var(--transition-fast),
     box-shadow var(--transition-fast);
 }
 
-.filters::before {
-  position: absolute;
-  inset: 0;
-
-  border-radius: inherit;
-
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--color-text-primary) 4%, transparent),
-    transparent 34%
-  );
-
-  pointer-events: none;
-
-  content: "";
-}
-
-.hasActiveFilters {
+.filters[data-filtered="true"] {
   border-color: var(--color-primary-border);
 }
 
 .form {
-  position: relative;
-  z-index: var(--z-base);
+  display: grid;
 
-  display: flex;
-  align-items: flex-end;
+  /*
+   * Search occupies exactly 30% on full desktop layouts.
+   * The centre column intentionally remains blank and absorbs
+   * the remaining space.
+   * Actions stay grouped at the far right.
+   */
+  grid-template-columns:
+    minmax(0, 30%)
+    minmax(var(--space-8), 1fr)
+    auto;
 
-  width: 100%;
+  align-items: end;
 
   gap: var(--space-5);
+
+  width: 100%;
 }
 
-.searchField {
-  flex: 0 0 30%;
-
-  width: 30%;
+.search {
   min-width: 0;
 }
 
 .spacer {
-  flex: 1 1 auto;
-
-  min-width: var(--space-4);
+  min-width: 0;
 }
 
 .controls {
   display: flex;
-  flex: 0 0 auto;
   align-items: flex-end;
+  justify-content: flex-end;
 
   gap: var(--space-3);
+
+  min-width: 0;
 }
 
-.sortField {
-  width: 14rem;
+.sort {
+  flex: 0 0 15rem;
 
-  flex: 0 0 14rem;
+  width: 15rem;
 }
 
-.actions {
-  display: flex;
-  align-items: center;
-
-  gap: var(--space-2);
-}
-
-.applyAction {
+.applyButton {
   flex: 0 0 auto;
 
   white-space: nowrap;
@@ -103,6 +87,8 @@
   align-items: center;
   justify-content: center;
 
+  gap: var(--space-2);
+
   min-height: var(--control-height-lg);
 
   padding-inline: var(--control-padding-inline-lg);
@@ -111,7 +97,7 @@
 
   background: color-mix(
     in srgb,
-    var(--color-surface-secondary) 70%,
+    var(--color-surface-secondary) 68%,
     transparent
   );
 
@@ -119,7 +105,7 @@
   border-radius: var(--radius-round);
 
   font-family: var(--font-family-primary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   line-height: 1;
 
@@ -139,38 +125,63 @@
   border-color: var(--color-border-strong);
 }
 
-.resetAction:active {
-  background: var(--color-surface-active);
-}
-
 .resetAction:focus-visible {
   outline: var(--focus-ring-width) solid var(--color-focus);
   outline-offset: var(--focus-ring-offset);
 }
 
+.resetAction:active {
+  background: var(--color-surface-active);
+
+  transform: translateY(1px);
+}
+
 /*
- * Keep the desktop toolbar structure intact for as long as
- * there is enough room:
- *
- * Search (30%) → flexible empty space → filters/actions.
+ * Medium layouts need more room for the action cluster.
+ * Preserve the left/right relationship while allowing the
+ * search control to occupy slightly more usable space.
+ */
+@media (max-width: 75rem) {
+  .form {
+    grid-template-columns:
+      minmax(15rem, 34%)
+      minmax(var(--space-4), 1fr)
+      auto;
+
+    gap: var(--space-4);
+  }
+
+  .sort {
+    flex-basis: 13rem;
+
+    width: 13rem;
+  }
+
+  .controls {
+    gap: var(--space-2);
+  }
+}
+
+/*
+ * On tablet-sized layouts there is no longer enough horizontal
+ * room for a useful deliberate spacer. Search remains above the
+ * action group instead of compressing controls excessively.
  */
 @media (max-width: 64rem) {
   .form {
-    flex-wrap: wrap;
-  }
-
-  .searchField {
-    flex-basis: 100%;
-
-    width: 100%;
+    grid-template-columns: 1fr;
   }
 
   .spacer {
     display: none;
   }
 
+  .search {
+    width: min(100%, 30rem);
+  }
+
   .controls {
-    justify-content: space-between;
+    justify-content: flex-start;
 
     width: 100%;
   }
@@ -181,33 +192,38 @@
     padding: var(--space-4);
   }
 
+  .search {
+    width: 100%;
+  }
+
   .controls {
     align-items: stretch;
-    flex-direction: column;
+    flex-wrap: wrap;
   }
 
-  .sortField {
-    width: 100%;
+  .sort {
+    flex: 1 0 100%;
 
-    flex-basis: auto;
-  }
-
-  .actions {
     width: 100%;
   }
 
-  .applyAction,
+  .applyButton {
+    flex: 1 1 auto;
+  }
+
   .resetAction {
-    flex: 1 1 0;
-
-    width: 100%;
+    flex: 1 1 auto;
   }
 }
 
 @media (max-width: 30rem) {
-  .actions {
-    align-items: stretch;
+  .controls {
     flex-direction: column;
+  }
+
+  .applyButton,
+  .resetAction {
+    width: 100%;
   }
 }
 
@@ -216,16 +232,8 @@
   .resetAction {
     transition: none;
   }
-}
 
-@supports not (
-  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
-) {
-  .filters {
-    background: var(--color-surface);
-  }
-
-  .resetAction {
-    background: var(--color-surface-secondary);
+  .resetAction:active {
+    transform: none;
   }
 }
