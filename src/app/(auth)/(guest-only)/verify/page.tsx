@@ -2,10 +2,11 @@ import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { VerificationForm } from "@/components/auth/verify/VerificationForm";
 import { Icon } from "@/components/ui/Icon/Icon";
+import { ROUTES } from "@/constants/routes";
 
 import styles from "./page.module.css";
-import { VerificationForm } from "@/components/auth/verify/VerificationForm";
 
 export const metadata: Metadata = {
   title: "Verify your identity",
@@ -14,10 +15,10 @@ export const metadata: Metadata = {
 export default function VerifyPage() {
   return (
     <div className={styles.page}>
-      <Link href="/login" className={styles.backLink}>
+      <Link href={ROUTES.auth.forgotPassword} className={styles.backLink}>
         <Icon icon={ArrowLeft01Icon} size={16} />
 
-        <span>Back to sign in</span>
+        <span>Request a new code</span>
       </Link>
 
       <header className={styles.header}>
