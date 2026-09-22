@@ -178,8 +178,11 @@
 * Loading
 * ======================================================= */
 
-.loading {
+.button.loading:disabled {
+  --loading-mark-color: currentColor;
+
   cursor: wait;
+  opacity: 1;
 }
 
 .hiddenLabel {
