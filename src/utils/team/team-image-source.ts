@@ -1,36 +1,45 @@
-import type {
-    NextConfig,
-} from "next";
+import {
+    API_ROUTES,
+} from "@/constants/routes";
 
-const nextConfig: NextConfig = {
-    reactCompiler: true,
 
-    images: {
-        remotePatterns: [
-            {
-                protocol: "https",
-                hostname:
-                    "res.cloudinary.com",
-            },
-        ],
-    },
+export function getTeamImageSource(
+    value: string | null,
+) {
+    if (!value) {
+        return null;
+    }
 
-    async headers() {
-        return [
-            {
-                source: "/:path*",
+    if (
+        value.startsWith(
+            "/media/team/",
+        )
+    ) {
+        const params =
+            new URLSearchParams({
+                path: value,
+            });
 
-                headers: [
-                    {
-                        key:
-                            "X-Robots-Tag",
-                        value:
-                            "noindex, nofollow, noarchive",
-                    },
-                ],
-            },
-        ];
-    },
-};
+        return (
+            `${API_ROUTES.team.media}?` +
+            params.toString()
+        );
+    }
 
-export default nextConfig;
+    try {
+        const url =
+            new URL(value);
+
+        if (
+            url.protocol !== "https:" ||
+            url.hostname !==
+            "res.cloudinary.com"
+        ) {
+            return null;
+        }
+
+        return url.toString();
+    } catch {
+        return null;
+    }
+}
