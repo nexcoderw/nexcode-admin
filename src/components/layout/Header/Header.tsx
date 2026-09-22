@@ -135,7 +135,7 @@ export function Header({
           aria-label="NEXCODE dashboard"
         >
           <span className={styles.brandMark} aria-hidden="true">
-            <Image src="/nexcode-icon.svg" alt="" width={36} height={36} />
+            <Image src="/svg/nexcode-icon-white.svg" alt="" width={36} height={36} />
           </span>
 
           <span className={styles.brandName}>NEXCODE</span>
