@@ -4,8 +4,8 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import type { ChangeEvent } from "react";
 import { useState } from "react";
 
-import { Button } from "../ui/Button/Button";
-import { Icon } from "../ui/Icon/Icon";
+import { Button } from "../../ui/Button/Button";
+import { Icon } from "../../ui/Icon/Icon";
 
 import styles from "./VerificationForm.module.css";
 

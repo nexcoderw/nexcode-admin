@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Icon } from "../../../components/ui/Icon/Icon";
 
 import styles from "./page.module.css";
-import { VerificationForm } from "@/components/auth/VerificationForm";
+import { VerificationForm } from "@/components/auth/verify/VerificationForm";
 
 export const metadata: Metadata = {
   title: "Verify your identity",
