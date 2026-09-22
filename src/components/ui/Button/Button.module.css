@@ -39,6 +39,12 @@
   opacity: var(--opacity-disabled);
 }
 
+.button[aria-disabled="true"] {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: var(--opacity-disabled);
+}
+
 /* =========================================================
 
 * Variants
@@ -215,7 +221,8 @@
 * Loading
 * ======================================================= */
 
-.button.loading:disabled {
+.button.loading:disabled,
+.button.loading[aria-disabled="true"] {
   cursor: wait;
   opacity: 1;
 }

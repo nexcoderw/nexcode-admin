@@ -117,26 +117,34 @@ export function Button({
     const {
       onClick,
       tabIndex,
+      title,
       ...remainingLinkProps
     } = linkProps;
+
+    if (disabled || isLoading) {
+      return (
+        <span
+          className={classes}
+          title={title}
+          role="link"
+          aria-label={isLoading ? loadingLabel : ariaLabel}
+          aria-busy={isLoading || undefined}
+          aria-disabled="true"
+        >
+          {content}
+        </span>
+      );
+    }
 
     return (
       <Link
         {...remainingLinkProps}
         href={href}
         className={classes}
-        aria-label={isLoading ? loadingLabel : ariaLabel}
-        aria-busy={isLoading || undefined}
-        aria-disabled={disabled || isLoading || undefined}
-        tabIndex={disabled || isLoading ? -1 : tabIndex}
-        onClick={(event) => {
-          if (disabled || isLoading) {
-            event.preventDefault();
-            return;
-          }
-
-          onClick?.(event);
-        }}
+        title={title}
+        aria-label={ariaLabel}
+        tabIndex={tabIndex}
+        {...(onClick ? { onClick } : {})}
       >
         {content}
       </Link>
