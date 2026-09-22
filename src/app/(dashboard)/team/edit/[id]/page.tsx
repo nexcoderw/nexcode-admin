@@ -80,12 +80,9 @@ export default async function TeamEditPage({ params }: TeamEditPageProps) {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <Link
-          href={ROUTES.admin.teamDetail(teamMember.id)}
-          className={styles.back}
-        >
+        <Link href={ROUTES.admin.team} className={styles.back}>
           <Icon icon={ArrowLeft01Icon} size={17} />
-          Back to member
+          Back to Team
         </Link>
 
         <span className={styles.sectionLabel}>Team management</span>
