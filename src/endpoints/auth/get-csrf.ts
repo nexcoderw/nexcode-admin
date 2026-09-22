@@ -21,6 +21,7 @@ export interface AdminCsrfContext {
 
 export async function getAdminCsrf(
     forwarded: Headers,
+    sessionId?: string,
 ): Promise<AdminCsrfContext | null> {
     const result =
         await backendRequest<BackendCsrfResponse>(
@@ -28,6 +29,13 @@ export async function getAdminCsrf(
             {
                 method: "GET",
                 forwarded,
+                headers: sessionId
+                    ? {
+                        Cookie: `sessionid=${encodeURIComponent(
+                            sessionId,
+                        )}`,
+                    }
+                    : undefined,
             },
         );
 
