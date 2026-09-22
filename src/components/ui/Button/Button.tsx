@@ -37,7 +37,7 @@ export function Button({
     styles[variant],
     styles[size],
     fullWidth ? styles.fullWidth : "",
-    isLoading ? styles.isLoading : "",
+    isLoading ? styles.loading : "",
     className ?? "",
   ]
     .filter(Boolean)
@@ -53,7 +53,6 @@ export function Button({
     >
       {isLoading ? (
         <>
-          {" "}
           <LoadingMark size="sm" />
           <span>{loadingLabel}</span>
         </>
