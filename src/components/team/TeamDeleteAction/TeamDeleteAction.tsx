@@ -8,7 +8,8 @@ import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Dialog } from "@/components/ui/Dialog/Dialog";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { API_ROUTES, ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { TEAM_API_ROUTES, TEAM_ROUTES } from "@/constants/routes/team-routes";
 
 import styles from "./TeamDeleteAction.module.css";
 
@@ -43,7 +44,7 @@ export function TeamDeleteAction({
     setError(null);
 
     try {
-      const response = await fetch(API_ROUTES.team.delete(teamId), {
+      const response = await fetch(TEAM_API_ROUTES.delete(teamId), {
         method: "DELETE",
         credentials: "same-origin",
         headers: {
@@ -52,14 +53,14 @@ export function TeamDeleteAction({
       });
 
       if (response.status === 401 || response.status === 403) {
-        router.replace(ROUTES.auth.login);
+        router.replace(AUTH_ROUTES.login);
         router.refresh();
         return;
       }
 
       if (response.status === 404) {
         setOpen(false);
-        router.replace(ROUTES.admin.team);
+        router.replace(TEAM_ROUTES.list);
         router.refresh();
         return;
       }
@@ -72,7 +73,7 @@ export function TeamDeleteAction({
       }
 
       setOpen(false);
-      router.replace(ROUTES.admin.team);
+      router.replace(TEAM_ROUTES.list);
       router.refresh();
     } catch {
       setError(
