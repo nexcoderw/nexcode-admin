@@ -99,7 +99,11 @@ describe("TeamCard", () => {
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: "Save changes" }),
+      screen.getByRole("button", { name: "Continue" }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("button", { name: "Delete Jane Doe" }),
     ).toBeInTheDocument();
   });
 
