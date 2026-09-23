@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 import { PortfolioWorkspace } from "@/components/portfolio/PortfolioWorkspace/PortfolioWorkspace";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import {
   getPortfolioServerContext,
   listPortfolioTeamMembers,
@@ -21,20 +22,20 @@ export default async function AddPortfolioPage() {
   const context = await getPortfolioServerContext();
 
   if (!context) {
-    redirect(ROUTES.auth.login);
+    redirect(AUTH_ROUTES.login);
   }
 
   const teams = await listPortfolioTeamMembers(context);
 
   if (teams.status === 401 || teams.status === 403) {
-    redirect(ROUTES.auth.login);
+    redirect(AUTH_ROUTES.login);
   }
 
   return (
     <div className={styles.page}>
       <header className={styles.header}>
         <Button
-          href={ROUTES.admin.portfolios}
+          href={PORTFOLIO_ROUTES.list}
           variant="ghost"
           leftIcon={<Icon icon={ArrowLeft01Icon} size={17} />}
         >
