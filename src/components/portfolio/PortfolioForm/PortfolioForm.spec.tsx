@@ -47,7 +47,11 @@ describe("PortfolioForm", () => {
 
     await userEvent.type(screen.getByLabelText(/Name/), "NEXCODE Admin");
 
-    await userEvent.click(screen.getByLabelText("Jane Doe"));
+    await userEvent.click(
+      screen.getByRole("checkbox", {
+        name: /Jane Doe/,
+      }),
+    );
 
     await userEvent.click(
       screen.getByRole("button", {
