@@ -93,10 +93,14 @@ that was never meant for a user.
 
 ## Loading States
 
-Every route with a data dependency has a `loading.tsx` whose skeleton matches
-the shape of the content that will replace it. A spinner centred on an empty
-page is a last resort: a skeleton that matches prevents the layout shift a
-spinner guarantees.
+Page loading has one owner: `app/(dashboard)/loading.tsx`, which renders the
+shared `PageLoader` for every dashboard route. It sits inside the admin shell,
+so the header stays in place and only the content area waits, and it stays
+hidden for the first moment so quick navigations never flash it.
+
+Do not add per-route `loading.tsx` files or page skeletons; every page shares
+the one loader. In-place feedback for an action — a button that is saving —
+is a control state, not a page loader, and belongs to that control.
 
 ## Empty States
 
@@ -119,5 +123,5 @@ blank panel.
 - [ ] No error page shows a stack trace, backend URL, or raw exception message.
 - [ ] Backend failures display the correlation ID.
 - [ ] 403 shows the 403 page and never redirects to login.
-- [ ] Every data route has a matching skeleton.
+- [ ] Page loading goes through the shared `PageLoader`; no per-route loaders.
 - [ ] Every list has a designed empty state.
