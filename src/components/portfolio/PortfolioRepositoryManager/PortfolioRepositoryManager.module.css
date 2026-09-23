@@ -1,0 +1,88 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+
+  max-width: var(--content-width-lg);
+
+  padding: var(--space-6);
+
+  background: var(--color-surface);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+
+  border-radius: var(--radius-xl);
+}
+
+.section header p {
+  margin-top: var(--space-1);
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr auto;
+
+  gap: var(--space-4);
+
+  align-items: end;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  padding: var(--space-4);
+
+  background: var(--color-surface-secondary);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+
+  border-radius: var(--radius-lg);
+}
+
+/*
+ * Stored links are edited in place, so each row carries the same
+ * column rhythm as the add form above it.
+ */
+.itemForm {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr auto;
+
+  gap: var(--space-4);
+
+  align-items: end;
+}
+
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.itemError {
+  color: var(--color-error);
+
+  font-size: var(--font-size-xs);
+}
+
+@media (max-width: 48rem) {
+  .form,
+  .itemForm {
+    grid-template-columns: 1fr;
+  }
+
+  .itemActions {
+    justify-content: flex-end;
+  }
+}
