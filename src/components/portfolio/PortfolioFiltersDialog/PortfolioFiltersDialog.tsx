@@ -15,7 +15,7 @@ import { Dialog } from "@/components/ui/Dialog/Dialog";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { Input } from "@/components/ui/Input/Input";
 import { Select } from "@/components/ui/Select/Select";
-import { ROUTES } from "@/constants/routes";
+import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import type { TeamMember } from "@/types/team/team";
 import type { ResolvedPortfolioListQuery } from "@/utils/portfolio/portfolio-page-query";
 
@@ -164,7 +164,7 @@ export function PortfolioFiltersDialog({
         {open && (
           <form
             method="get"
-            action={ROUTES.admin.portfolios}
+            action={PORTFOLIO_ROUTES.list}
             className={styles.form}
           >
             <Input
@@ -224,7 +224,7 @@ export function PortfolioFiltersDialog({
             <div className={styles.actions}>
               {activeCount > 0 && (
                 <Button
-                  href={ROUTES.admin.portfolios}
+                  href={PORTFOLIO_ROUTES.list}
                   variant="ghost"
                   leftIcon={<Icon icon={FilterResetIcon} size={18} />}
                   className={styles.reset}
