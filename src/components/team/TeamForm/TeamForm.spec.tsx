@@ -55,7 +55,9 @@ describe("TeamForm", () => {
 
     render(<TeamForm mode="add" onCancel={onCancel} onSuccess={onSuccess} />);
 
-    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Add team member" }),
+    );
 
     expect(
       screen.getByText("Enter the team member's name."),
@@ -91,9 +93,6 @@ describe("TeamForm", () => {
     await userEvent.type(screen.getByLabelText(/Name/), "Jane Doe");
 
     await userEvent.type(screen.getByLabelText(/Position/), "Engineer");
-
-    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
-    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
 
     await userEvent.click(
       screen.getByRole("button", { name: "Add team member" }),
@@ -153,9 +152,6 @@ describe("TeamForm", () => {
       />,
     );
 
-    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
-    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
-
     await userEvent.click(screen.getByRole("button", { name: "Remove image" }));
 
     await userEvent.click(screen.getByRole("button", { name: "Save changes" }));
@@ -197,9 +193,6 @@ describe("TeamForm", () => {
     await userEvent.type(screen.getByLabelText(/Name/), "Jane");
     await userEvent.type(screen.getByLabelText(/Position/), "Engineer");
 
-    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
-    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
-
     await userEvent.click(
       screen.getByRole("button", { name: "Add team member" }),
     );
@@ -216,9 +209,6 @@ describe("TeamForm", () => {
 
     await userEvent.type(screen.getByLabelText(/Name/), "Jane");
     await userEvent.type(screen.getByLabelText(/Position/), "Engineer");
-
-    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
-    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
 
     const cutout = new File(["not-png"], "cutout.jpg", { type: "image/jpeg" });
 
