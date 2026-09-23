@@ -25,6 +25,20 @@ export const ROUTES = {
 
     settings: "/settings",
   },
+  portfolios: "/portfolios",
+
+  portfolioAdd:
+    "/portfolios/add",
+
+  portfolioDetail: (
+    portfolioId: number,
+  ) =>
+    `/portfolios/detail/${portfolioId}`,
+
+  portfolioEdit: (
+    portfolioId: number,
+  ) =>
+    `/portfolios/edit/${portfolioId}`,
 
   errors: {
     serviceUnavailable: "/service-unavailable",
