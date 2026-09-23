@@ -56,7 +56,12 @@ src/
       confirm-password-reset.ts
     client.ts
   constants/
-    routes.ts
+    routes/                 # one file per domain: page and API routes
+      auth-routes.ts
+      portfolio-routes.ts
+    messages/               # one file per domain: message keys and text
+      auth-messages.ts
+      messages.ts           # registry resolving any key to its text
     shared/                 # constants used across features
     dashboard/              # constants for one feature
   hooks/
