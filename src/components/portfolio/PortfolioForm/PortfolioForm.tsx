@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  Briefcase01Icon,
-  File01Icon,
-  UserGroupIcon,
-} from "@hugeicons/core-free-icons";
+import { Briefcase01Icon } from "@hugeicons/core-free-icons";
+import type { ReactNode } from "react";
 
 import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
@@ -40,6 +37,46 @@ interface PortfolioFormProps {
   teamMembers: PortfolioFormTeamMember[];
 }
 
+const SUMMARY_LIMIT = 300;
+
+const CATEGORY_OPTIONS = [
+  { value: "web_application", label: "Web application" },
+  { value: "mobile_application", label: "Mobile application" },
+  { value: "ui_ux", label: "UI/UX" },
+  { value: "branding", label: "Branding" },
+];
+
+const PROJECT_TYPE_OPTIONS = [
+  { value: "client_project", label: "Client project" },
+  { value: "student_project", label: "Student project" },
+  { value: "learning_project", label: "Learning project" },
+];
+
+const STATUS_OPTIONS = [
+  { value: "draft", label: "Draft" },
+  { value: "published", label: "Published" },
+  { value: "archived", label: "Archived" },
+];
+
+/**
+ * What each field means when the backend rejects it. A message that
+ * names the problem is the difference between a form a user can fix and
+ * one they have to guess at.
+ */
+const FIELD_MESSAGES: Record<string, string> = {
+  name: "Enter a project name.",
+  category: "Choose a category.",
+  projectType: "Choose a project type.",
+  status: "Choose a status.",
+  summary: `Keep the summary within ${SUMMARY_LIMIT} characters.`,
+  description: "Check the description.",
+  liveUrl: "Enter a full URL, starting with https://",
+  figmaUrl: "Enter a full Figma URL, starting with https://",
+  projectInitiationDate: "Enter a valid date.",
+  deadlineDate: "The deadline cannot be earlier than the initiation date.",
+  teamMemberIds: "Select at least one available Team member.",
+};
+
 export function PortfolioForm({
   mode,
   portfolio,
@@ -50,8 +87,16 @@ export function PortfolioForm({
     portfolio,
   });
 
+  const selectedCount = form.values.teamMemberIds.length;
+
+  const summaryLength = form.values.summary.length;
+
   function error(field: string) {
-    return form.fields.includes(field) ? "Check this field." : undefined;
+    if (!form.fields.includes(field)) {
+      return undefined;
+    }
+
+    return FIELD_MESSAGES[field] ?? "Check this field.";
   }
 
   return (
@@ -74,19 +119,18 @@ export function PortfolioForm({
         </Alert>
       )}
 
-      <section className={styles.section}>
-        <header>
-          <h2>Project information</h2>
-
-          <p>Define the main public information for this portfolio.</p>
-        </header>
-
+      <Section
+        index="01"
+        title="Project information"
+        description="The name, classification and copy shown wherever this project appears."
+      >
         <div className={styles.grid}>
           <Input
             label="Name"
             required
             value={form.values.name}
             error={error("name")}
+            placeholder="NEXCODE Platform"
             leftIcon={<Icon icon={Briefcase01Icon} size={18} />}
             onChange={(event) => form.setValue("name", event.target.value)}
           />
@@ -95,24 +139,7 @@ export function PortfolioForm({
             label="Category"
             value={form.values.category}
             error={error("category")}
-            options={[
-              {
-                value: "web_application",
-                label: "Web application",
-              },
-              {
-                value: "mobile_application",
-                label: "Mobile application",
-              },
-              {
-                value: "ui_ux",
-                label: "UI/UX",
-              },
-              {
-                value: "branding",
-                label: "Branding",
-              },
-            ]}
+            options={CATEGORY_OPTIONS}
             onChange={(event) => form.setValue("category", event.target.value)}
           />
 
@@ -120,20 +147,7 @@ export function PortfolioForm({
             label="Project type"
             value={form.values.projectType}
             error={error("projectType")}
-            options={[
-              {
-                value: "client_project",
-                label: "Client project",
-              },
-              {
-                value: "student_project",
-                label: "Student project",
-              },
-              {
-                value: "learning_project",
-                label: "Learning project",
-              },
-            ]}
+            options={PROJECT_TYPE_OPTIONS}
             onChange={(event) =>
               form.setValue("projectType", event.target.value)
             }
@@ -143,20 +157,8 @@ export function PortfolioForm({
             label="Status"
             value={form.values.status}
             error={error("status")}
-            options={[
-              {
-                value: "draft",
-                label: "Draft",
-              },
-              {
-                value: "published",
-                label: "Published",
-              },
-              {
-                value: "archived",
-                label: "Archived",
-              },
-            ]}
+            helperText="Drafts stay hidden from the public site."
+            options={STATUS_OPTIONS}
             onChange={(event) => form.setValue("status", event.target.value)}
           />
         </div>
@@ -165,8 +167,10 @@ export function PortfolioForm({
           label="Summary"
           value={form.values.summary}
           error={error("summary")}
-          maxLength={300}
+          maxLength={SUMMARY_LIMIT}
           showOptional
+          placeholder="One sentence shown on the portfolio card."
+          helperText={`${summaryLength} of ${SUMMARY_LIMIT} characters used.`}
           onChange={(event) => form.setValue("summary", event.target.value)}
         />
 
@@ -176,21 +180,23 @@ export function PortfolioForm({
           error={error("description")}
           rows={7}
           showOptional
+          helperText="The full write-up shown on the project's detail page."
           onChange={(event) => form.setValue("description", event.target.value)}
         />
-      </section>
+      </Section>
 
-      <section className={styles.section}>
-        <header>
-          <h2>Links and dates</h2>
-        </header>
-
+      <Section
+        index="02"
+        title="Links and dates"
+        description="Optional references and the schedule this project ran to."
+      >
         <div className={styles.grid}>
           <Input
             type="url"
             label="Live URL"
             value={form.values.liveUrl}
             showOptional
+            placeholder="https://example.com"
             error={error("liveUrl")}
             onChange={(event) => form.setValue("liveUrl", event.target.value)}
           />
@@ -200,6 +206,7 @@ export function PortfolioForm({
             label="Figma URL"
             value={form.values.figmaUrl}
             showOptional
+            placeholder="https://figma.com/file/..."
             error={error("figmaUrl")}
             onChange={(event) => form.setValue("figmaUrl", event.target.value)}
           />
@@ -220,24 +227,43 @@ export function PortfolioForm({
             label="Deadline"
             value={form.values.deadlineDate}
             showOptional
+            min={form.values.projectInitiationDate || undefined}
+            helperText="Must fall on or after the initiation date."
             error={error("deadlineDate")}
             onChange={(event) =>
               form.setValue("deadlineDate", event.target.value)
             }
           />
         </div>
-      </section>
+      </Section>
 
-      <section className={styles.section}>
-        <header>
-          <h2>Team members</h2>
+      <Section
+        index="03"
+        title="Team members"
+        description="Everyone credited on this project."
+        aside={
+          selectedCount > 0 ? (
+            <div className={styles.selection}>
+              <span className={styles.selectionCount}>
+                {selectedCount} selected
+              </span>
 
-          <p>Select every Team member associated with this project.</p>
-        </header>
-
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => form.setValue("teamMemberIds", [])}
+              >
+                Clear
+              </Button>
+            </div>
+          ) : undefined
+        }
+      >
         {teamMembers.length === 0 ? (
           <p className={styles.emptyTeam}>
-            No Team members are currently available.
+            No Team members are currently available. Add them under Team, then
+            return to credit them here.
           </p>
         ) : (
           <div className={styles.teamGrid}>
@@ -252,26 +278,67 @@ export function PortfolioForm({
             ))}
           </div>
         )}
-      </section>
+      </Section>
 
+      {/*
+       * The actions stay in view on a long form, so saving never means
+       * scrolling to the bottom first.
+       */}
       <footer className={styles.actions}>
-        <Button
-          href={ROUTES.admin.portfolios}
-          variant="secondary"
-          leftIcon={<Icon icon={UserGroupIcon} size={17} />}
-        >
-          Cancel
-        </Button>
+        <span className={styles.actionsHint}>
+          {mode === "add"
+            ? "Images and links can be added once the project exists."
+            : "Changes apply as soon as they are saved."}
+        </span>
 
-        <Button
-          type="submit"
-          isLoading={form.saving}
-          loadingLabel="Saving portfolio"
-          leftIcon={<Icon icon={File01Icon} size={17} />}
-        >
-          {mode === "add" ? "Create portfolio" : "Save changes"}
-        </Button>
+        <div className={styles.actionsButtons}>
+          <Button href={ROUTES.admin.portfolios} variant="secondary">
+            Cancel
+          </Button>
+
+          <Button
+            type="submit"
+            isLoading={form.saving}
+            loadingLabel="Saving portfolio"
+          >
+            {mode === "add" ? "Create portfolio" : "Save changes"}
+          </Button>
+        </div>
       </footer>
     </form>
+  );
+}
+
+function Section({
+  index,
+  title,
+  description,
+  aside,
+  children,
+}: {
+  index: string;
+  title: string;
+  description: string;
+  aside?: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <section className={styles.section}>
+      <header className={styles.sectionHeader}>
+        <div>
+          <span className={styles.index} aria-hidden="true">
+            {index}
+          </span>
+
+          <h2>{title}</h2>
+
+          <p>{description}</p>
+        </div>
+
+        {aside}
+      </header>
+
+      <div className={styles.sectionBody}>{children}</div>
+    </section>
   );
 }
