@@ -43,7 +43,7 @@ export function TeamDetailsDialog({
         variant="secondary"
         size="sm"
         iconOnly={!showTriggerLabel}
-        leftIcon={<Icon icon={ViewIcon} size={18} />}
+        leftIcon={<Icon icon={ViewIcon} size={showTriggerLabel ? 9 : 10} />}
         aria-label={`View ${name}`}
         title={`View ${name}`}
         onClick={() => setOpen(true)}
