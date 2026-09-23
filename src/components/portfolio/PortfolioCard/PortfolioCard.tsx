@@ -9,7 +9,7 @@ import { PortfolioDeleteAction } from "@/components/portfolio/PortfolioDeleteAct
 import { Badge } from "@/components/ui/Badge/Badge";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
+import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import type { PortfolioSummary } from "@/types/portfolio/portfolio";
 import { getPortfolioImageSource } from "@/utils/portfolio/portfolio-image-source";
 import {
@@ -81,7 +81,7 @@ export function PortfolioCard({ portfolio }: PortfolioCardProps) {
 
         <div className={styles.actions}>
           <Button
-            href={ROUTES.admin.portfolioDetail(portfolio.id)}
+            href={PORTFOLIO_ROUTES.detail(portfolio.id)}
             variant="secondary"
             size="sm"
             leftIcon={<Icon icon={ArrowRight01Icon} size={16} />}
@@ -90,7 +90,7 @@ export function PortfolioCard({ portfolio }: PortfolioCardProps) {
           </Button>
 
           <Button
-            href={ROUTES.admin.portfolioEdit(portfolio.id)}
+            href={PORTFOLIO_ROUTES.edit(portfolio.id)}
             variant="ghost"
             size="sm"
             leftIcon={<Icon icon={File01Icon} size={16} />}
