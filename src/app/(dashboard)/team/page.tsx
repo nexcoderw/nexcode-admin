@@ -8,7 +8,7 @@ import { TeamFormDialogTrigger } from "@/components/team/TeamFormDialog/TeamForm
 import { TeamGrid } from "@/components/team/TeamGrid/TeamGrid";
 import { TeamPagination } from "@/components/team/TeamPagination/TeamPagination";
 import { Alert } from "@/components/ui/Alert/Alert";
-import { ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
 import { listTeam } from "@/endpoints/team/list-team";
 import { ADMIN_SESSION_COOKIE_NAME } from "@/utils/auth/session";
 import {
@@ -34,7 +34,7 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
   const sessionId = cookieStore.get(ADMIN_SESSION_COOKIE_NAME)?.value;
 
   if (!sessionId) {
-    redirect(ROUTES.auth.login);
+    redirect(AUTH_ROUTES.login);
   }
 
   const incomingHeaders = await headers();
@@ -54,7 +54,7 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
   }
 
   if (result && (result.status === 401 || result.status === 403)) {
-    redirect(ROUTES.auth.login);
+    redirect(AUTH_ROUTES.login);
   }
 
   const data = result?.ok ? result.data : null;
