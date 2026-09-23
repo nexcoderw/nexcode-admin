@@ -9,12 +9,9 @@ import {
 import {
     POST,
 } from "@/app/api/auth/login/route";
-import {
-    MESSAGE_KEYS,
-} from "@/constants/shared/messages";
-import {
-    API_ROUTES,
-} from "@/constants/routes";
+import { AUTH_MESSAGE_KEYS } from "@/constants/messages/auth-messages";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
+import { AUTH_API_ROUTES } from "@/constants/routes/auth-routes";
 import {
     ADMIN_CSRF_COOKIE_NAME,
     ADMIN_SESSION_COOKIE_NAME,
@@ -107,7 +104,7 @@ describe(
 
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth.login,
+                        AUTH_API_ROUTES.login,
                         {
                             email:
                                 "Admin@Nexcode.Africa",
@@ -203,7 +200,7 @@ describe(
 
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth.login,
+                        AUTH_API_ROUTES.login,
                         {
                             email:
                                 "admin@nexcode.africa",
@@ -222,7 +219,7 @@ describe(
                 expect(body).toEqual({
                     success: false,
                     messageKey:
-                        MESSAGE_KEYS.auth
+                        AUTH_MESSAGE_KEYS
                             .invalidCredentials,
                 });
 
@@ -249,7 +246,7 @@ describe(
 
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth.login,
+                        AUTH_API_ROUTES.login,
                         {
                             email:
                                 "admin@nexcode.africa",
@@ -273,7 +270,7 @@ describe(
                 ).toEqual({
                     success: false,
                     messageKey:
-                        MESSAGE_KEYS.auth
+                        AUTH_MESSAGE_KEYS
                             .tooManyAttempts,
                 });
             },
@@ -291,7 +288,7 @@ describe(
 
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth.login,
+                        AUTH_API_ROUTES.login,
                         {
                             email:
                                 "admin@nexcode.africa",
@@ -310,7 +307,7 @@ describe(
                 ).toEqual({
                     success: false,
                     messageKey:
-                        MESSAGE_KEYS.common
+                        COMMON_MESSAGE_KEYS
                             .serviceUnavailable,
                 });
             },
