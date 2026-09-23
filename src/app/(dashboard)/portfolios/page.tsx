@@ -9,7 +9,8 @@ import { PortfolioPagination } from "@/components/portfolio/PortfolioPagination/
 import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import { listPortfolios } from "@/endpoints/portfolio/list-portfolios";
 import {
   resolvePortfolioListQuery,
@@ -36,7 +37,7 @@ export default async function PortfolioPage({
   const context = await getPortfolioServerContext();
 
   if (!context) {
-    redirect(ROUTES.auth.login);
+    redirect(AUTH_ROUTES.login);
   }
 
   const query = resolvePortfolioListQuery(await searchParams);
@@ -51,7 +52,7 @@ export default async function PortfolioPage({
   ]);
 
   if (portfolioResult.status === 401 || portfolioResult.status === 403) {
-    redirect(ROUTES.auth.login);
+    redirect(AUTH_ROUTES.login);
   }
 
   const data = portfolioResult.ok ? portfolioResult.data : null;
@@ -84,7 +85,7 @@ export default async function PortfolioPage({
           />
 
           <Button
-            href={ROUTES.admin.portfolioAdd}
+            href={PORTFOLIO_ROUTES.add}
             leftIcon={<Icon icon={Briefcase01Icon} size={17} />}
           >
             Add portfolio
