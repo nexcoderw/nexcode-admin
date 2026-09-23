@@ -1,11 +1,12 @@
 "use client";
 
-import { Delete02Icon } from "@hugeicons/core-free-icons";
+import { Alert02Icon, Delete02Icon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
+import { Dialog } from "@/components/ui/Dialog/Dialog";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { API_ROUTES, ROUTES } from "@/constants/routes";
 
@@ -18,10 +19,19 @@ interface TeamDeleteActionProps {
 
 export function TeamDeleteAction({ teamId, teamName }: TeamDeleteActionProps) {
   const router = useRouter();
-
-  const [confirming, setConfirming] = useState(false);
+  const [open, setOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const name = teamName ?? "this team member";
+
+  function closeDialog() {
+    if (deleting) {
+      return;
+    }
+
+    setOpen(false);
+    setError(null);
+  }
 
   async function handleDelete() {
     setDeleting(true);
@@ -43,6 +53,7 @@ export function TeamDeleteAction({ teamId, teamName }: TeamDeleteActionProps) {
       }
 
       if (response.status === 404) {
+        setOpen(false);
         router.replace(ROUTES.admin.team);
         router.refresh();
         return;
@@ -55,6 +66,7 @@ export function TeamDeleteAction({ teamId, teamName }: TeamDeleteActionProps) {
         return;
       }
 
+      setOpen(false);
       router.replace(ROUTES.admin.team);
       router.refresh();
     } catch {
@@ -66,62 +78,79 @@ export function TeamDeleteAction({ teamId, teamName }: TeamDeleteActionProps) {
     }
   }
 
-  if (!confirming) {
-    return (
+  return (
+    <>
       <Button
         type="button"
         variant="danger"
         leftIcon={<Icon icon={Delete02Icon} size={17} />}
-        onClick={() => setConfirming(true)}
+        onClick={() => setOpen(true)}
       >
         Delete
       </Button>
-    );
-  }
 
-  return (
-    <div className={styles.confirmation}>
-      {error && (
-        <Alert variant="error" title="Unable to delete">
-          {error}
-        </Alert>
-      )}
+      <Dialog
+        open={open}
+        onClose={closeDialog}
+        title={`Delete ${name}?`}
+        description="This action permanently removes the profile from the team."
+        size="sm"
+        closeLabel="Close delete confirmation"
+        closeOnBackdrop={!deleting}
+        className={styles.deleteDialog}
+        footer={
+          open ? (
+            <div className={styles.actions}>
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={deleting}
+                onClick={closeDialog}
+              >
+                Keep member
+              </Button>
 
-      <div className={styles.confirmationContent}>
-        <div>
-          <strong className={styles.title}>Delete team member?</strong>
+              <Button
+                type="button"
+                variant="danger"
+                isLoading={deleting}
+                loadingLabel={`Deleting ${name}`}
+                onClick={handleDelete}
+              >
+                Delete permanently
+              </Button>
+            </div>
+          ) : undefined
+        }
+      >
+        {open && (
+          <div className={styles.content}>
+            <span className={styles.warningIcon} aria-hidden="true">
+              <Icon icon={Alert02Icon} size={28} />
+            </span>
 
-          <p className={styles.description}>
-            {teamName
-              ? `${teamName} will be permanently removed from the Team collection.`
-              : "This team member will be permanently removed from the Team collection."}
-          </p>
-        </div>
+            <div className={styles.warningCopy}>
+              <strong>This cannot be undone</strong>
+              <p>
+                The profile, standard photograph and transparent cutout for
+                {teamName ? ` ${teamName}` : " this member"} will no longer be
+                available to NEXCODE interfaces.
+              </p>
+            </div>
 
-        <div className={styles.actions}>
-          <Button
-            type="button"
-            variant="secondary"
-            disabled={deleting}
-            onClick={() => {
-              setConfirming(false);
-              setError(null);
-            }}
-          >
-            Cancel
-          </Button>
+            <div className={styles.memberRecord}>
+              <span>Profile selected for deletion</span>
+              <strong>{name}</strong>
+            </div>
 
-          <Button
-            type="button"
-            variant="danger"
-            isLoading={deleting}
-            loadingLabel="Deleting team member"
-            onClick={handleDelete}
-          >
-            Confirm delete
-          </Button>
-        </div>
-      </div>
-    </div>
+            {error && (
+              <Alert variant="error" title="Unable to delete">
+                {error}
+              </Alert>
+            )}
+          </div>
+        )}
+      </Dialog>
+    </>
   );
 }
