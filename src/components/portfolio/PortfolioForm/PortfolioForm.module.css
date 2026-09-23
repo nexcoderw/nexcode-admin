@@ -20,28 +20,101 @@
   border-radius: var(--radius-xl);
 }
 
-.section header {
+/* A numbered header gives the form a readable order without a wizard. */
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+
+  padding-bottom: var(--space-4);
+
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+}
+
+.sectionHeader > div {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+
+  min-width: 0;
 }
 
-.section header p,
+.sectionHeader h2 {
+  font-size: var(--font-size-lg);
+
+  line-height: var(--line-height-tight);
+
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.index {
+  color: var(--color-primary);
+
+  font-size: var(--font-size-xs);
+
+  font-weight: var(--font-weight-semibold);
+
+  letter-spacing: var(--letter-spacing-wide);
+
+  font-variant-numeric: tabular-nums;
+}
+
+.sectionHeader p,
 .emptyTeam {
   color: var(--color-text-muted);
 
   font-size: var(--font-size-sm);
+
+  line-height: var(--line-height-relaxed);
 }
 
-.grid,
-.teamGrid {
+.sectionBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.selection {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.selectionCount {
+  padding: var(--space-1) var(--space-3);
+
+  color: var(--color-primary);
+
+  background: var(--color-primary-subtle);
+
+  border-radius: var(--radius-round);
+
+  font-size: var(--font-size-xs);
+
+  font-weight: var(--font-weight-semibold);
+
+  white-space: nowrap;
+}
+
+/*
+ * Fields size themselves to the space available rather than to fixed
+ * breakpoints, so the form reflows inside any container width.
+ */
+.grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 
   gap: var(--space-4);
 }
 
 .teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+
+  gap: var(--space-3);
+
   padding: var(--space-4);
 
   background: var(--color-surface-secondary);
@@ -51,21 +124,62 @@
   border-radius: var(--radius-lg);
 }
 
+/* Kept in view so saving never requires scrolling to the bottom first. */
 .actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-3);
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
 
-  padding-top: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+
+  padding: var(--space-4) var(--space-5);
+
+  background: var(--color-surface-elevated);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+
+  border-radius: var(--radius-xl);
+}
+
+.actionsHint {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+.actionsButtons {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-3);
 }
 
 @media (max-width: 42rem) {
-  .grid,
-  .teamGrid {
-    grid-template-columns: 1fr;
-  }
-
   .section {
     padding: var(--space-4);
+  }
+
+  .sectionHeader {
+    align-items: stretch;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+
+    padding: var(--space-4);
+  }
+
+  .actionsHint {
+    order: 2;
+  }
+
+  .actionsButtons > * {
+    flex: 1;
   }
 }
