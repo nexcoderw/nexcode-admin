@@ -10,7 +10,7 @@ import { Icon } from "@/components/ui/Icon/Icon";
 import { Input } from "@/components/ui/Input/Input";
 import { Select } from "@/components/ui/Select/Select";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
-import { ROUTES } from "@/constants/routes";
+import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import { usePortfolioForm } from "@/hooks/portfolio/usePortfolioForm";
 import type { PortfolioDetail } from "@/types/portfolio/portfolio";
 
@@ -292,7 +292,7 @@ export function PortfolioForm({
         </span>
 
         <div className={styles.actionsButtons}>
-          <Button href={ROUTES.admin.portfolios} variant="secondary">
+          <Button href={PORTFOLIO_ROUTES.list} variant="secondary">
             Cancel
           </Button>
 
