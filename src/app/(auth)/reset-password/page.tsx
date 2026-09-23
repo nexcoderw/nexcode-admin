@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { ResetPasswordForm } from "@/components/auth/reset-password/ResetPasswordForm";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
 
 import styles from "./page.module.css";
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function ResetPasswordPage() {
   return (
     <div className={styles.page}>
-      <Link href={ROUTES.auth.forgotPassword} className={styles.backLink}>
+      <Link href={AUTH_ROUTES.forgotPassword} className={styles.backLink}>
         <Icon icon={ArrowLeft01Icon} size={16} />
 
         <span>Request a new code</span>
