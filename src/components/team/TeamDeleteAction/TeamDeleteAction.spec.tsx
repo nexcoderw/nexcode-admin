@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { TeamDeleteAction } from "./TeamDeleteAction";
 
@@ -16,6 +16,16 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
+beforeAll(() => {
+  HTMLDialogElement.prototype.showModal = function showModal() {
+    this.setAttribute("open", "");
+  };
+
+  HTMLDialogElement.prototype.close = function close() {
+    this.removeAttribute("open");
+  };
+});
+
 describe("TeamDeleteAction", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -30,7 +40,9 @@ describe("TeamDeleteAction", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Delete" }));
 
-    expect(screen.getByText("Delete team member?")).toBeInTheDocument();
+    expect(
+      screen.getByRole("dialog", { name: "Delete Jane Doe?" }),
+    ).toBeInTheDocument();
 
     expect(fetchSpy).not.toHaveBeenCalled();
   });
@@ -50,7 +62,7 @@ describe("TeamDeleteAction", () => {
     await userEvent.click(screen.getByRole("button", { name: "Delete" }));
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Confirm delete" }),
+      screen.getByRole("button", { name: "Delete permanently" }),
     );
 
     await waitFor(() => {
@@ -87,7 +99,7 @@ describe("TeamDeleteAction", () => {
     await userEvent.click(screen.getByRole("button", { name: "Delete" }));
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Confirm delete" }),
+      screen.getByRole("button", { name: "Delete permanently" }),
     );
 
     expect(
