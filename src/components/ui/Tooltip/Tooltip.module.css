@@ -10,7 +10,7 @@
 
 .tooltip {
   position: absolute;
-  z-index: var(--z-index-tooltip);
+  z-index: var(--z-tooltip);
 
   width: max-content;
   max-width: 16rem;
