@@ -9,8 +9,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 
-import { API_ROUTES, ROUTES } from "@/constants/routes";
-import { MESSAGE_KEYS, MESSAGES } from "@/constants/shared/messages";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
+import { MESSAGES } from "@/constants/messages/messages";
+import { ADMIN_ROUTES } from "@/constants/routes/admin-routes";
+import { AUTH_API_ROUTES, AUTH_ROUTES } from "@/constants/routes/auth-routes";
 import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Checkbox } from "@/components/ui/Checkbox/Checkbox";
@@ -74,7 +76,7 @@ export function LoginForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(API_ROUTES.auth.login, {
+      const response = await fetch(AUTH_API_ROUTES.login, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,11 +96,11 @@ export function LoginForm() {
         return;
       }
 
-      router.replace(ROUTES.admin.dashboard);
+      router.replace(ADMIN_ROUTES.dashboard);
 
       router.refresh();
     } catch {
-      setFormError(MESSAGES[MESSAGE_KEYS.common.serviceUnavailable]);
+      setFormError(MESSAGES[COMMON_MESSAGE_KEYS.serviceUnavailable]);
     } finally {
       setIsSubmitting(false);
     }
@@ -138,7 +140,7 @@ export function LoginForm() {
         <Checkbox name="remember" label="Remember me" disabled={isSubmitting} />
 
         <Link
-          href={ROUTES.auth.forgotPassword}
+          href={AUTH_ROUTES.forgotPassword}
           className={styles.forgotPassword}
         >
           Forgot password?
@@ -213,5 +215,5 @@ function resolveFailureMessage(messageKey: unknown) {
     return MESSAGES[messageKey as keyof typeof MESSAGES];
   }
 
-  return MESSAGES[MESSAGE_KEYS.common.serviceUnavailable];
+  return MESSAGES[COMMON_MESSAGE_KEYS.serviceUnavailable];
 }
