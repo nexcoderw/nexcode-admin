@@ -8,6 +8,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+
+  max-width: var(--content-width-lg);
+
+  padding-bottom: var(--space-5);
+
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
 }
 
 .navigation {
@@ -29,9 +35,25 @@
 
   font-weight: var(--font-weight-semibold);
 
+  letter-spacing: var(--letter-spacing-wide);
+
   text-transform: uppercase;
 }
 
+.header h1 {
+  font-size: var(--font-size-2xl);
+
+  line-height: var(--line-height-tight);
+
+  letter-spacing: var(--letter-spacing-tight);
+
+  overflow-wrap: anywhere;
+}
+
+/*
+ * The destructive action is set apart from the editing sections above
+ * it, so it is never the next thing a cursor lands on.
+ */
 .danger {
   display: flex;
   align-items: center;
@@ -39,6 +61,8 @@
   gap: var(--space-5);
 
   max-width: var(--content-width-lg);
+
+  margin-top: var(--space-2);
 
   padding: var(--space-5);
 
@@ -49,12 +73,18 @@
   border-radius: var(--radius-xl);
 }
 
+.danger h2 {
+  font-size: var(--font-size-md);
+}
+
 .danger p {
   margin-top: var(--space-1);
 
   color: var(--color-text-muted);
 
   font-size: var(--font-size-sm);
+
+  line-height: var(--line-height-relaxed);
 }
 
 @media (max-width: 40rem) {
@@ -62,5 +92,9 @@
   .navigation {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .navigation > * {
+    flex: 1;
   }
 }
