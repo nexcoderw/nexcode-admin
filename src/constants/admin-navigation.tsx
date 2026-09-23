@@ -14,7 +14,10 @@ import type { ReactNode } from 'react';
 
 import { Icon } from '../components/ui/Icon/Icon';
 
-import { ROUTES } from './routes';
+import { ADMIN_ROUTES } from '@/constants/routes/admin-routes';
+import { CLIENT_ROUTES } from '@/constants/routes/client-routes';
+import { PORTFOLIO_ROUTES } from '@/constants/routes/portfolio-routes';
+import { TEAM_ROUTES } from '@/constants/routes/team-routes';
 
 export interface AdminNavigationItem {
   label: string;
@@ -41,7 +44,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
     items: [
       {
         label: 'Dashboard',
-        href: ROUTES.admin.dashboard,
+        href: ADMIN_ROUTES.dashboard,
         exact: true,
         icon: (
           <Icon
@@ -63,7 +66,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
     items: [
       {
         label: 'Portfolios',
-        href: ROUTES.admin.portfolios,
+        href: PORTFOLIO_ROUTES.list,
         icon: (
           <Icon
             icon={Briefcase01Icon}
@@ -73,7 +76,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
       },
       {
         label: 'Clients',
-        href: ROUTES.admin.clients,
+        href: CLIENT_ROUTES.list,
         icon: (
           <Icon
             icon={UserGroupIcon}
@@ -83,7 +86,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
       },
       {
         label: 'Team',
-        href: ROUTES.admin.team,
+        href: TEAM_ROUTES.list,
         icon: (
           <Icon
             icon={UserGroupIcon}
@@ -104,7 +107,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
     items: [
       {
         label: 'Blogs',
-        href: ROUTES.admin.blogs,
+        href: ADMIN_ROUTES.blogs,
         icon: (
           <Icon
             icon={File01Icon}
@@ -114,7 +117,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
       },
       {
         label: 'Trainings',
-        href: ROUTES.admin.trainings,
+        href: ADMIN_ROUTES.trainings,
         icon: (
           <Icon
             icon={BookOpen01Icon}
@@ -124,7 +127,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
       },
       {
         label: 'Testimonials',
-        href: ROUTES.admin.testimonials,
+        href: ADMIN_ROUTES.testimonials,
         icon: (
           <Icon
             icon={StarIcon}
@@ -145,7 +148,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
     items: [
       {
         label: 'Contacts',
-        href: ROUTES.admin.contacts,
+        href: ADMIN_ROUTES.contacts,
         icon: (
           <Icon
             icon={Mail01Icon}
@@ -155,7 +158,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
       },
       {
         label: 'Payments',
-        href: ROUTES.admin.payments,
+        href: ADMIN_ROUTES.payments,
         icon: (
           <Icon
             icon={CreditCardIcon}
@@ -165,7 +168,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
       },
       {
         label: 'Payment statuses',
-        href: ROUTES.admin.paymentStatuses,
+        href: ADMIN_ROUTES.paymentStatuses,
         icon: (
           <Icon
             icon={SecurityCheckIcon}
@@ -186,7 +189,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
     items: [
       {
         label: 'Settings',
-        href: ROUTES.admin.settings,
+        href: ADMIN_ROUTES.settings,
         icon: (
           <Icon
             icon={Settings01Icon}
