@@ -1,0 +1,54 @@
+/*
+ * Only the page shell lives here. Each section below the header owns
+ * its own module alongside its component.
+ */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+
+  max-width: var(--content-width-lg);
+}
+
+.topActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.topActions > div {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.heading h1 {
+  font-size: var(--font-size-3xl);
+}
+
+.heading p {
+  max-width: 48rem;
+
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 36rem) {
+  .topActions,
+  .topActions > div {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
