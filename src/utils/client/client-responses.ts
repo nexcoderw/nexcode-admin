@@ -4,9 +4,9 @@ import {
     NextResponse,
 } from "next/server";
 
-import {
-    MESSAGE_KEYS,
-} from "@/constants/shared/messages";
+import { AUTH_MESSAGE_KEYS } from "@/constants/messages/auth-messages";
+import { CLIENT_MESSAGE_KEYS } from "@/constants/messages/client-messages";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
 import {
     clearAdminSessionCookies,
 } from "@/utils/auth/session";
@@ -19,7 +19,7 @@ export function clientAuthenticationRequired() {
                 success: false,
 
                 messageKey:
-                    MESSAGE_KEYS.auth
+                    AUTH_MESSAGE_KEYS
                         .authenticationRequired,
             },
             {
@@ -46,7 +46,7 @@ export function clientInvalidRequest(
                 success: false,
 
                 messageKey:
-                    MESSAGE_KEYS.client
+                    CLIENT_MESSAGE_KEYS
                         .invalidRequest,
 
                 fields,
@@ -66,7 +66,7 @@ export function clientNotFound() {
                 success: false,
 
                 messageKey:
-                    MESSAGE_KEYS.client
+                    CLIENT_MESSAGE_KEYS
                         .notFound,
             },
             {
@@ -84,7 +84,7 @@ export function clientServiceUnavailable() {
                 success: false,
 
                 messageKey:
-                    MESSAGE_KEYS.common
+                    COMMON_MESSAGE_KEYS
                         .serviceUnavailable,
             },
             {
