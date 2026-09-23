@@ -7,10 +7,8 @@ import {
     useState,
 } from "react";
 
-import {
-    API_ROUTES,
-    ROUTES,
-} from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { PORTFOLIO_API_ROUTES, PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import type {
     PortfolioDetail,
     PortfolioWriteInput,
@@ -94,10 +92,8 @@ export function usePortfolioForm({
             const response =
                 await fetch(
                     mode === "add"
-                        ? API_ROUTES
-                            .portfolio.add
-                        : API_ROUTES
-                            .portfolio.update(
+                        ? PORTFOLIO_API_ROUTES.add
+                        : PORTFOLIO_API_ROUTES.update(
                                 portfolio!.id,
                             ),
                     {
@@ -131,7 +127,7 @@ export function usePortfolioForm({
                 response.status === 403
             ) {
                 router.replace(
-                    ROUTES.auth.login,
+                    AUTH_ROUTES.login,
                 );
 
                 return;
@@ -158,8 +154,7 @@ export function usePortfolioForm({
 
             if (mode === "add") {
                 router.replace(
-                    `${ROUTES.admin
-                        .portfolioEdit(
+                    `${PORTFOLIO_ROUTES.edit(
                             result.data
                                 .portfolio.id,
                         )
