@@ -5,7 +5,7 @@ import {
 
 import {
     addPortfolioImage,
-} from "@/endpoints/portfolio/add-porfolio-image";
+} from "@/endpoints/portfolio/add-portfolio-image";
 import {
     parsePortfolioResourceId,
 } from "@/utils/portfolio/portfolio-id";
