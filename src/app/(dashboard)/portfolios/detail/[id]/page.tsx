@@ -10,7 +10,8 @@ import { PortfolioOverview } from "@/components/portfolio/PortfolioOverview/Port
 import { PortfolioTeamSection } from "@/components/portfolio/PortfolioTeamSection/PortfolioTeamSection";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import { getPortfolio } from "@/endpoints/portfolio/get-portfolio";
 import { parsePortfolioResourceId } from "@/utils/portfolio/portfolio-id";
 import { getPortfolioServerContext } from "@/utils/portfolio/portfolio-server-data";
@@ -33,7 +34,7 @@ export default async function PortfolioDetailsPage({
   const context = await getPortfolioServerContext();
 
   if (!context) {
-    redirect(ROUTES.auth.login);
+    redirect(AUTH_ROUTES.login);
   }
 
   const { id } = await params;
@@ -55,7 +56,7 @@ export default async function PortfolioDetailsPage({
   }
 
   if (result.status === 401 || result.status === 403) {
-    redirect(ROUTES.auth.login);
+    redirect(AUTH_ROUTES.login);
   }
 
   if (!result.ok || !result.portfolio) {
@@ -68,7 +69,7 @@ export default async function PortfolioDetailsPage({
     <div className={styles.page}>
       <nav className={styles.bar} aria-label="Portfolio actions">
         <Button
-          href={ROUTES.admin.portfolios}
+          href={PORTFOLIO_ROUTES.list}
           variant="ghost"
           size="sm"
           leftIcon={<Icon icon={ArrowLeft01Icon} size={16} />}
@@ -78,7 +79,7 @@ export default async function PortfolioDetailsPage({
 
         <div className={styles.barActions}>
           <Button
-            href={ROUTES.admin.portfolioEdit(portfolio.id)}
+            href={PORTFOLIO_ROUTES.edit(portfolio.id)}
             variant="secondary"
             size="sm"
             leftIcon={<Icon icon={File01Icon} size={16} />}
