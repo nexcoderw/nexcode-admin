@@ -70,7 +70,8 @@ export default async function PortfolioDetailsPage({
         <Button
           href={ROUTES.admin.portfolios}
           variant="ghost"
-          leftIcon={<Icon icon={ArrowLeft01Icon} size={17} />}
+          size="sm"
+          leftIcon={<Icon icon={ArrowLeft01Icon} size={16} />}
         >
           Portfolios
         </Button>
@@ -79,51 +80,66 @@ export default async function PortfolioDetailsPage({
           <Button
             href={ROUTES.admin.portfolioEdit(portfolio.id)}
             variant="secondary"
-            leftIcon={<Icon icon={File01Icon} size={17} />}
+            size="sm"
+            leftIcon={<Icon icon={File01Icon} size={16} />}
           >
-            Edit portfolio
+            Edit
           </Button>
 
           <PortfolioDeleteAction
             resource="portfolio"
             resourceId={portfolio.id}
             name={portfolio.name}
+            compact
           />
         </div>
       </nav>
 
       <PortfolioHero portfolio={portfolio} />
 
-      <PortfolioOverview portfolio={portfolio} />
+      <div className={styles.layout}>
+        <article className={styles.main}>
+          <section className={styles.about}>
+            <h2>About this project</h2>
 
-      <PortfolioImageGallery
-        images={portfolio.images}
-        portfolioName={portfolio.name}
-      />
+            <p>
+              {portfolio.description ||
+                "No description has been written for this project yet."}
+            </p>
+          </section>
 
-      <PortfolioTeamSection members={portfolio.teamMembers} />
+          <PortfolioImageGallery
+            images={portfolio.images}
+            portfolioName={portfolio.name}
+          />
+        </article>
 
-      {/* Documents and repositories sit side by side: both are short lists. */}
-      <div className={styles.links}>
-        <PortfolioLinkSection
-          title="Documents"
-          links={portfolio.documents.map((document) => ({
-            id: document.id,
-            label: document.title,
-            url: document.url,
-          }))}
-          emptyMessage="No document links have been added yet."
-        />
+        {/* The ledger: every fact and relationship, one hairline apart. */}
+        <aside className={styles.ledger} aria-label="Project record">
+          <PortfolioOverview portfolio={portfolio} />
 
-        <PortfolioLinkSection
-          title="Repositories"
-          links={portfolio.repositories.map((repository) => ({
-            id: repository.id,
-            label: repository.label,
-            url: repository.url,
-          }))}
-          emptyMessage="No repositories have been linked yet."
-        />
+          <PortfolioTeamSection members={portfolio.teamMembers} />
+
+          <PortfolioLinkSection
+            title="Documents"
+            links={portfolio.documents.map((document) => ({
+              id: document.id,
+              label: document.title,
+              url: document.url,
+            }))}
+            emptyMessage="No document links yet."
+          />
+
+          <PortfolioLinkSection
+            title="Repositories"
+            links={portfolio.repositories.map((repository) => ({
+              id: repository.id,
+              label: repository.label,
+              url: repository.url,
+            }))}
+            emptyMessage="No repositories linked yet."
+          />
+        </aside>
       </div>
     </div>
   );
