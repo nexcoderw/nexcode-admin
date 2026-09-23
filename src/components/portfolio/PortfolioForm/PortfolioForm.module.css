@@ -1,0 +1,71 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+
+  max-width: var(--content-width-lg);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+
+  padding: var(--space-6);
+
+  background: var(--color-surface);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+
+  border-radius: var(--radius-xl);
+}
+
+.section header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.section header p,
+.emptyTeam {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
+}
+
+.grid,
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: var(--space-4);
+}
+
+.teamGrid {
+  padding: var(--space-4);
+
+  background: var(--color-surface-secondary);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+
+  border-radius: var(--radius-lg);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+
+  padding-top: var(--space-2);
+}
+
+@media (max-width: 42rem) {
+  .grid,
+  .teamGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: var(--space-4);
+  }
+}
