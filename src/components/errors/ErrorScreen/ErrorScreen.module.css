@@ -1,0 +1,145 @@
+.screen {
+  display: grid;
+  place-items: center;
+
+  min-height: 100dvh;
+
+  padding: var(--space-8) var(--page-padding-inline);
+
+  background: var(--color-surface);
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 22rem) minmax(0, 30rem);
+  align-items: center;
+  gap: var(--space-12);
+
+  width: 100%;
+  max-width: 60rem;
+}
+
+.art {
+  display: grid;
+  place-items: center;
+
+  min-width: 0;
+}
+
+.art svg {
+  width: 100%;
+  height: auto;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+
+  min-width: 0;
+}
+
+.status {
+  color: var(--color-primary);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.title {
+  margin: 0;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.description {
+  max-width: 34rem;
+
+  margin: 0;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-relaxed);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+
+  margin-top: var(--space-2);
+}
+
+.reference {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2) var(--space-3);
+
+  background: var(--color-surface-secondary);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+
+  font-size: var(--font-size-xs);
+}
+
+.reference span {
+  color: var(--color-text-muted);
+
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.reference code {
+  color: var(--color-text-secondary);
+
+  font-family: inherit;
+  font-weight: var(--font-weight-semibold);
+  word-break: break-all;
+}
+
+@media (max-width: 60rem) {
+  .panel {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: var(--space-8);
+
+    max-width: 34rem;
+
+    text-align: center;
+  }
+
+  .art {
+    max-width: 18rem;
+  }
+
+  .copy {
+    align-items: center;
+  }
+
+  .actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 42rem) {
+  .screen {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+}
