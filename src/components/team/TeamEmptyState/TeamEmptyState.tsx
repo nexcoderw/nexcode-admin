@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { ROUTES } from "@/constants/routes";
 
+import { TeamFormDialogTrigger } from "../TeamFormDialog/TeamFormDialog";
+
 import styles from "./TeamEmptyState.module.css";
 
 interface TeamEmptyStateProps {
@@ -32,9 +34,7 @@ export function TeamEmptyState({ filtered }: TeamEmptyStateProps) {
           Reset filters
         </Link>
       ) : (
-        <Link href={ROUTES.admin.teamAdd} className={styles.primaryAction}>
-          Add team member
-        </Link>
+        <TeamFormDialogTrigger mode="add" />
       )}
     </section>
   );
