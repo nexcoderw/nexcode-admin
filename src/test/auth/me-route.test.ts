@@ -9,12 +9,8 @@ import {
 import {
     GET,
 } from "@/app/api/auth/me/route";
-import {
-    MESSAGE_KEYS,
-} from "@/constants/shared/messages";
-import {
-    API_ROUTES,
-} from "@/constants/routes";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
+import { AUTH_API_ROUTES } from "@/constants/routes/auth-routes";
 import {
     ADMIN_CSRF_COOKIE_NAME,
     ADMIN_SESSION_COOKIE_NAME,
@@ -48,7 +44,7 @@ describe(
             async () => {
                 const response = await GET(
                     createGetRequest(
-                        API_ROUTES.auth.me,
+                        AUTH_API_ROUTES.me,
                     ),
                 );
 
@@ -82,7 +78,7 @@ describe(
 
                 const response = await GET(
                     createGetRequest(
-                        API_ROUTES.auth.me,
+                        AUTH_API_ROUTES.me,
                         {
                             [ADMIN_SESSION_COOKIE_NAME]:
                                 "django-session",
@@ -127,7 +123,7 @@ describe(
 
                 const response = await GET(
                     createGetRequest(
-                        API_ROUTES.auth.me,
+                        AUTH_API_ROUTES.me,
                         {
                             [ADMIN_SESSION_COOKIE_NAME]:
                                 "expired-session",
@@ -174,7 +170,7 @@ describe(
 
                 const response = await GET(
                     createGetRequest(
-                        API_ROUTES.auth.me,
+                        AUTH_API_ROUTES.me,
                         {
                             [ADMIN_SESSION_COOKIE_NAME]:
                                 "django-session",
@@ -191,7 +187,7 @@ describe(
                 ).toEqual({
                     success: false,
                     messageKey:
-                        MESSAGE_KEYS.common
+                        COMMON_MESSAGE_KEYS
                             .serviceUnavailable,
                 });
             },
