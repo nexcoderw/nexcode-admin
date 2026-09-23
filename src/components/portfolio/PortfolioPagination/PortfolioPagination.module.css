@@ -20,6 +20,8 @@
   color: var(--color-text-muted);
 
   font-size: var(--font-size-xs);
+
+  font-variant-numeric: tabular-nums;
 }
 
 .controls {
@@ -76,5 +78,15 @@
 
   .controls {
     justify-content: space-between;
+  }
+
+  .control {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control {
+    transition: none;
   }
 }
