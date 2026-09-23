@@ -2,6 +2,14 @@ import "server-only";
 
 const BACKEND_REQUEST_TIMEOUT_MS = 10_000;
 
+/*
+ * File uploads get a longer limit than ordinary requests. The backend
+ * resizes and re-encodes every image before it replies, and aborting
+ * mid-way is worse than waiting: the backend still commits the change,
+ * so the admin would report a failure for an update that succeeded.
+ */
+const BACKEND_UPLOAD_TIMEOUT_MS = 30_000;
+
 const FORWARDED_HEADERS = [
     "x-device-id",
     "x-device-type",
@@ -143,7 +151,9 @@ export async function backendRequest<T>(
 
     const timeout = setTimeout(
         () => controller.abort(),
-        BACKEND_REQUEST_TIMEOUT_MS,
+        options.formData !== undefined
+            ? BACKEND_UPLOAD_TIMEOUT_MS
+            : BACKEND_REQUEST_TIMEOUT_MS,
     );
 
     try {
