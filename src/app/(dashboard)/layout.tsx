@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
 
 import { AdminShell } from "@/components/layout/AdminShell/AdminShell";
-import { ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { ERROR_ROUTES } from "@/constants/routes/error-routes";
 import { getCurrentAdmin } from "@/utils/auth/current-admin";
 
 interface DashboardLayoutProps {
@@ -15,13 +16,13 @@ export default async function DashboardLayout({
   const currentAdmin = await getCurrentAdmin();
 
   if (currentAdmin.status === "unauthenticated") {
-    redirect(ROUTES.auth.login);
+    redirect(AUTH_ROUTES.login);
   }
 
   // The portal is up and the service behind it is not, which is a 503
   // the reader can act on — not a crash.
   if (currentAdmin.status === "unavailable") {
-    redirect(ROUTES.errors.serviceUnavailable);
+    redirect(ERROR_ROUTES.serviceUnavailable);
   }
 
   const admin = currentAdmin.admin;
