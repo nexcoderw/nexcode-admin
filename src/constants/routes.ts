@@ -25,6 +25,10 @@ export const ROUTES = {
 
     settings: "/settings",
   },
+
+  errors: {
+    serviceUnavailable: "/service-unavailable",
+  },
 } as const;
 
 export const API_ROUTES = {
