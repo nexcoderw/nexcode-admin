@@ -1,5 +1,4 @@
 import {
-  Edit02Icon,
   GithubIcon,
   Linkedin01Icon,
   UserIcon,
@@ -8,11 +7,11 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
 import type { TeamMember } from "@/types/team/team";
 import { getTeamImageSource } from "@/utils/team/team-image-source";
 
 import { TeamDetailsDialog } from "../TeamDetailsDialog/TeamDetailsDialog";
+import { TeamFormDialogTrigger } from "../TeamFormDialog/TeamFormDialog";
 
 import styles from "./TeamCard.module.css";
 
@@ -62,17 +61,7 @@ export function TeamCard({ member }: TeamCardProps) {
             <div className={styles.actions}>
               <TeamDetailsDialog member={member} />
 
-              <Button
-                href={ROUTES.admin.teamEdit(member.id)}
-                variant="secondary"
-                size="sm"
-                iconOnly
-                leftIcon={<Icon icon={Edit02Icon} size={18} />}
-                aria-label={`Edit ${name}`}
-                title={`Edit ${name}`}
-              >
-                Edit {name}
-              </Button>
+              <TeamFormDialogTrigger mode="edit" teamMember={member} compact />
             </div>
           </header>
 
