@@ -1,4 +1,4 @@
-import { ROUTES } from "@/constants/routes";
+import { TEAM_ROUTES } from "@/constants/routes/team-routes";
 import type {
   TeamListQuery,
   TeamOrdering,
@@ -122,8 +122,8 @@ export function buildTeamListHref(
     params.toString();
 
   return queryString
-    ? `${ROUTES.admin.team}?${queryString}`
-    : ROUTES.admin.team;
+    ? `${TEAM_ROUTES.list}?${queryString}`
+    : TEAM_ROUTES.list;
 }
 
 function resolveOrdering(
