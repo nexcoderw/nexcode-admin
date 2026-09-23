@@ -16,7 +16,8 @@ import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { Input } from "@/components/ui/Input/Input";
-import { API_ROUTES, ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { TEAM_API_ROUTES } from "@/constants/routes/team-routes";
 import type { TeamMember } from "@/types/team/team";
 
 import { TeamImageField } from "../TeamImageField/TeamImageField";
@@ -196,8 +197,8 @@ export function TeamForm({
     try {
       const response = await fetch(
         mode === "add"
-          ? API_ROUTES.team.add
-          : API_ROUTES.team.update(teamMember!.id),
+          ? TEAM_API_ROUTES.add
+          : TEAM_API_ROUTES.update(teamMember!.id),
         {
           method: mode === "add" ? "POST" : "PATCH",
           body: buildFormData(mode, values, files, removals),
@@ -213,7 +214,7 @@ export function TeamForm({
       }
 
       if (response.status === 401 || response.status === 403) {
-        router.replace(ROUTES.auth.login);
+        router.replace(AUTH_ROUTES.login);
         router.refresh();
         return;
       }
