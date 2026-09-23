@@ -14,10 +14,6 @@ export const ROUTES = {
 
     team: "/team",
 
-    teamAdd: "/team/add",
-
-    teamEdit: (teamId: number) => `/team/edit/${teamId}`,
-
     blogs: "/blogs",
     trainings: "/trainings",
     testimonials: "/testimonials",
@@ -47,8 +43,6 @@ export const API_ROUTES = {
     list: "/api/team/list",
 
     add: "/api/team/add",
-
-    detail: (teamId: number) => `/api/team/detail/${teamId}`,
 
     update: (teamId: number) => `/api/team/update/${teamId}`,
 
