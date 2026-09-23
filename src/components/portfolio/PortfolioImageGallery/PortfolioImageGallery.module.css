@@ -3,8 +3,6 @@
   flex-direction: column;
   gap: var(--space-4);
 
-  max-width: var(--content-width-lg);
-
   padding: var(--space-6);
 
   background: var(--color-surface);
@@ -14,25 +12,34 @@
   border-radius: var(--radius-xl);
 }
 
+.section h2 {
+  font-size: var(--font-size-md);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
 .empty {
   color: var(--color-text-muted);
 
   font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
 }
 
+/* Fluid tiles: the gallery reflows at every width, not at three sizes. */
 .imageGrid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
 
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 .imageCard {
   position: relative;
 
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 4 / 3;
 
   overflow: hidden;
+
+  background: var(--color-surface-secondary);
 
   border-radius: var(--radius-lg);
 }
@@ -41,14 +48,12 @@
   object-fit: cover;
 }
 
-@media (max-width: 52rem) {
-  .imageGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+@media (max-width: 48rem) {
+  .section {
+    padding: var(--space-5);
   }
-}
 
-@media (max-width: 36rem) {
   .imageGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
   }
 }
