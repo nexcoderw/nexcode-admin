@@ -7,7 +7,8 @@ import { PortfolioWorkspace } from "@/components/portfolio/PortfolioWorkspace/Po
 import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import { getPortfolio } from "@/endpoints/portfolio/get-portfolio";
 import { parsePortfolioResourceId } from "@/utils/portfolio/portfolio-id";
 import {
@@ -38,7 +39,7 @@ export default async function EditPortfolioPage({
   const context = await getPortfolioServerContext();
 
   if (!context) {
-    redirect(ROUTES.auth.login);
+    redirect(AUTH_ROUTES.login);
   }
 
   const { id } = await params;
@@ -60,7 +61,7 @@ export default async function EditPortfolioPage({
   }
 
   if (portfolioResult.status === 401 || portfolioResult.status === 403) {
-    redirect(ROUTES.auth.login);
+    redirect(AUTH_ROUTES.login);
   }
 
   if (!portfolioResult.ok || !portfolioResult.portfolio) {
@@ -78,7 +79,7 @@ export default async function EditPortfolioPage({
       <header className={styles.header}>
         <div className={styles.navigation}>
           <Button
-            href={ROUTES.admin.portfolios}
+            href={PORTFOLIO_ROUTES.list}
             variant="ghost"
             leftIcon={<Icon icon={ArrowLeft01Icon} size={17} />}
           >
@@ -86,7 +87,7 @@ export default async function EditPortfolioPage({
           </Button>
 
           <Button
-            href={ROUTES.admin.portfolioDetail(portfolio.id)}
+            href={PORTFOLIO_ROUTES.detail(portfolio.id)}
             variant="secondary"
             rightIcon={<Icon icon={ArrowRight01Icon} size={17} />}
           >
