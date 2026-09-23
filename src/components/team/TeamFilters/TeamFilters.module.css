@@ -1,239 +1,269 @@
+/*
+ * Refine bar: a single elevated console rather than a plain field row.
+ * A lime status rail sits above the controls, and the criteria in force
+ * are restated underneath as removable chips.
+ */
 .filters {
   position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
 
   width: 100%;
 
   padding: var(--space-5);
 
-  /*
-   * Use the normal surface first as a safe fallback.
-   * The colour-mix layer provides the restrained translucent
-   * treatment where supported.
-   */
   background: var(--color-surface);
-  background: color-mix(in srgb, var(--color-surface) 78%, transparent);
 
   border: var(--border-width) solid var(--color-border-subtle);
   border-radius: var(--radius-xl);
 
   box-shadow: var(--shadow-sm);
 
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
+  transition: border-color var(--transition-fast);
+}
 
-  transition:
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast);
+/* Hairline of light along the top edge — depth without a blur layer. */
+.filters::before {
+  position: absolute;
+  top: 0;
+  right: var(--space-6);
+  left: var(--space-6);
+
+  height: var(--border-width);
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-border-strong),
+    transparent
+  );
+
+  content: "";
 }
 
 .filters[data-filtered="true"] {
   border-color: var(--color-primary-border);
 }
 
+.rail {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  padding-left: var(--space-3);
+
+  border-left: 0.125rem solid var(--color-border);
+}
+
+.filters[data-filtered="true"] .rail {
+  border-left-color: var(--color-primary);
+}
+
+.railLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.railStatus {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+.filters[data-filtered="true"] .railStatus {
+  color: var(--color-primary);
+}
+
 .form {
   display: grid;
-
-  /*
-   * Search occupies exactly 30% on full desktop layouts.
-   * The centre column intentionally remains blank and absorbs
-   * the remaining space.
-   * Actions stay grouped at the far right.
-   */
-  grid-template-columns:
-    minmax(0, 30%)
-    minmax(var(--space-8), 1fr)
-    auto;
-
+  grid-template-columns: minmax(0, 30rem) 16rem minmax(0, 1fr);
   align-items: end;
-
   gap: var(--space-5);
 
   width: 100%;
 }
 
-.search {
+.field,
+.sort {
   min-width: 0;
 }
 
-.spacer {
-  min-width: 0;
-}
-
-.controls {
+/* Vertical hairline separates the inputs from the actions. */
+.actions {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
-
   gap: var(--space-3);
 
   min-width: 0;
+
+  padding-left: var(--space-5);
+
+  border-left: var(--border-width) solid var(--color-border-subtle);
 }
 
-.sort {
-  flex: 0 0 15rem;
-
-  width: 15rem;
-}
-
-.applyButton {
+.action {
   flex: 0 0 auto;
 
   white-space: nowrap;
 }
 
-.resetAction {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-
+.chips {
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-2);
 
-  min-height: var(--control-height-lg);
+  margin: 0;
+  padding: var(--space-4) 0 0;
 
-  padding-inline: var(--control-padding-inline-lg);
+  border-top: var(--border-width) solid var(--color-border-subtle);
 
-  color: var(--color-text-secondary);
+  list-style: none;
+}
 
-  background: color-mix(
-    in srgb,
-    var(--color-surface-secondary) 68%,
-    transparent
-  );
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  max-width: 100%;
+
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
+
+  background: var(--color-surface-secondary);
 
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-round);
 
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  line-height: 1;
+  font-size: var(--font-size-xs);
+}
 
+.chipLabel {
+  color: var(--color-text-muted);
+
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.chipValue {
+  overflow: hidden;
+
+  max-width: 18rem;
+
+  color: var(--color-text-primary);
+
+  font-weight: var(--font-weight-semibold);
   white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.chipClear {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+
+  width: 1.375rem;
+  height: 1.375rem;
+
+  color: var(--color-text-secondary);
+  background: var(--color-surface-tertiary);
+
+  border-radius: var(--radius-round);
 
   transition:
     color var(--transition-fast),
-    background-color var(--transition-fast),
-    border-color var(--transition-fast);
+    background-color var(--transition-fast);
 }
 
-.resetAction:hover {
-  color: var(--color-text-primary);
-
-  background: var(--color-surface-hover);
-
-  border-color: var(--color-border-strong);
+.chipClear:hover {
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
 }
 
-.resetAction:focus-visible {
+.chipClear:focus-visible {
   outline: var(--focus-ring-width) solid var(--color-focus);
   outline-offset: var(--focus-ring-offset);
 }
 
-.resetAction:active {
-  background: var(--color-surface-active);
-
-  transform: translateY(1px);
-}
-
-/*
- * Medium layouts need more room for the action cluster.
- * Preserve the left/right relationship while allowing the
- * search control to occupy slightly more usable space.
- */
 @media (max-width: 75rem) {
   .form {
-    grid-template-columns:
-      minmax(15rem, 34%)
-      minmax(var(--space-4), 1fr)
-      auto;
-
+    grid-template-columns: minmax(0, 1fr) 14rem auto;
     gap: var(--space-4);
   }
 
-  .sort {
-    flex-basis: 13rem;
-
-    width: 13rem;
-  }
-
-  .controls {
+  .actions {
     gap: var(--space-2);
+
+    padding-left: var(--space-4);
   }
 }
 
-/*
- * On tablet-sized layouts there is no longer enough horizontal
- * room for a useful deliberate spacer. Search remains above the
- * action group instead of compressing controls excessively.
- */
 @media (max-width: 64rem) {
   .form {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) 14rem;
   }
 
-  .spacer {
-    display: none;
-  }
+  .actions {
+    grid-column: 1 / -1;
 
-  .search {
-    width: min(100%, 30rem);
-  }
-
-  .controls {
     justify-content: flex-start;
 
-    width: 100%;
+    padding-left: 0;
+
+    border-left: 0;
   }
 }
 
 @media (max-width: 42rem) {
   .filters {
+    gap: var(--space-4);
+
     padding: var(--space-4);
   }
 
-  .search {
-    width: 100%;
+  .form {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .controls {
-    align-items: stretch;
+  .actions {
     flex-wrap: wrap;
   }
 
-  .sort {
-    flex: 1 0 100%;
-
-    width: 100%;
-  }
-
-  .applyButton {
+  .action {
     flex: 1 1 auto;
   }
 
-  .resetAction {
-    flex: 1 1 auto;
+  .chipValue {
+    max-width: 10rem;
   }
 }
 
 @media (max-width: 30rem) {
-  .controls {
+  .rail {
     flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
   }
 
-  .applyButton,
-  .resetAction {
-    width: 100%;
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .filters,
-  .resetAction {
+  .chipClear {
     transition: none;
-  }
-
-  .resetAction:active {
-    transform: none;
   }
 }
