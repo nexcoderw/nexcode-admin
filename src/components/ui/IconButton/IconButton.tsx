@@ -1,7 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-import { LoadingMark } from "../LoadingIndicator/LoadingIndicator";
-
 import styles from "./IconButton.module.css";
 
 export type IconButtonVariant = "default" | "ghost" | "primary" | "danger";
@@ -50,7 +48,7 @@ export function IconButton({
       aria-busy={isLoading || undefined}
     >
       {isLoading ? (
-        <LoadingMark size="sm" />
+        <span className={styles.spinner} aria-hidden="true" />
       ) : (
         <span className={styles.icon} aria-hidden="true">
           {icon}{" "}
