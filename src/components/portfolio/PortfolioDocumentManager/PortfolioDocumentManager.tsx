@@ -9,7 +9,7 @@ import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { Input } from "@/components/ui/Input/Input";
-import { API_ROUTES } from "@/constants/routes";
+import { PORTFOLIO_API_ROUTES } from "@/constants/routes/portfolio-routes";
 import type { PortfolioDocument } from "@/types/portfolio/portfolio";
 
 import styles from "./PortfolioDocumentManager.module.css";
@@ -37,7 +37,7 @@ export function PortfolioDocumentManager({
 
     try {
       const response = await fetch(
-        API_ROUTES.portfolio.documentAdd(portfolioId),
+        PORTFOLIO_API_ROUTES.documentAdd(portfolioId),
         {
           method: "POST",
 
