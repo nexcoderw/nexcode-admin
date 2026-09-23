@@ -5,7 +5,7 @@ import {
 
 import {
     deletePortfolioDocument,
-} from "@/endpoints/portfolio/delete-porfolio-document";
+} from "@/endpoints/portfolio/delete-portfolio-document";
 import {
     parsePortfolioResourceId,
 } from "@/utils/portfolio/portfolio-id";
