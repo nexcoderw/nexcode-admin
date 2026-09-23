@@ -8,7 +8,7 @@ import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { Input } from "@/components/ui/Input/Input";
-import { API_ROUTES, ROUTES } from "@/constants/routes";
+import { AUTH_API_ROUTES, AUTH_ROUTES } from "@/constants/routes/auth-routes";
 import { resolveAuthMessage } from "@/utils/auth/resolve-message";
 
 import styles from "./ForgotPasswordForm.module.css";
@@ -73,7 +73,7 @@ export function ForgotPasswordForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(API_ROUTES.auth.requestPasswordReset, {
+      const response = await fetch(AUTH_API_ROUTES.requestPasswordReset, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +91,7 @@ export function ForgotPasswordForm() {
         return;
       }
 
-      router.push(ROUTES.auth.verify);
+      router.push(AUTH_ROUTES.verify);
     } catch {
       setFormError(resolveAuthMessage(null));
     } finally {
