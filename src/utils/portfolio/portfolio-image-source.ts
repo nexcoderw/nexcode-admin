@@ -1,6 +1,4 @@
-import {
-    API_ROUTES,
-} from "@/constants/routes";
+import { PORTFOLIO_API_ROUTES } from "@/constants/routes/portfolio-routes";
 
 export function getPortfolioImageSource(
     value: string | null,
@@ -20,7 +18,7 @@ export function getPortfolioImageSource(
             });
 
         return (
-            `${API_ROUTES.portfolio.media}?` +
+            `${PORTFOLIO_API_ROUTES.media}?` +
             params.toString()
         );
     }
