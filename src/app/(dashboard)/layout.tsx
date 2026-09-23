@@ -18,8 +18,10 @@ export default async function DashboardLayout({
     redirect(ROUTES.auth.login);
   }
 
+  // The portal is up and the service behind it is not, which is a 503
+  // the reader can act on — not a crash.
   if (currentAdmin.status === "unavailable") {
-    throw new Error("Administrator session validation is unavailable.");
+    redirect(ROUTES.errors.serviceUnavailable);
   }
 
   const admin = currentAdmin.admin;
