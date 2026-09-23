@@ -1,17 +1,52 @@
-.confirmation {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-
-  width: 100%;
+.deleteDialog.deleteDialog {
+  border-color: var(--color-error-border);
 }
 
-.confirmationContent {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.content {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-4);
+}
 
-  gap: var(--space-5);
+.warningIcon {
+  display: grid;
+  place-items: center;
+
+  width: 3.5rem;
+  height: 3.5rem;
+
+  color: var(--color-error);
+  background: var(--color-error-subtle);
+
+  border: var(--border-width) solid var(--color-error-border);
+  border-radius: var(--radius-round);
+}
+
+.warningCopy {
+  align-self: center;
+}
+
+.warningCopy strong {
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.warningCopy p {
+  margin: var(--space-1) 0 0;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.memberRecord {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-direction: column;
+  gap: var(--space-1);
 
   padding: var(--space-4);
 
@@ -21,41 +56,53 @@
   border-radius: var(--radius-lg);
 }
 
-.title {
-  display: block;
-
-  color: var(--color-text-primary);
-
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-}
-
-.description {
-  margin: var(--space-1) 0 0;
-
+.memberRecord span {
   color: var(--color-text-muted);
 
   font-size: var(--font-size-xs);
-  line-height: var(--line-height-relaxed);
+}
+
+.memberRecord strong {
+  overflow-wrap: anywhere;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.content > :last-child {
+  grid-column: 1 / -1;
 }
 
 .actions {
   display: flex;
-  flex: 0 0 auto;
-  gap: var(--space-2);
+  justify-content: flex-end;
+  gap: var(--space-3);
+
+  width: 100%;
 }
 
-@media (max-width: 42rem) {
-  .confirmationContent {
-    align-items: stretch;
-    flex-direction: column;
+@media (max-width: 40rem) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+
+  .warningIcon {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .memberRecord,
+  .content > :last-child {
+    grid-column: 1;
   }
 
   .actions {
-    width: 100%;
+    flex-direction: column-reverse;
   }
 
   .actions > * {
-    flex: 1;
+    width: 100%;
   }
 }
