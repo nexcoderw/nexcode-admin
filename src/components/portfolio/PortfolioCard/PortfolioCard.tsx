@@ -35,7 +35,7 @@ export function PortfolioCard({ portfolio }: PortfolioCardProps) {
             src={image}
             alt={portfolio.coverImage?.altText || portfolio.name}
             fill
-            sizes="(max-width: 52rem) 100vw, (max-width: 78rem) 50vw, 33vw"
+            sizes="(max-width: 30rem) 100vw, (max-width: 64rem) 50vw, 22rem"
             className={styles.image}
             unoptimized={image.startsWith("/api/portfolio/media")}
           />
@@ -74,7 +74,7 @@ export function PortfolioCard({ portfolio }: PortfolioCardProps) {
           </div>
 
           <div>
-            <dt>Deadline</dt>
+            <dt>Due</dt>
             <dd>{formatPortfolioDate(portfolio.deadlineDate)}</dd>
           </div>
         </dl>
