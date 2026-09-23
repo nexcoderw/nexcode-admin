@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { ServiceUnavailableArt } from "@/components/errors/ErrorArt/ServiceUnavailableArt";
 import { ErrorScreen } from "@/components/errors/ErrorScreen/ErrorScreen";
 import { Button } from "@/components/ui/Button/Button";
-import { ROUTES } from "@/constants/routes";
+import { ADMIN_ROUTES } from "@/constants/routes/admin-routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { Login01Icon, ReloadIcon } from "@hugeicons/core-free-icons";
 
@@ -32,7 +33,7 @@ export default async function ServiceUnavailablePage({
       actions={
         <>
           <Button
-            href={ROUTES.admin.dashboard}
+            href={ADMIN_ROUTES.dashboard}
             size="lg"
             leftIcon={<Icon icon={ReloadIcon} size={18} />}
           >
@@ -40,7 +41,7 @@ export default async function ServiceUnavailablePage({
           </Button>
 
           <Button
-            href={ROUTES.auth.login}
+            href={AUTH_ROUTES.login}
             variant="secondary"
             size="lg"
             leftIcon={<Icon icon={Login01Icon} size={18} />}
