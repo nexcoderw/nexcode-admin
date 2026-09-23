@@ -4,7 +4,7 @@ import { ApplicationErrorArt } from "@/components/errors/ErrorArt/ApplicationErr
 import { ErrorScreen } from "@/components/errors/ErrorScreen/ErrorScreen";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
+import { ADMIN_ROUTES } from "@/constants/routes/admin-routes";
 import { DashboardBrowsingIcon } from "@hugeicons/core-free-icons";
 import ReloadIcon from "@hugeicons/core-free-icons/ReloadIcon";
 
@@ -38,7 +38,7 @@ export default function ErrorBoundary({ error, reset }: ErrorBoundaryProps) {
           </Button>
 
           <Button
-            href={ROUTES.admin.dashboard}
+            href={ADMIN_ROUTES.dashboard}
             variant="secondary"
             size="lg"
             leftIcon={<Icon icon={DashboardBrowsingIcon} size={18} />}
