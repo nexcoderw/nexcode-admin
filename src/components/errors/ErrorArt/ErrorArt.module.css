@@ -1,0 +1,110 @@
+/*
+ * Shared drawing primitives for the error screens. Flat fills on design
+ * tokens, no gradients. Depth comes from the ground ellipse and the
+ * difference between fills, never from shadow.
+ */
+.art {
+  display: block;
+
+  width: 100%;
+  max-width: 20rem;
+  height: auto;
+}
+
+.ground {
+  fill: var(--color-surface-secondary);
+}
+
+.body {
+  fill: var(--color-surface-tertiary);
+  stroke: var(--color-border-strong);
+  stroke-width: 2;
+}
+
+.slot,
+.foot {
+  fill: var(--color-surface-secondary);
+}
+
+.lamp {
+  fill: var(--color-primary);
+}
+
+.lampOff {
+  fill: var(--color-neutral-500);
+}
+
+.waves path {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.wave {
+  opacity: 0.9;
+
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+.waveMid {
+  opacity: 0.55;
+
+  animation: pulse 2.4s ease-in-out 0.3s infinite;
+}
+
+.waveFar {
+  opacity: 0.25;
+
+  animation: pulse 2.4s ease-in-out 0.6s infinite;
+}
+
+/* 500 — a broken panel with a spark that keeps trying to cross. */
+.break {
+  fill: none;
+  stroke: var(--color-border-strong);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.spark {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  animation: flicker 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  45%,
+  55% {
+    opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave,
+  .waveMid,
+  .waveFar,
+  .spark {
+    animation: none;
+  }
+}
