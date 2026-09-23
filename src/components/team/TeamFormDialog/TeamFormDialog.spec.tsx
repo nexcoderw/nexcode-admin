@@ -36,12 +36,9 @@ describe("TeamFormDialog", () => {
     expect(
       screen.getByRole("heading", { name: "Member information" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Professional links" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Profile media" }),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Profiles")).toBeInTheDocument();
+    expect(screen.getByText("Media")).toBeInTheDocument();
+    expect(screen.getByText("Step 1 of 3")).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
