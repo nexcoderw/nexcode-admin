@@ -1,3 +1,6 @@
+import { LinkSquare02Icon } from "@hugeicons/core-free-icons";
+
+import { Icon } from "@/components/ui/Icon/Icon";
 import type { PortfolioDetail } from "@/types/portfolio/portfolio";
 import {
   formatPortfolioDate,
@@ -10,6 +13,10 @@ interface PortfolioOverviewProps {
   portfolio: PortfolioDetail;
 }
 
+/**
+ * The project's facts as a ledger: one row per fact, label on the left,
+ * value on the right, followed by the project's own outbound links.
+ */
 export function PortfolioOverview({ portfolio }: PortfolioOverviewProps) {
   const facts = [
     {
@@ -25,13 +32,28 @@ export function PortfolioOverview({ portfolio }: PortfolioOverviewProps) {
       value: formatPortfolioDate(portfolio.deadlineDate),
     },
     {
-      term: "Team",
-      value: `${portfolio.teamMembers.length}`,
+      term: "Published",
+      value: formatPortfolioDate(portfolio.publishedAt),
+    },
+    {
+      term: "Last updated",
+      value: formatPortfolioDate(portfolio.updatedAt),
+    },
+    {
+      term: "Slug",
+      value: portfolio.slug,
     },
   ];
 
+  const links = [
+    { label: "Live site", url: portfolio.liveUrl },
+    { label: "Figma file", url: portfolio.figmaUrl },
+  ].filter((link): link is { label: string; url: string } =>
+    Boolean(link.url),
+  );
+
   return (
-    <section className={styles.overview}>
+    <section className={styles.overview} aria-label="Project facts">
       <dl className={styles.facts}>
         {facts.map((fact) => (
           <div key={fact.term}>
@@ -41,27 +63,20 @@ export function PortfolioOverview({ portfolio }: PortfolioOverviewProps) {
         ))}
       </dl>
 
-      {portfolio.description && (
-        <div className={styles.description}>
-          <h2>About this project</h2>
+      {links.length > 0 && (
+        <div className={styles.links}>
+          {links.map((link) => (
+            <a
+              key={link.label}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {link.label}
 
-          <p>{portfolio.description}</p>
-        </div>
-      )}
-
-      {(portfolio.liveUrl || portfolio.figmaUrl) && (
-        <div className={styles.quickLinks}>
-          {portfolio.liveUrl && (
-            <a href={portfolio.liveUrl} target="_blank" rel="noreferrer">
-              Visit live site
+              <Icon icon={LinkSquare02Icon} size={15} />
             </a>
-          )}
-
-          {portfolio.figmaUrl && (
-            <a href={portfolio.figmaUrl} target="_blank" rel="noreferrer">
-              Open Figma file
-            </a>
-          )}
+          ))}
         </div>
       )}
     </section>
