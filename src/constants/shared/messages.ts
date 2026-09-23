@@ -28,6 +28,22 @@ export const MESSAGE_KEYS = {
         notFound:
             "team.error.not_found",
     },
+    portfolio: {
+        invalidRequest:
+            "portfolio.error.invalid_request",
+
+        notFound:
+            "portfolio.error.not_found",
+
+        imageNotFound:
+            "portfolio.image.error.not_found",
+
+        documentNotFound:
+            "portfolio.document.error.not_found",
+
+        repositoryNotFound:
+            "portfolio.repository.error.not_found",
+    },
 
     common: {
         serviceUnavailable:
@@ -63,6 +79,21 @@ export const MESSAGES = {
 
     [MESSAGE_KEYS.team.notFound]:
         "The team member could not be found.",
+
+    [MESSAGE_KEYS.portfolio.invalidRequest]:
+        "Check the portfolio information and try again.",
+
+    [MESSAGE_KEYS.portfolio.notFound]:
+        "The portfolio could not be found.",
+
+    [MESSAGE_KEYS.portfolio.imageNotFound]:
+        "The portfolio image could not be found.",
+
+    [MESSAGE_KEYS.portfolio.documentNotFound]:
+        "The portfolio document link could not be found.",
+
+    [MESSAGE_KEYS.portfolio.repositoryNotFound]:
+        "The portfolio repository could not be found.",
 } as const;
 
 export type MessageKey =
