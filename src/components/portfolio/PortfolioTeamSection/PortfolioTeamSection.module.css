@@ -3,8 +3,6 @@
   flex-direction: column;
   gap: var(--space-4);
 
-  max-width: var(--content-width-lg);
-
   padding: var(--space-6);
 
   background: var(--color-surface);
@@ -14,41 +12,114 @@
   border-radius: var(--radius-xl);
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.header h2 {
+  font-size: var(--font-size-md);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.count {
+  display: inline-grid;
+  place-items: center;
+
+  min-width: 1.375rem;
+  height: 1.375rem;
+
+  padding-inline: var(--space-1);
+
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+
+  border-radius: var(--radius-round);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
 .empty {
   color: var(--color-text-muted);
 
   font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
 }
 
-.simpleList {
+.list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
   gap: var(--space-3);
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
 }
 
-.simpleList > div {
+.member {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+  align-items: center;
+  gap: var(--space-3);
 
-  padding: var(--space-4);
+  min-width: 0;
+  padding: var(--space-3);
 
   background: var(--color-surface-secondary);
 
   border: var(--border-width) solid var(--color-border-subtle);
-
   border-radius: var(--radius-lg);
 }
 
-.simpleList span {
+.avatar {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+
+  width: 2.25rem;
+  height: 2.25rem;
+
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+
+  border-radius: var(--radius-round);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+
+  min-width: 0;
+}
+
+.identity strong,
+.identity small {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.identity strong {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.identity small {
   color: var(--color-text-muted);
 
   font-size: var(--font-size-xs);
 }
 
-@media (max-width: 36rem) {
-  .simpleList {
-    grid-template-columns: 1fr;
+@media (max-width: 48rem) {
+  .section {
+    padding: var(--space-5);
   }
 }
