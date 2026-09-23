@@ -104,7 +104,12 @@ export function TeamFormDialogTrigger({
         variant={adding ? "primary" : "secondary"}
         size={compact ? "sm" : "md"}
         iconOnly={compact}
-        leftIcon={<Icon icon={adding ? UserAdd01Icon : Edit02Icon} size={18} />}
+        leftIcon={
+          <Icon
+            icon={adding ? UserAdd01Icon : Edit02Icon}
+            size={compact ? 10 : 18}
+          />
+        }
         aria-label={adding ? "Add team member" : `Edit ${name}`}
         title={compact ? `Edit ${name}` : undefined}
         onClick={() => setOpen(true)}
