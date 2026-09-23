@@ -9,12 +9,8 @@ import {
 import {
     POST,
 } from "@/app/api/auth/password-reset/verify/route";
-import {
-    MESSAGE_KEYS,
-} from "@/constants/shared/messages";
-import {
-    API_ROUTES,
-} from "@/constants/routes";
+import { AUTH_MESSAGE_KEYS } from "@/constants/messages/auth-messages";
+import { AUTH_API_ROUTES } from "@/constants/routes/auth-routes";
 import {
     ADMIN_PASSWORD_RESET_CHALLENGE_COOKIE,
     ADMIN_PASSWORD_RESET_TOKEN_COOKIE,
@@ -77,7 +73,7 @@ describe(
 
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth
+                        AUTH_API_ROUTES
                             .verifyPasswordReset,
                         {
                             code: "384271",
@@ -138,7 +134,7 @@ describe(
             async () => {
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth
+                        AUTH_API_ROUTES
                             .verifyPasswordReset,
                         {
                             code: "384271",
@@ -159,7 +155,7 @@ describe(
                 ).toEqual({
                     success: false,
                     messageKey:
-                        MESSAGE_KEYS.auth
+                        AUTH_MESSAGE_KEYS
                             .passwordResetSessionInvalid,
                 });
             },
@@ -182,7 +178,7 @@ describe(
 
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth
+                        AUTH_API_ROUTES
                             .verifyPasswordReset,
                         {
                             code: "111111",
@@ -203,7 +199,7 @@ describe(
                 ).toEqual({
                     success: false,
                     messageKey:
-                        MESSAGE_KEYS.auth
+                        AUTH_MESSAGE_KEYS
                             .passwordResetVerificationInvalid,
                 });
             },
