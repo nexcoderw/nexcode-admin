@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { TeamEmptyState } from "@/components/team/TeamEmptyState/TeamEmptyState";
-import { TeamFilters } from "@/components/team/TeamFilters/TeamFilters";
+import { TeamFiltersDialog } from "@/components/team/TeamFiltersDialog/TeamFiltersDialog";
 import { TeamFormDialogTrigger } from "@/components/team/TeamFormDialog/TeamFormDialog";
 import { TeamGrid } from "@/components/team/TeamGrid/TeamGrid";
 import { TeamPagination } from "@/components/team/TeamPagination/TeamPagination";
@@ -75,12 +75,12 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
           </p>
         </div>
 
-        <div className={styles.addAction}>
+        <div className={styles.headerActions}>
+          <TeamFiltersDialog query={query} />
+
           <TeamFormDialogTrigger mode="add" />
         </div>
       </header>
-
-      <TeamFilters query={query} />
 
       {!data ? (
         <Alert variant="error" title={"Team unavailable"}>
