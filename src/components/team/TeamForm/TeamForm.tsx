@@ -1,13 +1,16 @@
 "use client";
 
 import {
+  CancelCircleHalfDotIcon,
   GithubIcon,
   Linkedin01Icon,
+  SendIcon,
   UserIcon,
   WorkIcon,
 } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import type { ChangeEvent, FormEvent, ReactNode } from "react";
+import { useRef, useState } from "react";
 
 import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
@@ -30,49 +33,95 @@ interface TeamFormProps {
   onSubmittingChange?: (submitting: boolean) => void;
 }
 
-type TeamField =
-  | "name"
-  | "position"
-  | "linkedin"
-  | "github"
-  | "image"
-  | "image_png";
+type TextField = "name" | "position" | "linkedin" | "github";
+type MediaField = "image" | "image_png";
+type TeamField = TextField | MediaField;
 
+type TextValues = Record<TextField, string>;
+type MediaFiles = Record<MediaField, File | null>;
+type MediaRemovals = Record<MediaField, boolean>;
 type FieldErrors = Partial<Record<TeamField, string>>;
 
-type FormStep = 0 | 1 | 2;
-
-const FORM_STEPS = [
-  {
-    label: "Identity",
-    description: "Name and role",
-    fields: ["name", "position"],
-  },
-  {
-    label: "Profiles",
-    description: "Professional links",
-    fields: ["linkedin", "github"],
-  },
-  {
-    label: "Media",
-    description: "Portrait and cutout",
-    fields: ["image", "image_png"],
-  },
-] as const satisfies ReadonlyArray<{
+interface TextFieldConfig {
+  name: TextField;
   label: string;
-  description: string;
-  fields: readonly TeamField[];
-}>;
-
-interface MutationResponse {
-  success?: boolean;
-  fields?: string[];
-  data?: {
-    teamMember?: TeamMember;
-  };
+  icon: typeof UserIcon;
+  type?: "url";
+  optional?: boolean;
+  placeholder?: string;
+  autoComplete?: string;
 }
 
+const IDENTITY_FIELDS: readonly TextFieldConfig[] = [
+  { name: "name", label: "Name", icon: UserIcon, autoComplete: "name" },
+  { name: "position", label: "Position", icon: WorkIcon },
+];
+
+const LINK_FIELDS: readonly TextFieldConfig[] = [
+  {
+    name: "linkedin",
+    label: "LinkedIn URL",
+    icon: Linkedin01Icon,
+    type: "url",
+    optional: true,
+    placeholder: "https://www.linkedin.com/in/...",
+  },
+  {
+    name: "github",
+    label: "GitHub URL",
+    icon: GithubIcon,
+    type: "url",
+    optional: true,
+    placeholder: "https://github.com/...",
+  },
+];
+
+const MEDIA_FIELDS = [
+  {
+    name: "image",
+    label: "Profile image",
+    description: "Standard profile photograph. JPEG, PNG or WebP up to 10 MB.",
+    accept: "image/jpeg,image/png,image/webp",
+    types: ["image/jpeg", "image/png", "image/webp"],
+    typeError: "Use a JPEG, PNG or WebP profile image.",
+    sizeError: "Profile image must not exceed 10 MB.",
+  },
+  {
+    name: "image_png",
+    label: "Transparent PNG / cutout",
+    description:
+      "Transparent or isolated member artwork. This file must be a genuine PNG.",
+    accept: "image/png",
+    types: ["image/png"],
+    typeError: "The cutout image must be a PNG file.",
+    sizeError: "PNG cutout must not exceed 10 MB.",
+  },
+] as const satisfies ReadonlyArray<{
+  name: MediaField;
+  label: string;
+  description: string;
+  accept: string;
+  types: readonly string[];
+  typeError: string;
+  sizeError: string;
+}>;
+
+const BACKEND_FIELD_ERRORS: Record<string, [TeamField, string]> = {
+  name: ["name", "Enter a valid team member name."],
+  position: ["position", "Enter a valid position."],
+  linkedin: ["linkedin", "Enter a valid LinkedIn URL."],
+  github: ["github", "Enter a valid GitHub URL."],
+  image: ["image", "Review the profile image."],
+  remove_image: ["image", "Review the profile image."],
+  image_png: ["image_png", "Review the PNG cutout image."],
+  remove_image_png: ["image_png", "Review the PNG cutout image."],
+};
+
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+
+interface MutationResponse {
+  fields?: string[];
+}
 
 export function TeamForm({
   mode,
@@ -82,52 +131,50 @@ export function TeamForm({
   onSubmittingChange,
 }: TeamFormProps) {
   const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const [name, setName] = useState(teamMember?.name ?? "");
-  const [position, setPosition] = useState(teamMember?.position ?? "");
-  const [linkedin, setLinkedin] = useState(teamMember?.linkedin ?? "");
-  const [github, setGithub] = useState(teamMember?.github ?? "");
+  const [values, setValues] = useState<TextValues>(() => ({
+    name: teamMember?.name ?? "",
+    position: teamMember?.position ?? "",
+    linkedin: teamMember?.linkedin ?? "",
+    github: teamMember?.github ?? "",
+  }));
 
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePng, setImagePng] = useState<File | null>(null);
+  const [files, setFiles] = useState<MediaFiles>({
+    image: null,
+    image_png: null,
+  });
 
-  const [removeImage, setRemoveImage] = useState(false);
-  const [removeImagePng, setRemoveImagePng] = useState(false);
+  const [removals, setRemovals] = useState<MediaRemovals>({
+    image: false,
+    image_png: false,
+  });
 
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [step, setStep] = useState<FormStep>(0);
-  const [furthestStep, setFurthestStep] = useState<FormStep>(0);
 
-  function getValidationErrors() {
-    return validateForm({
-      name,
-      position,
-      linkedin,
-      github,
-      image,
-      imagePng,
-    });
+  /**
+   * A single change handler shared by every text input, so no per-field
+   * closure is allocated on render.
+   */
+  function handleTextChange(event: ChangeEvent<HTMLInputElement>) {
+    const field = event.target.name as TextField;
+    const { value } = event.target;
+
+    setValues((current) => ({ ...current, [field]: value }));
+    clearError(field);
   }
 
-  function continueToNextStep() {
-    const validationErrors = getValidationErrors();
-    const currentFields = FORM_STEPS[step].fields;
-    const currentErrors = pickFieldErrors(validationErrors, currentFields);
-
-    setErrors((existing) =>
-      replaceFieldErrors(existing, currentFields, currentErrors),
+  function clearError(field: TeamField) {
+    setErrors((current) =>
+      current[field] ? omitField(current, field) : current,
     );
+  }
 
-    if (Object.keys(currentErrors).length > 0 || step === 2) {
-      return;
-    }
-
-    const nextStep = (step + 1) as FormStep;
-
-    setStep(nextStep);
-    setFurthestStep((current) => Math.max(current, nextStep) as FormStep);
+  function reportErrors(nextErrors: FieldErrors) {
+    setErrors(nextErrors);
+    focusFirstError(formRef.current, nextErrors);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -135,40 +182,14 @@ export function TeamForm({
 
     setFormError(null);
 
-    const validationErrors = getValidationErrors();
-
-    setErrors(validationErrors);
+    const validationErrors = validate(values, files);
 
     if (Object.keys(validationErrors).length > 0) {
-      setStep(getFirstErrorStep(validationErrors));
+      reportErrors(validationErrors);
       return;
     }
 
-    const formData = new FormData();
-
-    formData.set("name", name.trim());
-    formData.set("position", position.trim());
-    formData.set("linkedin", linkedin.trim());
-    formData.set("github", github.trim());
-
-    if (image && !removeImage) {
-      formData.set("image", image);
-    }
-
-    if (imagePng && !removeImagePng) {
-      formData.set("image_png", imagePng);
-    }
-
-    if (mode === "edit") {
-      if (removeImage) {
-        formData.set("remove_image", "true");
-      }
-
-      if (removeImagePng) {
-        formData.set("remove_image_png", "true");
-      }
-    }
-
+    setErrors({});
     setSubmitting(true);
     onSubmittingChange?.(true);
 
@@ -179,53 +200,41 @@ export function TeamForm({
           : API_ROUTES.team.update(teamMember!.id),
         {
           method: mode === "add" ? "POST" : "PATCH",
-          body: formData,
+          body: buildFormData(mode, values, files, removals),
           credentials: "same-origin",
-          headers: {
-            Accept: "application/json",
-          },
+          headers: { Accept: "application/json" },
         },
       );
 
-      let payload: MutationResponse | null = null;
-
-      try {
-        payload = (await response.json()) as MutationResponse;
-      } catch {
-        payload = null;
+      if (response.ok) {
+        onSuccess();
+        router.refresh();
+        return;
       }
 
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          router.replace(ROUTES.auth.login);
-          router.refresh();
-          return;
-        }
+      if (response.status === 401 || response.status === 403) {
+        router.replace(ROUTES.auth.login);
+        router.refresh();
+        return;
+      }
 
-        if (response.status === 400) {
-          const backendErrors = mapBackendFields(payload?.fields ?? []);
+      if (response.status === 400) {
+        const payload = (await response
+          .json()
+          .catch(() => null)) as MutationResponse | null;
 
-          setErrors(backendErrors);
-          setStep(getFirstErrorStep(backendErrors));
-          setFormError(
-            "Review the highlighted fields and correct the information provided.",
-          );
-          return;
-        }
-
-        if (response.status === 404 && mode === "edit") {
-          setFormError("This team member no longer exists.");
-          return;
-        }
-
+        reportErrors(mapBackendFields(payload?.fields ?? []));
         setFormError(
-          "The team member could not be saved. Please try again shortly.",
+          "Review the highlighted fields and correct the information provided.",
         );
         return;
       }
 
-      onSuccess();
-      router.refresh();
+      setFormError(
+        response.status === 404 && mode === "edit"
+          ? "This team member no longer exists."
+          : "The team member could not be saved. Please try again shortly.",
+      );
     } catch {
       setFormError(
         "The team service is currently unavailable. Please try again shortly.",
@@ -236,329 +245,194 @@ export function TeamForm({
     }
   }
 
+  function renderTextFields(fields: readonly TextFieldConfig[]) {
+    return fields.map((field) => (
+      <Input
+        key={field.name}
+        name={field.name}
+        label={field.label}
+        type={field.type}
+        value={values[field.name]}
+        required={!field.optional}
+        showOptional={field.optional}
+        placeholder={field.placeholder}
+        autoComplete={field.autoComplete}
+        maxLength={255}
+        disabled={submitting}
+        error={errors[field.name]}
+        leftIcon={<Icon icon={field.icon} size={18} />}
+        onChange={handleTextChange}
+      />
+    ));
+  }
+
   return (
-    <form className={styles.form} onSubmit={handleSubmit} noValidate>
-      <nav className={styles.wizard} aria-label="Team profile form progress">
-        <ol>
-          {FORM_STEPS.map((formStep, index) => {
-            const active = step === index;
-            const completed = index < step;
-            const available = index <= furthestStep;
-
-            return (
-              <li
-                key={formStep.label}
-                className={[
-                  styles.wizardStep,
-                  active ? styles.wizardStepActive : "",
-                  completed ? styles.wizardStepComplete : "",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-              >
-                <button
-                  type="button"
-                  disabled={!available || submitting}
-                  aria-current={active ? "step" : undefined}
-                  onClick={() => setStep(index as FormStep)}
-                >
-                  <span className={styles.stepMarker} aria-hidden="true">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-
-                  <span className={styles.stepCopy}>
-                    <strong>{formStep.label}</strong>
-                    <small>{formStep.description}</small>
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ol>
-      </nav>
-
+    <form
+      ref={formRef}
+      className={styles.form}
+      onSubmit={handleSubmit}
+      noValidate
+    >
       {formError && (
         <Alert variant="error" title="Unable to save team member">
           {formError}
         </Alert>
       )}
 
-      <div className={styles.stepStatus} aria-live="polite">
-        <span>
-          Step {step + 1} of {FORM_STEPS.length}
-        </span>
-        <strong>{FORM_STEPS[step].label}</strong>
-      </div>
+      <Section index="01" title="Identity" hint="Name and role">
+        <div className={styles.grid}>{renderTextFields(IDENTITY_FIELDS)}</div>
+      </Section>
 
-      {step === 0 && (
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Member information</h2>
+      <Section index="02" title="Profiles" hint="Professional links, optional">
+        <div className={styles.grid}>{renderTextFields(LINK_FIELDS)}</div>
+      </Section>
 
-            <p className={styles.sectionDescription}>
-              Core information displayed with this team member&apos;s public
-              profile.
-            </p>
-          </div>
-
-          <div className={styles.fields}>
-            <Input
-              label="Name"
-              name="name"
-              value={name}
-              required
-              maxLength={255}
-              autoComplete="name"
-              disabled={submitting}
-              error={errors.name}
-              leftIcon={<Icon icon={UserIcon} size={18} />}
-              onChange={(event) => {
-                setName(event.target.value);
-                clearFieldError("name", setErrors);
-              }}
-            />
-
-            <Input
-              label="Position"
-              name="position"
-              value={position}
-              required
-              maxLength={255}
-              disabled={submitting}
-              error={errors.position}
-              leftIcon={<Icon icon={WorkIcon} size={18} />}
-              onChange={(event) => {
-                setPosition(event.target.value);
-                clearFieldError("position", setErrors);
-              }}
-            />
-          </div>
-        </section>
-      )}
-
-      {step === 1 && (
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Professional links</h2>
-
-            <p className={styles.sectionDescription}>
-              Optional LinkedIn and GitHub profiles associated with this member.
-            </p>
-          </div>
-
-          <div className={styles.fields}>
-            <Input
-              label="LinkedIn URL"
-              name="linkedin"
-              type="url"
-              value={linkedin}
-              showOptional
-              placeholder="https://www.linkedin.com/in/..."
-              disabled={submitting}
-              error={errors.linkedin}
-              leftIcon={<Icon icon={Linkedin01Icon} size={18} />}
-              onChange={(event) => {
-                setLinkedin(event.target.value);
-                clearFieldError("linkedin", setErrors);
-              }}
-            />
-
-            <Input
-              label="GitHub URL"
-              name="github"
-              type="url"
-              value={github}
-              showOptional
-              placeholder="https://github.com/..."
-              disabled={submitting}
-              error={errors.github}
-              leftIcon={<Icon icon={GithubIcon} size={18} />}
-              onChange={(event) => {
-                setGithub(event.target.value);
-                clearFieldError("github", setErrors);
-              }}
-            />
-          </div>
-        </section>
-      )}
-
-      {step === 2 && (
-        <section className={styles.section}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Profile media</h2>
-
-            <p className={styles.sectionDescription}>
-              Manage the standard profile photograph and the transparent cutout
-              used by supported NEXCODE interfaces.
-            </p>
-          </div>
-
-          <div className={styles.imageFields}>
+      <Section index="03" title="Media" hint="Portrait and cutout">
+        <div className={styles.grid}>
+          {MEDIA_FIELDS.map((field) => (
             <TeamImageField
-              name="image"
-              label="Profile image"
-              description="Standard profile photograph. JPEG, PNG or WebP up to 10 MB."
-              accept="image/jpeg,image/png,image/webp"
-              currentImage={teamMember?.image}
-              error={errors.image}
+              key={field.name}
+              name={field.name}
+              label={field.label}
+              description={field.description}
+              accept={field.accept}
+              currentImage={
+                field.name === "image"
+                  ? teamMember?.image
+                  : teamMember?.imagePng
+              }
+              error={errors[field.name]}
               disabled={submitting}
               removable={mode === "edit"}
               onFileChange={(file) => {
-                setImage(file);
-                clearFieldError("image", setErrors);
+                setFiles((current) => ({ ...current, [field.name]: file }));
+                clearError(field.name);
               }}
-              onRemoveChange={setRemoveImage}
-            />
-
-            <TeamImageField
-              name="image_png"
-              label="Transparent PNG / cutout"
-              description="Transparent or isolated member artwork. This file must be a genuine PNG."
-              accept="image/png"
-              currentImage={teamMember?.imagePng}
-              error={errors.image_png}
-              disabled={submitting}
-              removable={mode === "edit"}
-              onFileChange={(file) => {
-                setImagePng(file);
-                clearFieldError("image_png", setErrors);
+              onRemoveChange={(remove) => {
+                setRemovals((current) => ({
+                  ...current,
+                  [field.name]: remove,
+                }));
               }}
-              onRemoveChange={setRemoveImagePng}
             />
-          </div>
-        </section>
-      )}
+          ))}
+        </div>
+      </Section>
 
       <div className={styles.actions}>
         <Button
           type="button"
+          size="lg"
           variant="secondary"
           disabled={submitting}
+          leftIcon={<Icon icon={CancelCircleHalfDotIcon} size={18} />}
           onClick={onCancel}
         >
           Cancel
         </Button>
 
-        <div className={styles.stepActions}>
-          {step > 0 && (
-            <Button
-              type="button"
-              variant="secondary"
-              disabled={submitting}
-              onClick={() => setStep((step - 1) as FormStep)}
-            >
-              Back
-            </Button>
-          )}
-
-          {step < 2 ? (
-            <Button type="button" onClick={continueToNextStep}>
-              Continue
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              isLoading={submitting}
-              loadingLabel={
-                mode === "add" ? "Adding team member" : "Saving team member"
-              }
-            >
-              {mode === "add" ? "Add team member" : "Save changes"}
-            </Button>
-          )}
-        </div>
+        <Button
+          type="submit"
+          size="lg"
+          isLoading={submitting}
+          leftIcon={<Icon icon={SendIcon} size={18} />}
+          loadingLabel={
+            mode === "add" ? "Adding team member" : "Saving team member"
+          }
+        >
+          {mode === "add" ? "Add team member" : "Save changes"}
+        </Button>
       </div>
     </form>
   );
 }
 
-function pickFieldErrors(
-  errors: FieldErrors,
-  fields: readonly TeamField[],
-) {
-  const selected: FieldErrors = {};
+function Section({
+  index,
+  title,
+  hint,
+  children,
+}: {
+  index: string;
+  title: string;
+  hint: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className={styles.section}>
+      <div className={styles.aside}>
+        <span className={styles.index} aria-hidden="true">
+          {index}
+        </span>
 
-  for (const field of fields) {
-    if (errors[field]) {
-      selected[field] = errors[field];
+        <h2 className={styles.title}>{title}</h2>
+
+        <p className={styles.hint}>{hint}</p>
+      </div>
+
+      <div className={styles.body}>{children}</div>
+    </section>
+  );
+}
+
+function buildFormData(
+  mode: TeamFormMode,
+  values: TextValues,
+  files: MediaFiles,
+  removals: MediaRemovals,
+) {
+  const formData = new FormData();
+
+  for (const [field, value] of Object.entries(values)) {
+    formData.set(field, value.trim());
+  }
+
+  for (const field of MEDIA_FIELDS) {
+    const file = files[field.name];
+
+    if (file && !removals[field.name]) {
+      formData.set(field.name, file);
+    }
+
+    if (mode === "edit" && removals[field.name]) {
+      formData.set(`remove_${field.name}`, "true");
     }
   }
 
-  return selected;
+  return formData;
 }
 
-function replaceFieldErrors(
-  existing: FieldErrors,
-  fields: readonly TeamField[],
-  replacements: FieldErrors,
-) {
-  const next = { ...existing };
-
-  for (const field of fields) {
-    delete next[field];
-  }
-
-  return { ...next, ...replacements };
-}
-
-function getFirstErrorStep(errors: FieldErrors): FormStep {
-  const index = FORM_STEPS.findIndex((formStep) =>
-    formStep.fields.some((field) => Boolean(errors[field])),
-  );
-
-  return index >= 0 ? (index as FormStep) : 0;
-}
-
-function validateForm({
-  name,
-  position,
-  linkedin,
-  github,
-  image,
-  imagePng,
-}: {
-  name: string;
-  position: string;
-  linkedin: string;
-  github: string;
-  image: File | null;
-  imagePng: File | null;
-}): FieldErrors {
+function validate(values: TextValues, files: MediaFiles): FieldErrors {
   const errors: FieldErrors = {};
 
-  if (!name.trim()) {
+  if (!values.name.trim()) {
     errors.name = "Enter the team member's name.";
   }
 
-  if (!position.trim()) {
+  if (!values.position.trim()) {
     errors.position = "Enter the team member's position.";
   }
 
-  if (linkedin && !isAllowedUrl(linkedin, "linkedin.com")) {
+  if (values.linkedin && !isAllowedUrl(values.linkedin, "linkedin.com")) {
     errors.linkedin = "Enter a valid LinkedIn URL.";
   }
 
-  if (github && !isAllowedUrl(github, "github.com")) {
+  if (values.github && !isAllowedUrl(values.github, "github.com")) {
     errors.github = "Enter a valid GitHub URL.";
   }
 
-  if (image && image.size > MAX_IMAGE_BYTES) {
-    errors.image = "Profile image must not exceed 10 MB.";
-  }
+  for (const field of MEDIA_FIELDS) {
+    const file = files[field.name];
 
-  if (
-    image &&
-    !["image/jpeg", "image/png", "image/webp"].includes(image.type)
-  ) {
-    errors.image = "Use a JPEG, PNG or WebP profile image.";
-  }
+    if (!file) {
+      continue;
+    }
 
-  if (imagePng && imagePng.size > MAX_IMAGE_BYTES) {
-    errors.image_png = "PNG cutout must not exceed 10 MB.";
-  }
-
-  if (imagePng && imagePng.type !== "image/png") {
-    errors.image_png = "The cutout image must be a PNG file.";
+    if (file.size > MAX_IMAGE_BYTES) {
+      errors[field.name] = field.sizeError;
+    } else if (!(field.types as readonly string[]).includes(file.type)) {
+      errors[field.name] = field.typeError;
+    }
   }
 
   return errors;
@@ -567,11 +441,11 @@ function validateForm({
 function isAllowedUrl(value: string, expectedHost: string) {
   try {
     const url = new URL(value);
+    const hostname = url.hostname.toLowerCase();
 
     return (
       (url.protocol === "https:" || url.protocol === "http:") &&
-      (url.hostname.toLowerCase() === expectedHost ||
-        url.hostname.toLowerCase().endsWith(`.${expectedHost}`))
+      (hostname === expectedHost || hostname.endsWith(`.${expectedHost}`))
     );
   } catch {
     return false;
@@ -582,51 +456,39 @@ function mapBackendFields(fields: string[]): FieldErrors {
   const errors: FieldErrors = {};
 
   for (const field of fields) {
-    switch (field) {
-      case "name":
-        errors.name = "Enter a valid team member name.";
-        break;
+    const mapped = BACKEND_FIELD_ERRORS[field];
 
-      case "position":
-        errors.position = "Enter a valid position.";
-        break;
-
-      case "linkedin":
-        errors.linkedin = "Enter a valid LinkedIn URL.";
-        break;
-
-      case "github":
-        errors.github = "Enter a valid GitHub URL.";
-        break;
-
-      case "image":
-      case "remove_image":
-        errors.image = "Review the profile image.";
-        break;
-
-      case "image_png":
-      case "remove_image_png":
-        errors.image_png = "Review the PNG cutout image.";
-        break;
+    if (mapped) {
+      errors[mapped[0]] = mapped[1];
     }
   }
 
   return errors;
 }
 
-function clearFieldError(
-  field: keyof FieldErrors,
-  setErrors: React.Dispatch<React.SetStateAction<FieldErrors>>,
-) {
-  setErrors((current) => {
-    if (!current[field]) {
-      return current;
-    }
+function omitField(errors: FieldErrors, field: TeamField) {
+  const next = { ...errors };
 
-    const next = { ...current };
+  delete next[field];
 
-    delete next[field];
+  return next;
+}
 
-    return next;
-  });
+function focusFirstError(form: HTMLFormElement | null, errors: FieldErrors) {
+  if (!form) {
+    return;
+  }
+
+  const [field] = Object.keys(errors);
+
+  if (!field) {
+    return;
+  }
+
+  const control = form.elements.namedItem(field);
+
+  // Focusing scrolls the control into view, so nothing else is needed here.
+  if (control instanceof HTMLElement) {
+    control.focus();
+  }
 }
