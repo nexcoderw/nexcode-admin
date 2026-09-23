@@ -162,4 +162,70 @@ describe("Portfolio related record managers", () => {
       }),
     ).not.toBeInTheDocument();
   });
+
+  it("rejects an existing repository link before submitting", async () => {
+    const repository = makePortfolioDetail().repositories[0];
+    const fetchMock = vi.spyOn(globalThis, "fetch");
+
+    render(
+      <PortfolioRepositoryManager
+        portfolioId={7}
+        repositories={[repository]}
+      />,
+    );
+
+    await userEvent.type(
+      screen.getByLabelText(/^Repository label/),
+      "Duplicate",
+    );
+
+    await userEvent.type(
+      screen.getByLabelText(/^Repository URL/),
+      repository.url,
+    );
+
+    await userEvent.click(
+      screen.getByRole("button", {
+        name: "Add repository",
+      }),
+    );
+
+    expect(
+      screen.getByText(
+        "This repository link already exists for this portfolio.",
+      ),
+    ).toBeInTheDocument();
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("explains repository URL validation failures", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(null, { status: 400 }),
+    );
+
+    render(<PortfolioRepositoryManager portfolioId={7} repositories={[]} />);
+
+    await userEvent.type(
+      screen.getByLabelText(/^Repository label/),
+      "GitHub",
+    );
+
+    await userEvent.type(
+      screen.getByLabelText(/^Repository URL/),
+      "https://github.com/nexcode/api",
+    );
+
+    await userEvent.click(
+      screen.getByRole("button", {
+        name: "Add repository",
+      }),
+    );
+
+    expect(
+      await screen.findByText(
+        "This repository URL is invalid or already exists for this portfolio.",
+      ),
+    ).toBeInTheDocument();
+  });
 });
