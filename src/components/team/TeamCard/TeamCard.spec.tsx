@@ -88,15 +88,19 @@ describe("TeamCard", () => {
 
     expect(screen.getByText("Profile information")).toBeInTheDocument();
 
-    expect(screen.getByRole("link", { name: "Edit Jane Doe" })).toHaveAttribute(
-      "href",
-      "/team/edit/17",
-    );
+    expect(
+      screen.queryByRole("link", { name: "Edit Jane Doe" }),
+    ).not.toBeInTheDocument();
 
-    expect(screen.getByRole("link", { name: "Edit profile" })).toHaveAttribute(
-      "href",
-      "/team/edit/17",
-    );
+    await userEvent.click(screen.getByRole("button", { name: "Edit profile" }));
+
+    expect(
+      screen.getByRole("dialog", { name: "Edit Jane Doe" }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("button", { name: "Save changes" }),
+    ).toBeInTheDocument();
   });
 
   it("shows only professional profiles that exist", () => {
