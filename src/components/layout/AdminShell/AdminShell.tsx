@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
-import { API_ROUTES, ROUTES } from "@/constants/routes";
+import { AUTH_API_ROUTES, AUTH_ROUTES } from "@/constants/routes/auth-routes";
 
 import type { HeaderAdmin } from "../Header/Header";
 import { Header } from "../Header/Header";
@@ -42,7 +42,7 @@ export function AdminShell({
     setIsSigningOut(true);
 
     try {
-      const response = await fetch(API_ROUTES.auth.logout, {
+      const response = await fetch(AUTH_API_ROUTES.logout, {
         method: "POST",
       });
 
@@ -53,7 +53,7 @@ export function AdminShell({
         return;
       }
 
-      router.replace(ROUTES.auth.login);
+      router.replace(AUTH_ROUTES.login);
 
       router.refresh();
     } catch {
