@@ -38,8 +38,26 @@
   max-width: 30rem;
 }
 
+.content h2 {
+  font-size: var(--font-size-lg);
+
+  letter-spacing: var(--letter-spacing-tight);
+}
+
 .content p {
   color: var(--color-text-muted);
 
   font-size: var(--font-size-sm);
+
+  line-height: var(--line-height-relaxed);
+}
+
+@media (max-width: 30rem) {
+  .empty {
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .empty > :last-child {
+    width: 100%;
+  }
 }
