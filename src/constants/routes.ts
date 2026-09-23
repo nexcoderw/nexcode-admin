@@ -56,6 +56,7 @@ export const API_ROUTES = {
 
     confirmPasswordReset: "/api/auth/password-reset/confirm",
   },
+
   team: {
     list: "/api/team/list",
 
@@ -67,6 +68,7 @@ export const API_ROUTES = {
 
     media: "/api/team/media",
   },
+
   portfolio: {
     list:
       "/api/portfolio/list",
@@ -137,4 +139,31 @@ export const API_ROUTES = {
     media:
       "/api/portfolio/media",
   },
+
+  client: {
+    list:
+      "/api/client/list",
+
+    add:
+      "/api/client/add",
+
+    detail: (
+      clientId: number,
+    ) =>
+      `/api/client/detail/${clientId}`,
+
+    update: (
+      clientId: number,
+    ) =>
+      `/api/client/update/${clientId}`,
+
+    delete: (
+      clientId: number,
+    ) =>
+      `/api/client/delete/${clientId}`,
+
+    media:
+      "/api/client/media",
+  },
+
 } as const;
