@@ -20,11 +20,14 @@ import { TeamImageField } from "../TeamImageField/TeamImageField";
 
 import styles from "./TeamForm.module.css";
 
-type TeamFormMode = "add" | "edit";
+export type TeamFormMode = "add" | "edit";
 
 interface TeamFormProps {
   mode: TeamFormMode;
   teamMember?: TeamMember;
+  onCancel: () => void;
+  onSuccess: () => void;
+  onSubmittingChange?: (submitting: boolean) => void;
 }
 
 type FieldErrors = Partial<
@@ -44,7 +47,13 @@ interface MutationResponse {
 
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
 
-export function TeamForm({ mode, teamMember }: TeamFormProps) {
+export function TeamForm({
+  mode,
+  teamMember,
+  onCancel,
+  onSuccess,
+  onSubmittingChange,
+}: TeamFormProps) {
   const router = useRouter();
 
   const [name, setName] = useState(teamMember?.name ?? "");
@@ -108,6 +117,7 @@ export function TeamForm({ mode, teamMember }: TeamFormProps) {
     }
 
     setSubmitting(true);
+    onSubmittingChange?.(true);
 
     try {
       const response = await fetch(
@@ -158,7 +168,7 @@ export function TeamForm({ mode, teamMember }: TeamFormProps) {
         return;
       }
 
-      router.push(ROUTES.admin.team);
+      onSuccess();
       router.refresh();
     } catch {
       setFormError(
@@ -166,6 +176,7 @@ export function TeamForm({ mode, teamMember }: TeamFormProps) {
       );
     } finally {
       setSubmitting(false);
+      onSubmittingChange?.(false);
     }
   }
 
@@ -179,6 +190,8 @@ export function TeamForm({ mode, teamMember }: TeamFormProps) {
 
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
+          <span className={styles.sectionNumber}>01</span>
+
           <div>
             <h2 className={styles.sectionTitle}>Member information</h2>
 
@@ -225,6 +238,8 @@ export function TeamForm({ mode, teamMember }: TeamFormProps) {
 
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
+          <span className={styles.sectionNumber}>02</span>
+
           <div>
             <h2 className={styles.sectionTitle}>Professional links</h2>
 
@@ -271,6 +286,8 @@ export function TeamForm({ mode, teamMember }: TeamFormProps) {
 
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
+          <span className={styles.sectionNumber}>03</span>
+
           <div>
             <h2 className={styles.sectionTitle}>Profile media</h2>
 
@@ -321,9 +338,7 @@ export function TeamForm({ mode, teamMember }: TeamFormProps) {
           type="button"
           variant="secondary"
           disabled={submitting}
-          onClick={() => {
-            router.push(ROUTES.admin.team);
-          }}
+          onClick={onCancel}
         >
           Cancel
         </Button>
