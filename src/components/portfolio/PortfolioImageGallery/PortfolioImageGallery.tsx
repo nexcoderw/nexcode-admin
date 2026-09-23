@@ -32,24 +32,32 @@ export function PortfolioImageGallery({
 
   return (
     <section className={styles.section}>
-      <h2>Gallery</h2>
+      <header className={styles.header}>
+        <h2>Gallery</h2>
+
+        {sources.length > 0 && (
+          <span className={styles.count}>
+            {sources.length} {sources.length === 1 ? "image" : "images"}
+          </span>
+        )}
+      </header>
 
       {sources.length === 0 ? (
         <p className={styles.empty}>
           No images have been uploaded for this portfolio yet.
         </p>
       ) : (
-        <div className={styles.imageGrid}>
+        <div className={styles.grid}>
           {sources.map(({ image, source }) => (
-            <div key={image.id} className={styles.imageCard}>
+            <figure key={image.id} className={styles.tile}>
               <Image
                 src={source}
                 alt={image.altText || portfolioName}
                 fill
-                sizes="(max-width: 48rem) 45vw, 13rem"
+                sizes="(max-width: 48rem) 50vw, 24rem"
                 unoptimized={source.startsWith("/api/portfolio/media")}
               />
-            </div>
+            </figure>
           ))}
         </div>
       )}
