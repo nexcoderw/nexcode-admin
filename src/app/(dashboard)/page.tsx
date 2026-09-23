@@ -9,7 +9,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
+import { ADMIN_ROUTES } from "@/constants/routes/admin-routes";
+import { CLIENT_ROUTES } from "@/constants/routes/client-routes";
+import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 
 import styles from "./page.module.css";
 
@@ -53,37 +55,37 @@ const managementLinks = [
     label: "Portfolios",
     description:
       "Manage projects, project files and details.",
-    href: ROUTES.admin.portfolios,
+    href: PORTFOLIO_ROUTES.list,
   },
   {
     label: "Clients",
     description:
       "Manage NEXCODE client information.",
-    href: ROUTES.admin.clients,
+    href: CLIENT_ROUTES.list,
   },
   {
     label: "Blogs",
     description:
       "Create and manage website articles.",
-    href: ROUTES.admin.blogs,
+    href: ADMIN_ROUTES.blogs,
   },
   {
     label: "Trainings",
     description:
       "Manage training content and programmes.",
-    href: ROUTES.admin.trainings,
+    href: ADMIN_ROUTES.trainings,
   },
   {
     label: "Payments",
     description:
       "Review portfolio payments and statuses.",
-    href: ROUTES.admin.payments,
+    href: ADMIN_ROUTES.payments,
   },
   {
     label: "Contacts",
     description:
       "Review messages received from the website.",
-    href: ROUTES.admin.contacts,
+    href: ADMIN_ROUTES.contacts,
   },
 ];
 
