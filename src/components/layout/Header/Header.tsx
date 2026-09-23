@@ -20,7 +20,7 @@ import {
   type AdminNavigationGroup,
   type AdminNavigationItem,
 } from "../../../constants/admin-navigation";
-import { ROUTES } from "../../../constants/routes";
+import { ADMIN_ROUTES } from "@/constants/routes/admin-routes";
 import { Icon } from "../../ui/Icon/Icon";
 import { IconButton } from "../../ui/IconButton/IconButton";
 
@@ -134,7 +134,7 @@ function HeaderContent({
     >
       <div className={styles.primaryRow}>
         <Link
-          href={ROUTES.admin.dashboard}
+          href={ADMIN_ROUTES.dashboard}
           className={styles.brand}
           aria-label="NEXCODE dashboard"
         >
@@ -426,7 +426,7 @@ function AccountMenu({
       </Link>
 
       <Link
-        href={ROUTES.admin.settings}
+        href={ADMIN_ROUTES.settings}
         className={styles.accountMenuItem}
         role="menuitem"
       >
