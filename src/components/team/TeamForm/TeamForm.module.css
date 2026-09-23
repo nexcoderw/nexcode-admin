@@ -4,6 +4,145 @@
   gap: var(--space-5);
 }
 
+.wizard ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.wizardStep {
+  position: relative;
+  min-width: 0;
+}
+
+.wizardStep:not(:last-child)::after {
+  position: absolute;
+  top: 1rem;
+  right: 0;
+  left: calc(2rem + var(--space-3));
+  z-index: 0;
+
+  height: var(--border-width);
+
+  background: var(--color-border);
+
+  content: "";
+}
+
+.wizardStep button {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+
+  width: 100%;
+  padding: 0 var(--space-3) 0 0;
+
+  color: var(--color-text-muted);
+  background: transparent;
+
+  border: 0;
+
+  font: inherit;
+  text-align: left;
+}
+
+.wizardStep button:disabled {
+  cursor: default;
+  opacity: var(--opacity-disabled);
+}
+
+.wizardStep button:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-md);
+}
+
+.stepMarker {
+  display: grid;
+  place-items: center;
+
+  width: 2rem;
+  height: 2rem;
+
+  color: var(--color-text-muted);
+  background: var(--color-surface-tertiary);
+
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-round);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.stepCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+
+  min-width: 0;
+}
+
+.stepCopy strong,
+.stepCopy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stepCopy strong {
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.stepCopy small {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+.wizardStepActive .stepMarker {
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.25rem var(--color-primary-subtle);
+}
+
+.wizardStepActive .stepCopy strong {
+  color: var(--color-text-primary);
+}
+
+.wizardStepComplete .stepMarker {
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  border-color: var(--color-primary-border);
+}
+
+.stepStatus {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+.stepStatus strong {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
 .section {
   padding: var(--space-5);
 
@@ -13,31 +152,10 @@
 }
 
 .sectionHeader {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: start;
-  gap: var(--space-3);
-
   margin-bottom: var(--space-6);
   padding-bottom: var(--space-4);
 
   border-bottom: var(--border-width) solid var(--color-border-subtle);
-}
-
-.sectionNumber {
-  display: grid;
-  place-items: center;
-
-  width: 2rem;
-  height: 2rem;
-
-  color: var(--color-text-on-primary);
-  background: var(--color-primary);
-
-  border-radius: var(--radius-round);
-
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
 }
 
 .sectionTitle {
@@ -79,7 +197,7 @@
 
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
 
   gap: var(--space-3);
 
@@ -91,6 +209,13 @@
   border-top: var(--border-width) solid var(--color-border-subtle);
 }
 
+.stepActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
 @media (max-width: 64rem) {
   .imageFields {
     grid-template-columns: 1fr;
@@ -98,6 +223,10 @@
 }
 
 @media (max-width: 48rem) {
+  .stepCopy small {
+    display: none;
+  }
+
   .section {
     padding: var(--space-4);
   }
@@ -115,12 +244,36 @@
 }
 
 @media (max-width: 32rem) {
+  .wizardStep button {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: var(--space-2);
+
+    padding-right: 0;
+
+    text-align: center;
+  }
+
+  .wizardStep:not(:last-child)::after {
+    top: 1rem;
+    left: calc(50% + 1rem);
+  }
+
+  .stepCopy strong {
+    font-size: var(--font-size-xs);
+  }
+
   .actions {
     align-items: stretch;
     flex-direction: column-reverse;
   }
 
-  .actions > * {
+  .actions > *,
+  .stepActions {
     width: 100%;
+  }
+
+  .stepActions > * {
+    flex: 1;
   }
 }
