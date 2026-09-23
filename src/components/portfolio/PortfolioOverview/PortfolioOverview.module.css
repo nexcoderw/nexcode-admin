@@ -1,132 +1,104 @@
+/*
+ * A group inside the sidebar ledger, so it carries no card of its own;
+ * the ledger supplies the surface and the dividers between groups.
+ */
 .overview {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-
-  padding: var(--space-6);
-
-  background: var(--color-surface);
-
-  border: var(--border-width) solid var(--color-border-subtle);
-
-  border-radius: var(--radius-xl);
+  gap: var(--space-4);
 }
 
-/*
- * Facts read as one strip divided by hairlines rather than four boxes,
- * and wrap to as many columns as the width allows.
- */
 .facts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  display: flex;
+  flex-direction: column;
 
   margin: 0;
 }
 
 .facts > div {
-  padding-inline: var(--space-5);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
 
-  border-left: var(--border-width) solid var(--color-border-subtle);
+  padding-block: var(--space-2);
 }
 
-.facts > div:first-child {
-  padding-left: 0;
-
-  border-left: 0;
+.facts > div + div {
+  border-top: var(--border-width) dashed var(--color-border-subtle);
 }
 
 .facts dt {
+  flex: 0 0 auto;
+
   color: var(--color-text-muted);
 
   font-size: var(--font-size-xs);
-  letter-spacing: var(--letter-spacing-wide);
-  text-transform: uppercase;
 }
 
 .facts dd {
-  margin: var(--space-2) 0 0;
+  min-width: 0;
+  margin: 0;
+
+  overflow: hidden;
 
   color: var(--color-text-primary);
 
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.description {
-  padding-top: var(--space-6);
-
-  border-top: var(--border-width) solid var(--color-border-subtle);
-}
-
-.description h2 {
-  font-size: var(--font-size-md);
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-.description p {
-  max-width: 46rem;
-  margin-top: var(--space-3);
-
-  color: var(--color-text-secondary);
-
-  line-height: var(--line-height-relaxed);
-  white-space: pre-wrap;
-}
-
-.quickLinks {
-  display: flex;
-  flex-wrap: wrap;
+.links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
   gap: var(--space-2);
 }
 
-.quickLinks a {
+.links a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
 
-  min-height: var(--control-height-sm);
+  min-height: var(--control-height-md);
 
   padding-inline: var(--space-4);
 
-  color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
 
-  border: var(--border-width) solid var(--color-primary-border);
-  border-radius: var(--radius-round);
+  border-radius: var(--radius-md);
 
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
 
   transition: background-color var(--transition-fast);
 }
 
-.quickLinks a:hover {
-  background: var(--color-primary-subtle);
+/* The second link steps back so the pair reads as primary and secondary. */
+.links a + a {
+  color: var(--color-text-primary);
+  background: var(--color-surface-tertiary);
 }
 
-.quickLinks a:focus-visible {
+.links a:hover {
+  background: var(--color-primary-hover);
+}
+
+.links a + a:hover {
+  background: var(--color-surface-hover);
+}
+
+.links a:focus-visible {
   outline: var(--focus-ring-width) solid var(--color-focus);
   outline-offset: var(--focus-ring-offset);
 }
 
-@media (max-width: 48rem) {
-  .overview {
-    gap: var(--space-5);
-
-    padding: var(--space-5);
-  }
-
-  .facts > div {
-    padding: var(--space-3) 0 0;
-
-    border-left: 0;
-  }
-
-  .facts > div + div {
-    border-top: var(--border-width) solid var(--color-border-subtle);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .quickLinks a {
+  .links a {
     transition: none;
   }
 }
