@@ -8,7 +8,8 @@ import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Dialog } from "@/components/ui/Dialog/Dialog";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { API_ROUTES, ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { PORTFOLIO_API_ROUTES, PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 
 import styles from "./PortfolioDeleteAction.module.css";
 
@@ -59,7 +60,7 @@ export function PortfolioDeleteAction({
       });
 
       if (response.status === 401 || response.status === 403) {
-        router.replace(ROUTES.auth.login);
+        router.replace(AUTH_ROUTES.login);
 
         return;
       }
@@ -73,7 +74,7 @@ export function PortfolioDeleteAction({
       setOpen(false);
 
       if (resource === "portfolio") {
-        router.replace(ROUTES.admin.portfolios);
+        router.replace(PORTFOLIO_ROUTES.list);
       }
 
       router.refresh();
@@ -159,16 +160,16 @@ export function PortfolioDeleteAction({
 function deleteRoute(resource: PortfolioDeleteResource, id: number) {
   switch (resource) {
     case "image":
-      return API_ROUTES.portfolio.imageDelete(id);
+      return PORTFOLIO_API_ROUTES.imageDelete(id);
 
     case "document":
-      return API_ROUTES.portfolio.documentDelete(id);
+      return PORTFOLIO_API_ROUTES.documentDelete(id);
 
     case "repository":
-      return API_ROUTES.portfolio.repositoryDelete(id);
+      return PORTFOLIO_API_ROUTES.repositoryDelete(id);
 
     default:
-      return API_ROUTES.portfolio.delete(id);
+      return PORTFOLIO_API_ROUTES.delete(id);
   }
 }
 
