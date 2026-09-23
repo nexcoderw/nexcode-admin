@@ -9,12 +9,8 @@ import {
 import {
     POST,
 } from "@/app/api/auth/password-reset/request/route";
-import {
-    MESSAGE_KEYS,
-} from "@/constants/shared/messages";
-import {
-    API_ROUTES,
-} from "@/constants/routes";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
+import { AUTH_API_ROUTES } from "@/constants/routes/auth-routes";
 import {
     ADMIN_PASSWORD_RESET_CHALLENGE_COOKIE,
     ADMIN_PASSWORD_RESET_TOKEN_COOKIE,
@@ -77,7 +73,7 @@ describe(
 
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth
+                        AUTH_API_ROUTES
                             .requestPasswordReset,
                         {
                             email:
@@ -149,7 +145,7 @@ describe(
 
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth
+                        AUTH_API_ROUTES
                             .requestPasswordReset,
                         {
                             email:
@@ -167,7 +163,7 @@ describe(
                 ).toEqual({
                     success: false,
                     messageKey:
-                        MESSAGE_KEYS.common
+                        COMMON_MESSAGE_KEYS
                             .serviceUnavailable,
                 });
             },
