@@ -21,6 +21,7 @@ export const MESSAGE_KEYS = {
         passwordResetRejected:
             "auth.error.password_reset_rejected",
     },
+
     team: {
         invalidRequest:
             "team.error.invalid_request",
@@ -28,6 +29,7 @@ export const MESSAGE_KEYS = {
         notFound:
             "team.error.not_found",
     },
+
     portfolio: {
         invalidRequest:
             "portfolio.error.invalid_request",
@@ -43,6 +45,14 @@ export const MESSAGE_KEYS = {
 
         repositoryNotFound:
             "portfolio.repository.error.not_found",
+    },
+
+    client: {
+        invalidRequest:
+            "client.error.invalid_request",
+
+        notFound:
+            "client.error.not_found",
     },
 
     common: {
@@ -94,6 +104,12 @@ export const MESSAGES = {
 
     [MESSAGE_KEYS.portfolio.repositoryNotFound]:
         "The portfolio repository could not be found.",
+
+    [MESSAGE_KEYS.client.invalidRequest]:
+        "Check the client information and try again.",
+
+    [MESSAGE_KEYS.client.notFound]:
+        "The client could not be found.",
 } as const;
 
 export type MessageKey =
