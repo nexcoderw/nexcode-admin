@@ -11,6 +11,7 @@ import type { TeamMember } from "@/types/team/team";
 import { getTeamImageSource } from "@/utils/team/team-image-source";
 
 import { TeamDetailsDialog } from "../TeamDetailsDialog/TeamDetailsDialog";
+import { TeamDeleteAction } from "../TeamDeleteAction/TeamDeleteAction";
 import { TeamFormDialogTrigger } from "../TeamFormDialog/TeamFormDialog";
 
 import styles from "./TeamCard.module.css";
@@ -62,6 +63,12 @@ export function TeamCard({ member }: TeamCardProps) {
               <TeamDetailsDialog member={member} />
 
               <TeamFormDialogTrigger mode="edit" teamMember={member} compact />
+
+              <TeamDeleteAction
+                teamId={member.id}
+                teamName={member.name}
+                compact
+              />
             </div>
           </header>
 
