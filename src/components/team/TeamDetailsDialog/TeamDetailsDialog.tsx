@@ -13,11 +13,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { Dialog } from "@/components/ui/Dialog/Dialog";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
 import type { TeamMember } from "@/types/team/team";
 import { getTeamImageSource } from "@/utils/team/team-image-source";
 
 import { TeamDeleteAction } from "../TeamDeleteAction/TeamDeleteAction";
+import { TeamFormDialog } from "../TeamFormDialog/TeamFormDialog";
 
 import styles from "./TeamDetailsDialog.module.css";
 
@@ -31,6 +31,7 @@ export function TeamDetailsDialog({
   showTriggerLabel = false,
 }: TeamDetailsDialogProps) {
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
   const name = member.name ?? "Unnamed member";
   const image = getTeamImageSource(member.image);
   const cutout = getTeamImageSource(member.imagePng);
@@ -70,8 +71,12 @@ export function TeamDetailsDialog({
               </Button>
 
               <Button
-                href={ROUTES.admin.teamEdit(member.id)}
+                type="button"
                 leftIcon={<Icon icon={Edit02Icon} size={17} />}
+                onClick={() => {
+                  setOpen(false);
+                  setEditing(true);
+                }}
               >
                 Edit profile
               </Button>
@@ -204,6 +209,13 @@ export function TeamDetailsDialog({
           </div>
         )}
       </Dialog>
+
+      <TeamFormDialog
+        mode="edit"
+        teamMember={member}
+        open={editing}
+        onClose={() => setEditing(false)}
+      />
     </>
   );
 }
