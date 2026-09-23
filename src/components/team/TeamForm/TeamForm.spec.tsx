@@ -9,6 +9,8 @@ import { TeamForm } from "./TeamForm";
 const push = vi.fn();
 const replace = vi.fn();
 const refresh = vi.fn();
+const onCancel = vi.fn();
+const onSuccess = vi.fn();
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -44,12 +46,14 @@ describe("TeamForm", () => {
     push.mockReset();
     replace.mockReset();
     refresh.mockReset();
+    onCancel.mockReset();
+    onSuccess.mockReset();
   });
 
   it("validates required fields before sending an add request", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
 
-    render(<TeamForm mode="add" />);
+    render(<TeamForm mode="add" onCancel={onCancel} onSuccess={onSuccess} />);
 
     await userEvent.click(
       screen.getByRole("button", { name: "Add team member" }),
@@ -84,7 +88,7 @@ describe("TeamForm", () => {
       ),
     );
 
-    render(<TeamForm mode="add" />);
+    render(<TeamForm mode="add" onCancel={onCancel} onSuccess={onSuccess} />);
 
     await userEvent.type(screen.getByLabelText(/Name/), "Jane Doe");
 
@@ -109,7 +113,7 @@ describe("TeamForm", () => {
     expect(body.get("name")).toBe("Jane Doe");
     expect(body.get("position")).toBe("Engineer");
 
-    expect(push).toHaveBeenCalledWith("/team");
+    expect(onSuccess).toHaveBeenCalledOnce();
     expect(refresh).toHaveBeenCalled();
   });
 
@@ -139,7 +143,14 @@ describe("TeamForm", () => {
       ),
     );
 
-    render(<TeamForm mode="edit" teamMember={memberWithImage} />);
+    render(
+      <TeamForm
+        mode="edit"
+        teamMember={memberWithImage}
+        onCancel={onCancel}
+        onSuccess={onSuccess}
+      />,
+    );
 
     await userEvent.click(screen.getByRole("button", { name: "Remove image" }));
 
@@ -158,7 +169,7 @@ describe("TeamForm", () => {
     expect(body.get("remove_image")).toBe("true");
     expect(body.get("image")).toBeNull();
 
-    expect(push).toHaveBeenCalledWith("/team");
+    expect(onSuccess).toHaveBeenCalledOnce();
   });
 
   it("maps stable backend fields without displaying raw backend errors", async () => {
@@ -177,7 +188,7 @@ describe("TeamForm", () => {
       ),
     );
 
-    render(<TeamForm mode="add" />);
+    render(<TeamForm mode="add" onCancel={onCancel} onSuccess={onSuccess} />);
 
     await userEvent.type(screen.getByLabelText(/Name/), "Jane");
     await userEvent.type(screen.getByLabelText(/Position/), "Engineer");
@@ -194,7 +205,7 @@ describe("TeamForm", () => {
   it("rejects a non-PNG cutout before submission", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
 
-    render(<TeamForm mode="add" />);
+    render(<TeamForm mode="add" onCancel={onCancel} onSuccess={onSuccess} />);
 
     await userEvent.type(screen.getByLabelText(/Name/), "Jane");
     await userEvent.type(screen.getByLabelText(/Position/), "Engineer");
