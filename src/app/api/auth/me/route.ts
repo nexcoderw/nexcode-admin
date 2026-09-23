@@ -3,9 +3,8 @@ import {
     NextResponse,
 } from "next/server";
 
-import {
-    MESSAGE_KEYS,
-} from "@/constants/shared/messages";
+import { AUTH_MESSAGE_KEYS } from "@/constants/messages/auth-messages";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
 import {
     getAdminMe,
 } from "@/endpoints/auth/me";
@@ -80,7 +79,7 @@ function authenticationRequiredResponse() {
             {
                 success: false,
                 messageKey:
-                    MESSAGE_KEYS.auth
+                    AUTH_MESSAGE_KEYS
                         .authenticationRequired,
             },
             {
@@ -102,7 +101,7 @@ function serviceUnavailableResponse() {
             {
                 success: false,
                 messageKey:
-                    MESSAGE_KEYS.common
+                    COMMON_MESSAGE_KEYS
                         .serviceUnavailable,
             },
             {
