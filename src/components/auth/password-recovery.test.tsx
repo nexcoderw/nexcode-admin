@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ForgotPasswordForm } from "@/components/auth/forgot-password/ForgotPasswordForm";
 import { ResetPasswordForm } from "@/components/auth/reset-password/ResetPasswordForm";
 import { VerificationForm } from "@/components/auth/verify/VerificationForm";
-import { API_ROUTES, ROUTES } from "@/constants/routes";
+import { AUTH_API_ROUTES, AUTH_ROUTES } from "@/constants/routes/auth-routes";
 
 const navigation = vi.hoisted(() => ({
   push: vi.fn(),
@@ -48,13 +48,13 @@ describe("administrator password recovery", () => {
 
     const [url, options] = fetchMock.mock.calls[0];
 
-    expect(url).toBe(API_ROUTES.auth.requestPasswordReset);
+    expect(url).toBe(AUTH_API_ROUTES.requestPasswordReset);
 
     expect(JSON.parse(String(options.body))).toEqual({
       email: "admin@nexcode.africa",
     });
 
-    expect(navigation.push).toHaveBeenCalledWith(ROUTES.auth.verify);
+    expect(navigation.push).toHaveBeenCalledWith(AUTH_ROUTES.verify);
   });
 
   it("verifies the six-digit code and opens password reset", async () => {
@@ -78,13 +78,13 @@ describe("administrator password recovery", () => {
 
     const [url, options] = fetchMock.mock.calls[0];
 
-    expect(url).toBe(API_ROUTES.auth.verifyPasswordReset);
+    expect(url).toBe(AUTH_API_ROUTES.verifyPasswordReset);
 
     expect(JSON.parse(String(options.body))).toEqual({
       code: "384271",
     });
 
-    expect(navigation.replace).toHaveBeenCalledWith(ROUTES.auth.resetPassword);
+    expect(navigation.replace).toHaveBeenCalledWith(AUTH_ROUTES.resetPassword);
   });
 
   it("changes the password and returns to login", async () => {
@@ -112,14 +112,14 @@ describe("administrator password recovery", () => {
 
     const [url, options] = fetchMock.mock.calls[0];
 
-    expect(url).toBe(API_ROUTES.auth.confirmPasswordReset);
+    expect(url).toBe(AUTH_API_ROUTES.confirmPasswordReset);
 
     expect(JSON.parse(String(options.body))).toEqual({
       password,
       confirmPassword: password,
     });
 
-    expect(navigation.replace).toHaveBeenCalledWith(ROUTES.auth.login);
+    expect(navigation.replace).toHaveBeenCalledWith(AUTH_ROUTES.login);
 
     expect(navigation.refresh).toHaveBeenCalled();
   });
