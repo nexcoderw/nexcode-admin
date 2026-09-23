@@ -9,9 +9,7 @@ import {
 import {
     POST,
 } from "@/app/api/auth/logout/route";
-import {
-    API_ROUTES,
-} from "@/constants/routes";
+import { AUTH_API_ROUTES } from "@/constants/routes/auth-routes";
 import {
     ADMIN_CSRF_COOKIE_NAME,
     ADMIN_SESSION_COOKIE_NAME,
@@ -67,7 +65,7 @@ describe(
 
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth.logout,
+                        AUTH_API_ROUTES.logout,
                         {},
                         {
                             [ADMIN_SESSION_COOKIE_NAME]:
@@ -138,7 +136,7 @@ describe(
 
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth.logout,
+                        AUTH_API_ROUTES.logout,
                         {},
                         {
                             [ADMIN_SESSION_COOKIE_NAME]:
@@ -188,7 +186,7 @@ describe(
 
                 const response = await POST(
                     createJsonRequest(
-                        API_ROUTES.auth.logout,
+                        AUTH_API_ROUTES.logout,
                         {},
                         {
                             [ADMIN_SESSION_COOKIE_NAME]:
