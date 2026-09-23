@@ -4,9 +4,7 @@ import {
     PORTFOLIO_PROJECT_TYPES,
     PORTFOLIO_STATUSES,
 } from "@/constants/portfolio/portfolio-options";
-import {
-    ROUTES,
-} from "@/constants/routes";
+import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import type {
     PortfolioCategory,
     PortfolioListQuery,
@@ -200,8 +198,8 @@ export function buildPortfolioListHref(
         params.toString();
 
     return value
-        ? `${ROUTES.admin.portfolios}?${value}`
-        : ROUTES.admin.portfolios;
+        ? `${PORTFOLIO_ROUTES.list}?${value}`
+        : PORTFOLIO_ROUTES.list;
 }
 
 function read(
