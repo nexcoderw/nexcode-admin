@@ -1,6 +1,4 @@
-import {
-    API_ROUTES,
-} from "@/constants/routes";
+import { TEAM_API_ROUTES } from "@/constants/routes/team-routes";
 
 
 export function getTeamImageSource(
@@ -21,7 +19,7 @@ export function getTeamImageSource(
             });
 
         return (
-            `${API_ROUTES.team.media}?` +
+            `${TEAM_API_ROUTES.media}?` +
             params.toString()
         );
     }
