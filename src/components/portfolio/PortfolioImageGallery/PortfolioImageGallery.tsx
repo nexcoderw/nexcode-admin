@@ -32,7 +32,7 @@ export function PortfolioImageGallery({
 
   return (
     <section className={styles.section}>
-      <h2>Images</h2>
+      <h2>Gallery</h2>
 
       {sources.length === 0 ? (
         <p className={styles.empty}>
@@ -46,7 +46,7 @@ export function PortfolioImageGallery({
                 src={source}
                 alt={image.altText || portfolioName}
                 fill
-                sizes="33vw"
+                sizes="(max-width: 48rem) 45vw, 13rem"
                 unoptimized={source.startsWith("/api/portfolio/media")}
               />
             </div>
