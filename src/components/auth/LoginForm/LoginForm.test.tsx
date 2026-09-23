@@ -12,10 +12,8 @@ import {
     vi,
 } from "vitest";
 
-import {
-    API_ROUTES,
-    ROUTES,
-} from "@/constants/routes";
+import { ADMIN_ROUTES } from "@/constants/routes/admin-routes";
+import { AUTH_API_ROUTES } from "@/constants/routes/auth-routes";
 
 import {
     LoginForm,
@@ -107,7 +105,7 @@ describe("LoginForm", () => {
             ] = fetchMock.mock.calls[0];
 
             expect(url).toBe(
-                API_ROUTES.auth.login,
+                AUTH_API_ROUTES.login,
             );
 
             expect(options).toEqual(
@@ -132,7 +130,7 @@ describe("LoginForm", () => {
                 expect(
                     navigation.replace,
                 ).toHaveBeenCalledWith(
-                    ROUTES.admin.dashboard,
+                    ADMIN_ROUTES.dashboard,
                 );
 
                 expect(
