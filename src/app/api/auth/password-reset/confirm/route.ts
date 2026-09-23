@@ -3,9 +3,8 @@ import {
     NextResponse,
 } from "next/server";
 
-import {
-    MESSAGE_KEYS,
-} from "@/constants/shared/messages";
+import { AUTH_MESSAGE_KEYS } from "@/constants/messages/auth-messages";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
 import {
     confirmAdminPasswordReset,
 } from "@/endpoints/auth/confirm-password-reset";
@@ -35,7 +34,7 @@ export async function POST(
 
     if (!resetToken) {
         return failureResponse(
-            MESSAGE_KEYS.auth
+            AUTH_MESSAGE_KEYS
                 .passwordResetSessionInvalid,
             400,
         );
@@ -48,7 +47,7 @@ export async function POST(
 
     if (!body) {
         return failureResponse(
-            MESSAGE_KEYS.auth.invalidRequest,
+            AUTH_MESSAGE_KEYS.invalidRequest,
             400,
         );
     }
@@ -83,7 +82,7 @@ export async function POST(
         if (!result.ok) {
             if (result.status === 400) {
                 return failureResponse(
-                    MESSAGE_KEYS.auth
+                    AUTH_MESSAGE_KEYS
                         .passwordResetRejected,
                     400,
                 );
@@ -190,7 +189,7 @@ function failureResponse(
 
 function serviceUnavailableResponse() {
     return failureResponse(
-        MESSAGE_KEYS.common
+        COMMON_MESSAGE_KEYS
             .serviceUnavailable,
         503,
     );
