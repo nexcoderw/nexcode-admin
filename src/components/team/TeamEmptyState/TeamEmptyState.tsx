@@ -2,7 +2,7 @@ import { UserGroupIcon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
+import { TEAM_ROUTES } from "@/constants/routes/team-routes";
 
 import { TeamFormDialogTrigger } from "../TeamFormDialog/TeamFormDialog";
 
@@ -30,7 +30,7 @@ export function TeamEmptyState({ filtered }: TeamEmptyStateProps) {
       </div>
 
       {filtered ? (
-        <Link href={ROUTES.admin.team} className={styles.secondaryAction}>
+        <Link href={TEAM_ROUTES.list} className={styles.secondaryAction}>
           Reset filters
         </Link>
       ) : (
