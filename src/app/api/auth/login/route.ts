@@ -2,9 +2,8 @@ import {
     NextResponse,
 } from "next/server";
 
-import {
-    MESSAGE_KEYS,
-} from "@/constants/shared/messages";
+import { AUTH_MESSAGE_KEYS } from "@/constants/messages/auth-messages";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
 import {
     getAdminCsrf,
 } from "@/endpoints/auth/get-csrf";
@@ -36,7 +35,7 @@ export async function POST(
 
     if (!body) {
         return failureResponse(
-            MESSAGE_KEYS.auth.invalidRequest,
+            AUTH_MESSAGE_KEYS.invalidRequest,
             400,
         );
     }
@@ -162,14 +161,14 @@ function mapLoginFailure(
 ) {
     if (result.status === 401) {
         return failureResponse(
-            MESSAGE_KEYS.auth.invalidCredentials,
+            AUTH_MESSAGE_KEYS.invalidCredentials,
             401,
         );
     }
 
     if (result.status === 429) {
         const response = failureResponse(
-            MESSAGE_KEYS.auth.tooManyAttempts,
+            AUTH_MESSAGE_KEYS.tooManyAttempts,
             429,
         );
 
@@ -191,7 +190,7 @@ function mapLoginFailure(
 
     if (result.status === 400) {
         return failureResponse(
-            MESSAGE_KEYS.auth.invalidRequest,
+            AUTH_MESSAGE_KEYS.invalidRequest,
             400,
         );
     }
@@ -223,7 +222,7 @@ function failureResponse(
 
 function serviceUnavailableResponse() {
     return failureResponse(
-        MESSAGE_KEYS.common.serviceUnavailable,
+        COMMON_MESSAGE_KEYS.serviceUnavailable,
         503,
     );
 }
