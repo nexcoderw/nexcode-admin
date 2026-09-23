@@ -1,18 +1,30 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--space-6);
 }
 
+/*
+ * The header is separated by a hairline rather than a panel, so the
+ * cards below are the only surfaces competing for attention.
+ */
 .header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: var(--space-6);
+
+  padding-bottom: var(--space-5);
+
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
 }
 
 .header h1 {
   font-size: var(--font-size-2xl);
+
+  line-height: var(--line-height-tight);
+
+  letter-spacing: var(--letter-spacing-tight);
 }
 
 .header p {
@@ -22,6 +34,8 @@
   color: var(--color-text-muted);
 
   font-size: var(--font-size-sm);
+
+  line-height: var(--line-height-relaxed);
 }
 
 .eyebrow {
@@ -35,23 +49,37 @@
 
   font-weight: var(--font-weight-semibold);
 
-  text-transform: uppercase;
-
   letter-spacing: var(--letter-spacing-wide);
+
+  text-transform: uppercase;
 }
 
 .actions {
   display: flex;
+  flex: 0 0 auto;
+  align-items: center;
   gap: var(--space-3);
 }
 
-@media (max-width: 48rem) {
+@media (max-width: 60rem) {
   .header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+}
+
+@media (max-width: 30rem) {
+  .page {
+    gap: var(--space-5);
+  }
+
+  .actions {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .actions {
-    flex-wrap: wrap;
+  .actions > * {
+    width: 100%;
   }
 }
