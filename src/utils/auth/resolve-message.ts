@@ -1,13 +1,10 @@
-import {
-    MESSAGE_KEYS,
-    MESSAGES,
-    type MessageKey,
-} from "@/constants/shared/messages";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
+import { MESSAGES, type MessageKey } from "@/constants/messages/messages";
 
 export function resolveAuthMessage(
     messageKey: unknown,
     fallback: MessageKey =
-        MESSAGE_KEYS.common.serviceUnavailable,
+        COMMON_MESSAGE_KEYS.serviceUnavailable,
 ) {
     if (
         typeof messageKey === "string" &&
