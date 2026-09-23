@@ -1,4 +1,7 @@
 .card {
+  display: flex;
+  flex-direction: column;
+
   min-width: 0;
   overflow: hidden;
 
@@ -7,6 +10,24 @@
   border: var(--border-width) solid var(--color-border-subtle);
 
   border-radius: var(--radius-xl);
+
+  /*
+   * Transform is composited; border-color is paint only. Neither
+   * triggers layout, so the hover stays cheap in a long grid.
+   */
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+
+  border-color: var(--color-primary-border);
+}
+
+.card:focus-within {
+  border-color: var(--color-primary-border);
 }
 
 .media {
@@ -34,6 +55,8 @@
   height: 100%;
 
   color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
 }
 
 .status {
@@ -44,8 +67,9 @@
 
 .content {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-2);
 
   padding: var(--space-5);
 }
@@ -57,56 +81,90 @@
 
   font-weight: var(--font-weight-semibold);
 
+  letter-spacing: var(--letter-spacing-wide);
+
   text-transform: uppercase;
 }
 
+/* Two clamped lines each, so every card in a row keeps the same rhythm. */
 .title {
-  font-size: var(--font-size-xl);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+
+  overflow: hidden;
+
+  font-size: var(--font-size-lg);
+
+  line-height: var(--line-height-tight);
 }
 
 .summary {
-  min-height: 2.7rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+
+  overflow: hidden;
 
   color: var(--color-text-muted);
 
   font-size: var(--font-size-sm);
+
+  line-height: var(--line-height-relaxed);
 }
 
+/*
+ * A quiet inline row rather than a bordered panel: the numbers matter,
+ * the box around them did not.
+ */
 .meta {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
 
-  border: var(--border-width) solid var(--color-border-subtle);
-
-  border-radius: var(--radius-lg);
+  margin: 0;
+  padding-top: var(--space-1);
 }
 
 .meta div {
-  padding: var(--space-3);
-}
-
-.meta div + div {
-  border-left: var(--border-width) solid var(--color-border-subtle);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
 }
 
 .meta dt {
   color: var(--color-text-muted);
 
   font-size: var(--font-size-xs);
+
+  letter-spacing: var(--letter-spacing-wide);
+
+  text-transform: uppercase;
 }
 
 .meta dd {
-  margin: var(--space-1) 0 0;
+  margin: 0;
 
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
 
   font-size: var(--font-size-sm);
+
+  font-variant-numeric: tabular-nums;
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-2);
+
+  margin-top: auto;
+  padding-top: var(--space-4);
+}
+
+/* Delete is pushed away from the two navigation actions. */
+.actions > :last-child {
+  margin-left: auto;
 }
 
 .footer {
@@ -118,9 +176,34 @@
 
   color: var(--color-text-muted);
 
-  background: var(--color-surface-secondary);
-
   border-top: var(--border-width) solid var(--color-border-subtle);
 
   font-size: var(--font-size-xs);
+}
+
+.footer span {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 30rem) {
+  .content {
+    padding: var(--space-4);
+  }
+
+  .footer {
+    padding-inline: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
 }
