@@ -1,3 +1,8 @@
+import {
+    PORTFOLIO_CATEGORIES,
+    PORTFOLIO_PROJECT_TYPES,
+    PORTFOLIO_STATUSES,
+} from "@/constants/portfolio/portfolio-options";
 import type {
     PortfolioDocumentInput,
     PortfolioRepositoryInput,
@@ -24,23 +29,74 @@ export function sanitizePortfolioPayload(
         "name",
         "summary",
         "description",
-        "category",
-        "projectType",
         "liveUrl",
         "figmaUrl",
-        "status",
     ] as const) {
+        if (!(key in input)) {
+            continue;
+        }
+
+        const field =
+            input[key];
+
         if (
-            key in input &&
-            typeof input[key] !== "string"
+            typeof field !==
+            "string"
         ) {
             return null;
         }
 
-        if (typeof input[key] === "string") {
-            output[key] =
-                input[key];
-        }
+        output[key] = field;
+    }
+
+    const category =
+        readChoice(
+            input,
+            "category",
+            PORTFOLIO_CATEGORIES,
+        );
+
+    if (category === null) {
+        return null;
+    }
+
+    if (category !== undefined) {
+        output.category =
+            category;
+    }
+
+    const projectType =
+        readChoice(
+            input,
+            "projectType",
+            PORTFOLIO_PROJECT_TYPES,
+        );
+
+    if (projectType === null) {
+        return null;
+    }
+
+    if (
+        projectType !== undefined
+    ) {
+        output.projectType =
+            projectType;
+    }
+
+    const status =
+        readChoice(
+            input,
+            "status",
+            PORTFOLIO_STATUSES,
+        );
+
+    if (status === null) {
+        return null;
+    }
+
+    if (status !== undefined) {
+        output.status =
+            status;
     }
 
     for (const key of [
@@ -56,7 +112,8 @@ export function sanitizePortfolioPayload(
 
         if (
             field !== null &&
-            typeof field !== "string"
+            typeof field !==
+            "string"
         ) {
             return null;
         }
@@ -103,17 +160,21 @@ export function sanitizePortfolioDocumentPayload(
         "title",
         "url",
     ] as const) {
+        if (!(key in input)) {
+            continue;
+        }
+
+        const field =
+            input[key];
+
         if (
-            key in input &&
-            typeof input[key] !== "string"
+            typeof field !==
+            "string"
         ) {
             return null;
         }
 
-        if (typeof input[key] === "string") {
-            output[key] =
-                input[key];
-        }
+        output[key] = field;
     }
 
     return output;
@@ -136,20 +197,57 @@ export function sanitizePortfolioRepositoryPayload(
         "label",
         "url",
     ] as const) {
+        if (!(key in input)) {
+            continue;
+        }
+
+        const field =
+            input[key];
+
         if (
-            key in input &&
-            typeof input[key] !== "string"
+            typeof field !==
+            "string"
         ) {
             return null;
         }
 
-        if (typeof input[key] === "string") {
-            output[key] =
-                input[key];
-        }
+        output[key] = field;
     }
 
     return output;
+}
+
+function readChoice<
+    T extends string,
+>(
+    input: UnknownRecord,
+    key: string,
+    choices: readonly T[],
+): T | undefined | null {
+    if (!(key in input)) {
+        return undefined;
+    }
+
+    const value =
+        input[key];
+
+    if (
+        typeof value !==
+        "string"
+    ) {
+        return null;
+    }
+
+    if (
+        !(
+            choices as
+            readonly string[]
+        ).includes(value)
+    ) {
+        return null;
+    }
+
+    return value as T;
 }
 
 function asRecord(
@@ -157,7 +255,8 @@ function asRecord(
 ): UnknownRecord | null {
     return (
         value &&
-        typeof value === "object" &&
+        typeof value ===
+        "object" &&
         !Array.isArray(value)
     )
         ? value as UnknownRecord
@@ -168,8 +267,11 @@ function isPositiveInteger(
     value: unknown,
 ): value is number {
     return (
-        typeof value === "number" &&
-        Number.isSafeInteger(value) &&
+        typeof value ===
+        "number" &&
+        Number.isSafeInteger(
+            value,
+        ) &&
         value > 0
     );
 }
