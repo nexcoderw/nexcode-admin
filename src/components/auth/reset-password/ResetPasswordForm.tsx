@@ -12,7 +12,7 @@ import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { PasswordInput } from "@/components/ui/PasswordInput/PasswordInput";
-import { API_ROUTES, ROUTES } from "@/constants/routes";
+import { AUTH_API_ROUTES, AUTH_ROUTES } from "@/constants/routes/auth-routes";
 import { resolveAuthMessage } from "@/utils/auth/resolve-message";
 
 import styles from "./ResetPasswordForm.module.css";
@@ -71,7 +71,7 @@ export function ResetPasswordForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(API_ROUTES.auth.confirmPasswordReset, {
+      const response = await fetch(AUTH_API_ROUTES.confirmPasswordReset, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +90,7 @@ export function ResetPasswordForm() {
         return;
       }
 
-      router.replace(ROUTES.auth.login);
+      router.replace(AUTH_ROUTES.login);
 
       router.refresh();
     } catch {
