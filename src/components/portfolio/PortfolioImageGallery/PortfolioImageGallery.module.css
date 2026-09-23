@@ -1,0 +1,54 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  max-width: var(--content-width-lg);
+
+  padding: var(--space-6);
+
+  background: var(--color-surface);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+
+  border-radius: var(--radius-xl);
+}
+
+.empty {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: var(--space-4);
+}
+
+.imageCard {
+  position: relative;
+
+  aspect-ratio: 16 / 10;
+
+  overflow: hidden;
+
+  border-radius: var(--radius-lg);
+}
+
+.imageCard img {
+  object-fit: cover;
+}
+
+@media (max-width: 52rem) {
+  .imageGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 36rem) {
+  .imageGrid {
+    grid-template-columns: 1fr;
+  }
+}
