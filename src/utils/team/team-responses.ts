@@ -4,9 +4,9 @@ import {
     NextResponse,
 } from "next/server";
 
-import {
-    MESSAGE_KEYS,
-} from "@/constants/shared/messages";
+import { AUTH_MESSAGE_KEYS } from "@/constants/messages/auth-messages";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
+import { TEAM_MESSAGE_KEYS } from "@/constants/messages/team-messages";
 import {
     clearAdminSessionCookies,
 } from "@/utils/auth/session";
@@ -17,7 +17,7 @@ export function teamAuthenticationRequired() {
             {
                 success: false,
                 messageKey:
-                    MESSAGE_KEYS.auth
+                    AUTH_MESSAGE_KEYS
                         .authenticationRequired,
             },
             {
@@ -40,7 +40,7 @@ export function teamNotFound() {
             {
                 success: false,
                 messageKey:
-                    MESSAGE_KEYS.team
+                    TEAM_MESSAGE_KEYS
                         .notFound,
             },
             {
@@ -61,7 +61,7 @@ export function teamInvalidRequest(
             {
                 success: false,
                 messageKey:
-                    MESSAGE_KEYS.team
+                    TEAM_MESSAGE_KEYS
                         .invalidRequest,
                 fields,
             },
@@ -81,7 +81,7 @@ export function teamServiceUnavailable() {
             {
                 success: false,
                 messageKey:
-                    MESSAGE_KEYS.common
+                    COMMON_MESSAGE_KEYS
                         .serviceUnavailable,
             },
             {
