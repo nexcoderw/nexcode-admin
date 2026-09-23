@@ -4,9 +4,9 @@ import {
     NextResponse,
 } from "next/server";
 
-import {
-    MESSAGE_KEYS,
-} from "@/constants/shared/messages";
+import { AUTH_MESSAGE_KEYS } from "@/constants/messages/auth-messages";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
+import { PORTFOLIO_MESSAGE_KEYS } from "@/constants/messages/portfolio-messages";
 import {
     clearAdminSessionCookies,
 } from "@/utils/auth/session";
@@ -23,7 +23,7 @@ export function portfolioAuthenticationRequired() {
             {
                 success: false,
                 messageKey:
-                    MESSAGE_KEYS.auth
+                    AUTH_MESSAGE_KEYS
                         .authenticationRequired,
             },
             {
@@ -46,7 +46,7 @@ export function portfolioInvalidRequest(
             {
                 success: false,
                 messageKey:
-                    MESSAGE_KEYS.portfolio
+                    PORTFOLIO_MESSAGE_KEYS
                         .invalidRequest,
                 fields,
             },
@@ -63,16 +63,16 @@ export function portfolioNotFound(
 ) {
     const keys = {
         portfolio:
-            MESSAGE_KEYS.portfolio
+            PORTFOLIO_MESSAGE_KEYS
                 .notFound,
         image:
-            MESSAGE_KEYS.portfolio
+            PORTFOLIO_MESSAGE_KEYS
                 .imageNotFound,
         document:
-            MESSAGE_KEYS.portfolio
+            PORTFOLIO_MESSAGE_KEYS
                 .documentNotFound,
         repository:
-            MESSAGE_KEYS.portfolio
+            PORTFOLIO_MESSAGE_KEYS
                 .repositoryNotFound,
     } as const;
 
@@ -96,7 +96,7 @@ export function portfolioServiceUnavailable() {
             {
                 success: false,
                 messageKey:
-                    MESSAGE_KEYS.common
+                    COMMON_MESSAGE_KEYS
                         .serviceUnavailable,
             },
             {
