@@ -9,7 +9,7 @@ import { useRef, useState } from "react";
 import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { API_ROUTES, ROUTES } from "@/constants/routes";
+import { AUTH_API_ROUTES, AUTH_ROUTES } from "@/constants/routes/auth-routes";
 import { resolveAuthMessage } from "@/utils/auth/resolve-message";
 
 import styles from "./VerificationForm.module.css";
@@ -53,7 +53,7 @@ export function VerificationForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(API_ROUTES.auth.verifyPasswordReset, {
+      const response = await fetch(AUTH_API_ROUTES.verifyPasswordReset, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +77,7 @@ export function VerificationForm() {
         return;
       }
 
-      router.replace(ROUTES.auth.resetPassword);
+      router.replace(AUTH_ROUTES.resetPassword);
     } catch {
       setFormError(resolveAuthMessage(null));
     } finally {
@@ -164,7 +164,7 @@ export function VerificationForm() {
       <div className={styles.resend}>
         <span>Didn&apos;t receive the code?</span>
 
-        <Link href={ROUTES.auth.forgotPassword} className={styles.resendButton}>
+        <Link href={AUTH_ROUTES.forgotPassword} className={styles.resendButton}>
           Request another code
         </Link>
       </div>
