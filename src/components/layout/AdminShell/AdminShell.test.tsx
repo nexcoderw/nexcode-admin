@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { API_ROUTES, ROUTES } from "@/constants/routes";
+import { AUTH_API_ROUTES, AUTH_ROUTES } from "@/constants/routes/auth-routes";
 
 import { AdminShell } from "./AdminShell";
 
@@ -66,13 +66,13 @@ describe("AdminShell logout", () => {
     );
 
     await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledWith(API_ROUTES.auth.logout, {
+      expect(fetchMock).toHaveBeenCalledWith(AUTH_API_ROUTES.logout, {
         method: "POST",
       });
     });
 
     await waitFor(() => {
-      expect(navigation.replace).toHaveBeenCalledWith(ROUTES.auth.login);
+      expect(navigation.replace).toHaveBeenCalledWith(AUTH_ROUTES.login);
 
       expect(navigation.refresh).toHaveBeenCalled();
     });
