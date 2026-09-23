@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { ForgotPasswordForm } from "@/components/auth/forgot-password/ForgotPasswordForm";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
 
 import styles from "./page.module.css";
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function ForgotPasswordPage() {
   return (
     <div className={styles.page}>
-      <Link href={ROUTES.auth.login} className={styles.backLink}>
+      <Link href={AUTH_ROUTES.login} className={styles.backLink}>
         <Icon icon={ArrowLeft01Icon} size={16} />
 
         <span>Back to sign in</span>
