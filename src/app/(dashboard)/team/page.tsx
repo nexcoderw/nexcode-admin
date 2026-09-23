@@ -1,14 +1,13 @@
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { cookies, headers } from "next/headers";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { TeamEmptyState } from "@/components/team/TeamEmptyState/TeamEmptyState";
 import { TeamFilters } from "@/components/team/TeamFilters/TeamFilters";
+import { TeamFormDialogTrigger } from "@/components/team/TeamFormDialog/TeamFormDialog";
 import { TeamGrid } from "@/components/team/TeamGrid/TeamGrid";
 import { TeamPagination } from "@/components/team/TeamPagination/TeamPagination";
 import { Alert } from "@/components/ui/Alert/Alert";
-import { Icon } from "@/components/ui/Icon/Icon";
 import { ROUTES } from "@/constants/routes";
 import { listTeam } from "@/endpoints/team/list-team";
 import { ADMIN_SESSION_COOKIE_NAME } from "@/utils/auth/session";
@@ -18,7 +17,6 @@ import {
 } from "@/utils/team/team-list-query";
 
 import styles from "./page.module.css";
-import { Button } from "@/components/ui/Button/Button";
 
 export const metadata: Metadata = {
   title: "Team",
@@ -78,13 +76,8 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
         </div>
 
         <div className={styles.addAction}>
-  <Button
-    href={ROUTES.admin.teamAdd}
-    rightIcon={<Icon icon={ArrowRight01Icon} size={17} />}
-  >
-    Add team member
-  </Button>
-</div>
+          <TeamFormDialogTrigger mode="add" />
+        </div>
       </header>
 
       <TeamFilters query={query} />
