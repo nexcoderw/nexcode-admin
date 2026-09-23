@@ -91,7 +91,7 @@ const MEDIA_FIELDS = [
     name: "image_png",
     label: "Transparent PNG / cutout",
     description:
-      "Transparent or isolated member artwork. This file must be a genuine PNG.",
+      "Transparent member artwork. This file must be a genuine PNG.",
     accept: "image/png",
     types: ["image/png"],
     typeError: "The cutout image must be a PNG file.",
