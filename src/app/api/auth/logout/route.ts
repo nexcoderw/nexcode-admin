@@ -3,9 +3,7 @@ import {
     NextResponse,
 } from "next/server";
 
-import {
-    MESSAGE_KEYS,
-} from "@/constants/shared/messages";
+import { COMMON_MESSAGE_KEYS } from "@/constants/messages/common-messages";
 import {
     getAdminCsrf,
 } from "@/endpoints/auth/get-csrf";
@@ -138,7 +136,7 @@ function revocationFailedResponse() {
             success: false,
             signedOut: true,
             messageKey:
-                MESSAGE_KEYS.common
+                COMMON_MESSAGE_KEYS
                     .serviceUnavailable,
         },
         {
