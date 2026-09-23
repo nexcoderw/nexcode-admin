@@ -3,17 +3,16 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { PortfolioDeleteAction } from "@/components/portfolio/PortfolioDeleteAction/PortfolioDeleteAction";
+import { PortfolioHero } from "@/components/portfolio/PortfolioHero/PortfolioHero";
 import { PortfolioImageGallery } from "@/components/portfolio/PortfolioImageGallery/PortfolioImageGallery";
 import { PortfolioLinkSection } from "@/components/portfolio/PortfolioLinkSection/PortfolioLinkSection";
 import { PortfolioOverview } from "@/components/portfolio/PortfolioOverview/PortfolioOverview";
 import { PortfolioTeamSection } from "@/components/portfolio/PortfolioTeamSection/PortfolioTeamSection";
-import { Badge } from "@/components/ui/Badge/Badge";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { ROUTES } from "@/constants/routes";
 import { getPortfolio } from "@/endpoints/portfolio/get-portfolio";
 import { parsePortfolioResourceId } from "@/utils/portfolio/portfolio-id";
-import { getPortfolioStatusLabel } from "@/utils/portfolio/portfolio-labels";
 import { getPortfolioServerContext } from "@/utils/portfolio/portfolio-server-data";
 
 import styles from "./page.module.css";
@@ -67,45 +66,33 @@ export default async function PortfolioDetailsPage({
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <div className={styles.topActions}>
+      <nav className={styles.bar} aria-label="Portfolio actions">
+        <Button
+          href={ROUTES.admin.portfolios}
+          variant="ghost"
+          leftIcon={<Icon icon={ArrowLeft01Icon} size={17} />}
+        >
+          Portfolios
+        </Button>
+
+        <div className={styles.barActions}>
           <Button
-            href={ROUTES.admin.portfolios}
-            variant="ghost"
-            leftIcon={<Icon icon={ArrowLeft01Icon} size={17} />}
+            href={ROUTES.admin.portfolioEdit(portfolio.id)}
+            variant="secondary"
+            leftIcon={<Icon icon={File01Icon} size={17} />}
           >
-            Portfolios
+            Edit portfolio
           </Button>
 
-          <div>
-            <Button
-              href={ROUTES.admin.portfolioEdit(portfolio.id)}
-              variant="secondary"
-              leftIcon={<Icon icon={File01Icon} size={17} />}
-            >
-              Edit portfolio
-            </Button>
-
-            <PortfolioDeleteAction
-              resource="portfolio"
-              resourceId={portfolio.id}
-              name={portfolio.name}
-            />
-          </div>
+          <PortfolioDeleteAction
+            resource="portfolio"
+            resourceId={portfolio.id}
+            name={portfolio.name}
+          />
         </div>
+      </nav>
 
-        <div className={styles.heading}>
-          <Badge
-            variant={portfolio.status === "published" ? "success" : "neutral"}
-          >
-            {getPortfolioStatusLabel(portfolio.status)}
-          </Badge>
-
-          <h1>{portfolio.name}</h1>
-
-          <p>{portfolio.summary || "No project summary provided."}</p>
-        </div>
-      </header>
+      <PortfolioHero portfolio={portfolio} />
 
       <PortfolioOverview portfolio={portfolio} />
 
@@ -116,25 +103,28 @@ export default async function PortfolioDetailsPage({
 
       <PortfolioTeamSection members={portfolio.teamMembers} />
 
-      <PortfolioLinkSection
-        title="Document links"
-        links={portfolio.documents.map((document) => ({
-          id: document.id,
-          label: document.title,
-          url: document.url,
-        }))}
-        emptyMessage="No document links have been added yet."
-      />
+      {/* Documents and repositories sit side by side: both are short lists. */}
+      <div className={styles.links}>
+        <PortfolioLinkSection
+          title="Documents"
+          links={portfolio.documents.map((document) => ({
+            id: document.id,
+            label: document.title,
+            url: document.url,
+          }))}
+          emptyMessage="No document links have been added yet."
+        />
 
-      <PortfolioLinkSection
-        title="Repositories"
-        links={portfolio.repositories.map((repository) => ({
-          id: repository.id,
-          label: repository.label,
-          url: repository.url,
-        }))}
-        emptyMessage="No repositories have been linked yet."
-      />
+        <PortfolioLinkSection
+          title="Repositories"
+          links={portfolio.repositories.map((repository) => ({
+            id: repository.id,
+            label: repository.label,
+            url: repository.url,
+          }))}
+          emptyMessage="No repositories have been linked yet."
+        />
+      </div>
     </div>
   );
 }
