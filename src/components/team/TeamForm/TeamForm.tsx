@@ -30,12 +30,39 @@ interface TeamFormProps {
   onSubmittingChange?: (submitting: boolean) => void;
 }
 
-type FieldErrors = Partial<
-  Record<
-    "name" | "position" | "linkedin" | "github" | "image" | "image_png",
-    string
-  >
->;
+type TeamField =
+  | "name"
+  | "position"
+  | "linkedin"
+  | "github"
+  | "image"
+  | "image_png";
+
+type FieldErrors = Partial<Record<TeamField, string>>;
+
+type FormStep = 0 | 1 | 2;
+
+const FORM_STEPS = [
+  {
+    label: "Identity",
+    description: "Name and role",
+    fields: ["name", "position"],
+  },
+  {
+    label: "Profiles",
+    description: "Professional links",
+    fields: ["linkedin", "github"],
+  },
+  {
+    label: "Media",
+    description: "Portrait and cutout",
+    fields: ["image", "image_png"],
+  },
+] as const satisfies ReadonlyArray<{
+  label: string;
+  description: string;
+  fields: readonly TeamField[];
+}>;
 
 interface MutationResponse {
   success?: boolean;
@@ -70,13 +97,11 @@ export function TeamForm({
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [step, setStep] = useState<FormStep>(0);
+  const [furthestStep, setFurthestStep] = useState<FormStep>(0);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    setFormError(null);
-
-    const validationErrors = validateForm({
+  function getValidationErrors() {
+    return validateForm({
       name,
       position,
       linkedin,
@@ -84,10 +109,38 @@ export function TeamForm({
       image,
       imagePng,
     });
+  }
+
+  function continueToNextStep() {
+    const validationErrors = getValidationErrors();
+    const currentFields = FORM_STEPS[step].fields;
+    const currentErrors = pickFieldErrors(validationErrors, currentFields);
+
+    setErrors((existing) =>
+      replaceFieldErrors(existing, currentFields, currentErrors),
+    );
+
+    if (Object.keys(currentErrors).length > 0 || step === 2) {
+      return;
+    }
+
+    const nextStep = (step + 1) as FormStep;
+
+    setStep(nextStep);
+    setFurthestStep((current) => Math.max(current, nextStep) as FormStep);
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    setFormError(null);
+
+    const validationErrors = getValidationErrors();
 
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {
+      setStep(getFirstErrorStep(validationErrors));
       return;
     }
 
@@ -150,7 +203,10 @@ export function TeamForm({
         }
 
         if (response.status === 400) {
-          setErrors(mapBackendFields(payload?.fields ?? []));
+          const backendErrors = mapBackendFields(payload?.fields ?? []);
+
+          setErrors(backendErrors);
+          setStep(getFirstErrorStep(backendErrors));
           setFormError(
             "Review the highlighted fields and correct the information provided.",
           );
@@ -182,17 +238,61 @@ export function TeamForm({
 
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
+      <nav className={styles.wizard} aria-label="Team profile form progress">
+        <ol>
+          {FORM_STEPS.map((formStep, index) => {
+            const active = step === index;
+            const completed = index < step;
+            const available = index <= furthestStep;
+
+            return (
+              <li
+                key={formStep.label}
+                className={[
+                  styles.wizardStep,
+                  active ? styles.wizardStepActive : "",
+                  completed ? styles.wizardStepComplete : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+              >
+                <button
+                  type="button"
+                  disabled={!available || submitting}
+                  aria-current={active ? "step" : undefined}
+                  onClick={() => setStep(index as FormStep)}
+                >
+                  <span className={styles.stepMarker} aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <span className={styles.stepCopy}>
+                    <strong>{formStep.label}</strong>
+                    <small>{formStep.description}</small>
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+
       {formError && (
         <Alert variant="error" title="Unable to save team member">
           {formError}
         </Alert>
       )}
 
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <span className={styles.sectionNumber}>01</span>
+      <div className={styles.stepStatus} aria-live="polite">
+        <span>
+          Step {step + 1} of {FORM_STEPS.length}
+        </span>
+        <strong>{FORM_STEPS[step].label}</strong>
+      </div>
 
-          <div>
+      {step === 0 && (
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Member information</h2>
 
             <p className={styles.sectionDescription}>
@@ -200,95 +300,91 @@ export function TeamForm({
               profile.
             </p>
           </div>
-        </div>
 
-        <div className={styles.fields}>
-          <Input
-            label="Name"
-            name="name"
-            value={name}
-            required
-            maxLength={255}
-            autoComplete="name"
-            disabled={submitting}
-            error={errors.name}
-            leftIcon={<Icon icon={UserIcon} size={18} />}
-            onChange={(event) => {
-              setName(event.target.value);
-              clearFieldError("name", setErrors);
-            }}
-          />
+          <div className={styles.fields}>
+            <Input
+              label="Name"
+              name="name"
+              value={name}
+              required
+              maxLength={255}
+              autoComplete="name"
+              disabled={submitting}
+              error={errors.name}
+              leftIcon={<Icon icon={UserIcon} size={18} />}
+              onChange={(event) => {
+                setName(event.target.value);
+                clearFieldError("name", setErrors);
+              }}
+            />
 
-          <Input
-            label="Position"
-            name="position"
-            value={position}
-            required
-            maxLength={255}
-            disabled={submitting}
-            error={errors.position}
-            leftIcon={<Icon icon={WorkIcon} size={18} />}
-            onChange={(event) => {
-              setPosition(event.target.value);
-              clearFieldError("position", setErrors);
-            }}
-          />
-        </div>
-      </section>
+            <Input
+              label="Position"
+              name="position"
+              value={position}
+              required
+              maxLength={255}
+              disabled={submitting}
+              error={errors.position}
+              leftIcon={<Icon icon={WorkIcon} size={18} />}
+              onChange={(event) => {
+                setPosition(event.target.value);
+                clearFieldError("position", setErrors);
+              }}
+            />
+          </div>
+        </section>
+      )}
 
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <span className={styles.sectionNumber}>02</span>
-
-          <div>
+      {step === 1 && (
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Professional links</h2>
 
             <p className={styles.sectionDescription}>
               Optional LinkedIn and GitHub profiles associated with this member.
             </p>
           </div>
-        </div>
 
-        <div className={styles.fields}>
-          <Input
-            label="LinkedIn URL"
-            name="linkedin"
-            type="url"
-            value={linkedin}
-            showOptional
-            placeholder="https://www.linkedin.com/in/..."
-            disabled={submitting}
-            error={errors.linkedin}
-            leftIcon={<Icon icon={Linkedin01Icon} size={18} />}
-            onChange={(event) => {
-              setLinkedin(event.target.value);
-              clearFieldError("linkedin", setErrors);
-            }}
-          />
+          <div className={styles.fields}>
+            <Input
+              label="LinkedIn URL"
+              name="linkedin"
+              type="url"
+              value={linkedin}
+              showOptional
+              placeholder="https://www.linkedin.com/in/..."
+              disabled={submitting}
+              error={errors.linkedin}
+              leftIcon={<Icon icon={Linkedin01Icon} size={18} />}
+              onChange={(event) => {
+                setLinkedin(event.target.value);
+                clearFieldError("linkedin", setErrors);
+              }}
+            />
 
-          <Input
-            label="GitHub URL"
-            name="github"
-            type="url"
-            value={github}
-            showOptional
-            placeholder="https://github.com/..."
-            disabled={submitting}
-            error={errors.github}
-            leftIcon={<Icon icon={GithubIcon} size={18} />}
-            onChange={(event) => {
-              setGithub(event.target.value);
-              clearFieldError("github", setErrors);
-            }}
-          />
-        </div>
-      </section>
+            <Input
+              label="GitHub URL"
+              name="github"
+              type="url"
+              value={github}
+              showOptional
+              placeholder="https://github.com/..."
+              disabled={submitting}
+              error={errors.github}
+              leftIcon={<Icon icon={GithubIcon} size={18} />}
+              onChange={(event) => {
+                setGithub(event.target.value);
+                clearFieldError("github", setErrors);
+              }}
+            />
+          </div>
+        </section>
+      )}
 
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <span className={styles.sectionNumber}>03</span>
-
-          <div>
+      {step === 2 && (
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Profile media</h2>
 
             <p className={styles.sectionDescription}>
@@ -296,42 +392,42 @@ export function TeamForm({
               used by supported NEXCODE interfaces.
             </p>
           </div>
-        </div>
 
-        <div className={styles.imageFields}>
-          <TeamImageField
-            name="image"
-            label="Profile image"
-            description="Standard profile photograph. JPEG, PNG or WebP up to 10 MB."
-            accept="image/jpeg,image/png,image/webp"
-            currentImage={teamMember?.image}
-            error={errors.image}
-            disabled={submitting}
-            removable={mode === "edit"}
-            onFileChange={(file) => {
-              setImage(file);
-              clearFieldError("image", setErrors);
-            }}
-            onRemoveChange={setRemoveImage}
-          />
+          <div className={styles.imageFields}>
+            <TeamImageField
+              name="image"
+              label="Profile image"
+              description="Standard profile photograph. JPEG, PNG or WebP up to 10 MB."
+              accept="image/jpeg,image/png,image/webp"
+              currentImage={teamMember?.image}
+              error={errors.image}
+              disabled={submitting}
+              removable={mode === "edit"}
+              onFileChange={(file) => {
+                setImage(file);
+                clearFieldError("image", setErrors);
+              }}
+              onRemoveChange={setRemoveImage}
+            />
 
-          <TeamImageField
-            name="image_png"
-            label="Transparent PNG / cutout"
-            description="Transparent or isolated member artwork. This file must be a genuine PNG."
-            accept="image/png"
-            currentImage={teamMember?.imagePng}
-            error={errors.image_png}
-            disabled={submitting}
-            removable={mode === "edit"}
-            onFileChange={(file) => {
-              setImagePng(file);
-              clearFieldError("image_png", setErrors);
-            }}
-            onRemoveChange={setRemoveImagePng}
-          />
-        </div>
-      </section>
+            <TeamImageField
+              name="image_png"
+              label="Transparent PNG / cutout"
+              description="Transparent or isolated member artwork. This file must be a genuine PNG."
+              accept="image/png"
+              currentImage={teamMember?.imagePng}
+              error={errors.image_png}
+              disabled={submitting}
+              removable={mode === "edit"}
+              onFileChange={(file) => {
+                setImagePng(file);
+                clearFieldError("image_png", setErrors);
+              }}
+              onRemoveChange={setRemoveImagePng}
+            />
+          </div>
+        </section>
+      )}
 
       <div className={styles.actions}>
         <Button
@@ -343,18 +439,74 @@ export function TeamForm({
           Cancel
         </Button>
 
-        <Button
-          type="submit"
-          isLoading={submitting}
-          loadingLabel={
-            mode === "add" ? "Adding team member" : "Saving team member"
-          }
-        >
-          {mode === "add" ? "Add team member" : "Save changes"}
-        </Button>
+        <div className={styles.stepActions}>
+          {step > 0 && (
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={submitting}
+              onClick={() => setStep((step - 1) as FormStep)}
+            >
+              Back
+            </Button>
+          )}
+
+          {step < 2 ? (
+            <Button type="button" onClick={continueToNextStep}>
+              Continue
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              isLoading={submitting}
+              loadingLabel={
+                mode === "add" ? "Adding team member" : "Saving team member"
+              }
+            >
+              {mode === "add" ? "Add team member" : "Save changes"}
+            </Button>
+          )}
+        </div>
       </div>
     </form>
   );
+}
+
+function pickFieldErrors(
+  errors: FieldErrors,
+  fields: readonly TeamField[],
+) {
+  const selected: FieldErrors = {};
+
+  for (const field of fields) {
+    if (errors[field]) {
+      selected[field] = errors[field];
+    }
+  }
+
+  return selected;
+}
+
+function replaceFieldErrors(
+  existing: FieldErrors,
+  fields: readonly TeamField[],
+  replacements: FieldErrors,
+) {
+  const next = { ...existing };
+
+  for (const field of fields) {
+    delete next[field];
+  }
+
+  return { ...next, ...replacements };
+}
+
+function getFirstErrorStep(errors: FieldErrors): FormStep {
+  const index = FORM_STEPS.findIndex((formStep) =>
+    formStep.fields.some((field) => Boolean(errors[field])),
+  );
+
+  return index >= 0 ? (index as FormStep) : 0;
 }
 
 function validateForm({
