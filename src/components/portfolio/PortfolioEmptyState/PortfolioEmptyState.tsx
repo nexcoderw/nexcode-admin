@@ -2,7 +2,7 @@ import { Briefcase01Icon } from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
-import { ROUTES } from "@/constants/routes";
+import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 
 import styles from "./PortfolioEmptyState.module.css";
 
@@ -28,7 +28,7 @@ export function PortfolioEmptyState({ filtered }: PortfolioEmptyStateProps) {
       </div>
 
       <Button
-        href={filtered ? ROUTES.admin.portfolios : ROUTES.admin.portfolioAdd}
+        href={filtered ? PORTFOLIO_ROUTES.list : PORTFOLIO_ROUTES.add}
         variant={filtered ? "secondary" : "primary"}
         leftIcon={<Icon icon={Briefcase01Icon} size={17} />}
       >
