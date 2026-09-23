@@ -1,25 +1,37 @@
+/*
+ * The whole editor is one centred column. Everything inside it aligns
+ * to the same measure, so the header, tabs and panels share one axis.
+ */
 .page {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-6);
+
+  width: 100%;
+  max-width: 64rem;
+  margin-inline: auto;
 }
 
 .header {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-4);
 
-  max-width: var(--content-width-lg);
+  width: 100%;
 
   padding-bottom: var(--space-5);
 
   border-bottom: var(--border-width) solid var(--color-border-subtle);
+
+  text-align: center;
 }
 
 .header div {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-2);
 }
 
@@ -44,13 +56,18 @@
 }
 
 .header p {
-  max-width: 42rem;
+  max-width: 38rem;
 
   color: var(--color-text-muted);
 
   font-size: var(--font-size-sm);
 
   line-height: var(--line-height-relaxed);
+}
+
+/* The back link stays left-aligned; only the title block is centred. */
+.header > a:first-child {
+  align-self: flex-start;
 }
 
 @media (max-width: 30rem) {

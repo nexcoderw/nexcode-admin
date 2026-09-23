@@ -1,15 +1,26 @@
+/*
+ * One centred column for the whole editor: navigation, title, tabbed
+ * panels and the delete panel all align to the same measure.
+ */
 .page {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-6);
+
+  width: 100%;
+  max-width: 64rem;
+  margin-inline: auto;
+}
+
+.page > * {
+  width: 100%;
 }
 
 .header {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
-
-  max-width: var(--content-width-lg);
 
   padding-bottom: var(--space-5);
 
@@ -25,7 +36,10 @@
 .header > div:last-child {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-2);
+
+  text-align: center;
 }
 
 .header span {
@@ -51,16 +65,14 @@
 }
 
 /*
- * The destructive action is set apart from the editing sections above
- * it, so it is never the next thing a cursor lands on.
+ * The destructive action is set apart from the panels above it, so it
+ * is never the next thing a cursor lands on.
  */
 .danger {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-5);
-
-  max-width: var(--content-width-lg);
 
   margin-top: var(--space-2);
 

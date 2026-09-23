@@ -2,7 +2,7 @@ import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { PortfolioForm } from "@/components/portfolio/PortfolioForm/PortfolioForm";
+import { PortfolioWorkspace } from "@/components/portfolio/PortfolioWorkspace/PortfolioWorkspace";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { ROUTES } from "@/constants/routes";
@@ -47,13 +47,13 @@ export default async function AddPortfolioPage() {
           <h1>Add portfolio</h1>
 
           <p>
-            Create the project first. Images and related links can be added
-            immediately afterwards.
+            Fill in the project details, then add images, documents and
+            repositories from the tabs above.
           </p>
         </div>
       </header>
 
-      <PortfolioForm mode="add" teamMembers={teams.ok ? teams.items : []} />
+      <PortfolioWorkspace mode="add" teamMembers={teams.ok ? teams.items : []} />
     </div>
   );
 }

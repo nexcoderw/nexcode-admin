@@ -3,10 +3,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { PortfolioDeleteAction } from "@/components/portfolio/PortfolioDeleteAction/PortfolioDeleteAction";
-import { PortfolioDocumentManager } from "@/components/portfolio/PortfolioDocumentManager/PortfolioDocumentManager";
-import { PortfolioForm } from "@/components/portfolio/PortfolioForm/PortfolioForm";
-import { PortfolioImageManager } from "@/components/portfolio/PortfolioImageManager/PortfolioImageManager";
-import { PortfolioRepositoryManager } from "@/components/portfolio/PortfolioRepositoryManager/PortfolioRepositoryManager";
+import { PortfolioWorkspace } from "@/components/portfolio/PortfolioWorkspace/PortfolioWorkspace";
 import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
@@ -111,25 +108,10 @@ export default async function EditPortfolioPage({
         </Alert>
       )}
 
-      <PortfolioForm
+      <PortfolioWorkspace
         mode="edit"
         portfolio={portfolio}
         teamMembers={teamResult.ok ? teamResult.items : portfolio.teamMembers}
-      />
-
-      <PortfolioImageManager
-        portfolioId={portfolio.id}
-        images={portfolio.images}
-      />
-
-      <PortfolioDocumentManager
-        portfolioId={portfolio.id}
-        documents={portfolio.documents}
-      />
-
-      <PortfolioRepositoryManager
-        portfolioId={portfolio.id}
-        repositories={portfolio.repositories}
       />
 
       <section className={styles.danger}>
