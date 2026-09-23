@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
 
-import { ROUTES } from "@/constants/routes";
+import { ADMIN_ROUTES } from "@/constants/routes/admin-routes";
 import { getCurrentAdmin } from "@/utils/auth/current-admin";
 
 interface GuestOnlyLayoutProps {
@@ -14,7 +14,7 @@ export default async function GuestOnlyLayout({
   const currentAdmin = await getCurrentAdmin();
 
   if (currentAdmin.status === "authenticated") {
-    redirect(ROUTES.admin.dashboard);
+    redirect(ADMIN_ROUTES.dashboard);
   }
 
   return children;
