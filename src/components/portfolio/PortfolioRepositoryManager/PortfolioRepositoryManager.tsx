@@ -9,7 +9,7 @@ import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { Input } from "@/components/ui/Input/Input";
-import { API_ROUTES } from "@/constants/routes";
+import { PORTFOLIO_API_ROUTES } from "@/constants/routes/portfolio-routes";
 import type { PortfolioRepository } from "@/types/portfolio/portfolio";
 
 import styles from "./PortfolioRepositoryManager.module.css";
@@ -31,13 +31,21 @@ export function PortfolioRepositoryManager({
 
   async function addRepository(form: HTMLFormElement) {
     const data = new FormData(form);
+    const url = String(data.get("url") ?? "").trim();
+
+    setError(null);
+
+    if (repositories.some((repository) => repository.url === url)) {
+      setError("This repository link already exists for this portfolio.");
+
+      return;
+    }
 
     setSaving(true);
-    setError(null);
 
     try {
       const response = await fetch(
-        API_ROUTES.portfolio.repositoryAdd(portfolioId),
+        PORTFOLIO_API_ROUTES.repositoryAdd(portfolioId),
         {
           method: "POST",
 
@@ -48,13 +56,17 @@ export function PortfolioRepositoryManager({
           body: JSON.stringify({
             label: data.get("label"),
 
-            url: data.get("url"),
+            url,
           }),
         },
       );
 
       if (!response.ok) {
-        setError("The repository link could not be added.");
+        setError(
+          response.status === 400
+            ? "This repository URL is invalid or already exists for this portfolio."
+            : "The repository link could not be added.",
+        );
 
         return;
       }
@@ -149,7 +161,7 @@ function RepositoryRow({
 
     try {
       const response = await fetch(
-        API_ROUTES.portfolio.repositoryUpdate(repository.id),
+        PORTFOLIO_API_ROUTES.repositoryUpdate(repository.id),
         {
           method: "PATCH",
 
