@@ -120,14 +120,24 @@ export interface PortfolioWriteInput {
     name?: string;
     summary?: string;
     description?: string;
-    category?: PortfolioCategory | string;
-    projectType?: PortfolioProjectType | string;
+
+    category?: PortfolioCategory;
+
+    projectType?:
+    PortfolioProjectType;
+
     liveUrl?: string;
     figmaUrl?: string;
+
     teamMemberIds?: number[];
-    projectInitiationDate?: string | null;
-    deadlineDate?: string | null;
-    status?: PortfolioStatus | string;
+
+    projectInitiationDate?:
+    string | null;
+
+    deadlineDate?:
+    string | null;
+
+    status?: PortfolioStatus;
 }
 
 export interface PortfolioDocumentInput {
