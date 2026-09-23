@@ -15,9 +15,14 @@ import styles from "./TeamDeleteAction.module.css";
 interface TeamDeleteActionProps {
   teamId: number;
   teamName: string | null;
+  compact?: boolean;
 }
 
-export function TeamDeleteAction({ teamId, teamName }: TeamDeleteActionProps) {
+export function TeamDeleteAction({
+  teamId,
+  teamName,
+  compact = false,
+}: TeamDeleteActionProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -83,10 +88,14 @@ export function TeamDeleteAction({ teamId, teamName }: TeamDeleteActionProps) {
       <Button
         type="button"
         variant="danger"
-        leftIcon={<Icon icon={Delete02Icon} size={17} />}
+        size={compact ? "sm" : "md"}
+        iconOnly={compact}
+        leftIcon={<Icon icon={Delete02Icon} size={compact ? 10 : 17} />}
+        aria-label={compact ? `Delete ${name}` : undefined}
+        title={compact ? `Delete ${name}` : undefined}
         onClick={() => setOpen(true)}
       >
-        Delete
+        {compact ? `Delete ${name}` : "Delete"}
       </Button>
 
       <Dialog
