@@ -14,7 +14,7 @@ import { Dialog } from "@/components/ui/Dialog/Dialog";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { Input } from "@/components/ui/Input/Input";
 import { Select } from "@/components/ui/Select/Select";
-import { ROUTES } from "@/constants/routes";
+import { TEAM_ROUTES } from "@/constants/routes/team-routes";
 import type { ResolvedTeamListQuery } from "@/utils/team/team-list-query";
 
 import styles from "./TeamFiltersDialog.module.css";
@@ -71,7 +71,7 @@ export function TeamFiltersDialog({ query }: TeamFiltersDialogProps) {
         {open && (
           <form
             method="get"
-            action={ROUTES.admin.team}
+            action={TEAM_ROUTES.list}
             className={styles.form}
           >
             <Input
@@ -102,7 +102,7 @@ export function TeamFiltersDialog({ query }: TeamFiltersDialogProps) {
             <div className={styles.actions}>
               {activeCount > 0 && (
                 <Button
-                  href={ROUTES.admin.team}
+                  href={TEAM_ROUTES.list}
                   variant="ghost"
                   className={styles.reset}
                   leftIcon={<Icon icon={FilterResetIcon} size={18} />}
