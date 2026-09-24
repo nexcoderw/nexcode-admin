@@ -1,26 +1,18 @@
+/*
+ * One fluid track: cards reflow at every width and inside any container,
+ * rather than snapping between fixed column counts.
+ */
 .grid {
   display: grid;
-  grid-template-columns:
-    repeat(
-      3,
-      minmax(0, 1fr)
-    );
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
 
   gap: var(--space-5);
 }
 
-@media (max-width: 68rem) {
-  .grid {
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
-  }
-}
-
-@media (max-width: 42rem) {
+@media (max-width: 30rem) {
   .grid {
     grid-template-columns: 1fr;
+
+    gap: var(--space-4);
   }
 }
