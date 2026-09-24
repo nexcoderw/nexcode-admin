@@ -8,6 +8,7 @@ import {
 import {
     asRecord,
     isNullableNumber,
+    isMoney,
     isNullableString,
     isNumber,
     isOneOf,
@@ -34,7 +35,7 @@ export function mapPaymentRecord(
         !isNumber(
             item.agreement_id,
         ) ||
-        !isString(item.amount) ||
+        !isMoney(item.amount) ||
         !isOneOf(
             item.currency,
             PAYMENT_CURRENCIES,
@@ -212,7 +213,7 @@ function mapAllocation(
         !isString(
             item.installment_title,
         ) ||
-        !isString(item.amount)
+        !isMoney(item.amount)
     ) {
         return null;
     }
