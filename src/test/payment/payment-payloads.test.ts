@@ -6,8 +6,10 @@ import {
 
 import {
     sanitizeAgreementPayload,
-    sanitizeRecordPayload,
 } from "@/utils/payment/payloads";
+import {
+    sanitizeRecordPayload,
+} from "@/utils/payment/record-payloads";
 
 describe(
     "payment payloads",
