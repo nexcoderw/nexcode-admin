@@ -1,315 +1,159 @@
-import {
-  ArrowRight01Icon,
-  Briefcase01Icon,
-  File01Icon,
-  Mail01Icon,
-  UserGroupIcon,
-} from "@hugeicons/core-free-icons";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-import { Icon } from "@/components/ui/Icon/Icon";
+import { AttentionPanel } from "@/components/dashboard/AttentionPanel/AttentionPanel";
+import { RankedBars, StackedShare } from "@/components/dashboard/BreakdownCharts/BreakdownCharts";
+import { CashflowChart } from "@/components/dashboard/CashflowChart/CashflowChart";
+import { ChartFrame } from "@/components/dashboard/ChartFrame/ChartFrame";
+import { DashboardFigures } from "@/components/dashboard/DashboardFigures/DashboardFigures";
+import {
+  CashflowTable,
+  SlicesTable,
+  WeeksTable,
+} from "@/components/dashboard/DashboardTables/DashboardTables";
+import { MessagesTrend } from "@/components/dashboard/MessagesTrend/MessagesTrend";
+import { RecentPayments } from "@/components/dashboard/RecentPayments/RecentPayments";
+import { Alert } from "@/components/ui/Alert/Alert";
+import { PAYMENT_CURRENCIES } from "@/constants/payment/payment-query";
 import { ADMIN_ROUTES } from "@/constants/routes/admin-routes";
-import { CLIENT_ROUTES } from "@/constants/routes/client-routes";
-import { CONTACT_ROUTES } from "@/constants/routes/contact-routes";
-import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { ERROR_ROUTES } from "@/constants/routes/error-routes";
+import { getDashboardOverview } from "@/endpoints/dashboard/get-overview";
+import type { PaymentCurrency } from "@/types/payment/shared";
+import { getPaymentServerContext } from "@/utils/payment/payment-server-data";
 
 import styles from "./page.module.css";
-import { PAYMENT_ROUTES } from "@/constants/routes/payment-routes";
 
 export const metadata: Metadata = {
   title: "Dashboard",
 };
 
-const metrics = [
-  {
-    label: "Portfolios",
-    value: "—",
-    description:
-      "Projects managed by NEXCODE",
-    icon: Briefcase01Icon,
-  },
-  {
-    label: "Clients",
-    value: "—",
-    description:
-      "Registered client records",
-    icon: UserGroupIcon,
-  },
-  {
-    label: "Blogs",
-    value: "—",
-    description:
-      "Published and draft articles",
-    icon: File01Icon,
-  },
-  {
-    label: "Contacts",
-    value: "—",
-    description:
-      "Website contact messages",
-    icon: Mail01Icon,
-  },
-];
+interface DashboardPageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
 
-const managementLinks = [
-  {
-    label: "Portfolios",
-    description:
-      "Manage projects, project files and details.",
-    href: PORTFOLIO_ROUTES.list,
-  },
-  {
-    label: "Clients",
-    description:
-      "Manage NEXCODE client information.",
-    href: CLIENT_ROUTES.list,
-  },
-  {
-    label: "Blogs",
-    description:
-      "Create and manage website articles.",
-    href: ADMIN_ROUTES.blogs,
-  },
-  {
-    label: "Trainings",
-    description:
-      "Manage training content and programmes.",
-    href: ADMIN_ROUTES.trainings,
-  },
-  {
-    label: "Payments",
-    description:
-      "Review portfolio payments and statuses.",
-    href: PAYMENT_ROUTES.list,
-  },
-  {
-    label: "Contacts",
-    description:
-      "Review messages received from the website.",
-    href: CONTACT_ROUTES.list,
-  },
-];
+const TODAY = new Intl.DateTimeFormat("en-GB", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  timeZone: "UTC",
+});
 
-export default function DashboardPage() {
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
+  const context = await getPaymentServerContext();
+
+  if (!context) {
+    redirect(AUTH_ROUTES.login);
+  }
+
+  const requested = (await searchParams).currency;
+  const currency = PAYMENT_CURRENCIES.find((item) => item === requested) as
+    | PaymentCurrency
+    | undefined;
+
+  const result = await getDashboardOverview(
+    context.sessionId,
+    context.forwarded,
+    currency,
+  );
+
+  if (result.status === 401) {
+    redirect(ERROR_ROUTES.unauthorized);
+  }
+
+  if (result.status === 403) {
+    redirect(ERROR_ROUTES.forbidden);
+  }
+
+  const data = result.ok ? result.data : null;
+
+  if (!data) {
+    return (
+      <Alert variant="error" title="Dashboard unavailable">
+        The dashboard figures could not be loaded. Please try again shortly.
+      </Alert>
+    );
+  }
+
+  const currentMonth = data.today.slice(0, 7);
+
   return (
-    <div className={styles.dashboard}>
-      <section
-        className={styles.introduction}
-      >
+    <div className={styles.page}>
+      <header className={styles.header}>
         <div>
-          <span
-            className={
-              styles.sectionLabel
-            }
-          >
-            Platform overview
+          <span className={styles.eyebrow}>
+            {TODAY.format(new Date(`${data.today}T00:00:00Z`))}
           </span>
-
-          <h2 className={styles.heading}>
-            NEXCODE at a glance
-          </h2>
-
-          <p
-            className={
-              styles.description
-            }
-          >
-            Monitor the main areas of the
-            platform and quickly access
-            administrative operations.
-          </p>
+          <h1>Overview</h1>
         </div>
-      </section>
 
-      <section
-        className={styles.metrics}
-        aria-label="Platform statistics"
-      >
-        {metrics.map((metric) => (
-          <article
-            key={metric.label}
-            className={styles.metric}
-          >
-            <div
-              className={
-                styles.metricHeader
-              }
-            >
-              <span
-                className={
-                  styles.metricIcon
-                }
+        {/* Money is reported in one currency at a time. */}
+        {data.currencies.length > 1 && (
+          <nav className={styles.currencies} aria-label="Reporting currency">
+            {data.currencies.map((item) => (
+              <Link
+                key={item}
+                href={`${ADMIN_ROUTES.dashboard}?currency=${item}`}
+                aria-current={item === data.currency ? "page" : undefined}
               >
-                <Icon
-                  icon={metric.icon}
-                  size={20}
-                />
-              </span>
+                {item}
+              </Link>
+            ))}
+          </nav>
+        )}
+      </header>
 
-              <span
-                className={
-                  styles.metricLabel
-                }
-              >
-                {metric.label}
-              </span>
-            </div>
+      <AttentionPanel alerts={data.alerts} />
 
-            <strong
-              className={
-                styles.metricValue
-              }
-            >
-              {metric.value}
-            </strong>
+      <DashboardFigures data={data} currentMonth={currentMonth} />
 
-            <p
-              className={
-                styles.metricDescription
-              }
-            >
-              {metric.description}
-            </p>
-          </article>
-        ))}
-      </section>
-
-      <div
-        className={styles.contentGrid}
-      >
-        <section
-          className={styles.panel}
+      <div className={styles.charts}>
+        <ChartFrame
+          title="Collected against expected"
+          description={`Monthly, in ${data.currency}. Grey is what fell due; lime is what came in.`}
+          legend={[
+            { label: "Collected", color: "var(--chart-accent)", kind: "bar" },
+            { label: "Expected", color: "var(--chart-context)", kind: "bar" },
+          ]}
+          table={<CashflowTable months={data.cashflow} currency={data.currency} />}
         >
-          <header
-            className={
-              styles.panelHeader
-            }
-          >
-            <div>
-              <h3
-                className={
-                  styles.panelTitle
-                }
-              >
-                Management
-              </h3>
+          <CashflowChart
+            months={data.cashflow}
+            currency={data.currency}
+            currentMonth={currentMonth}
+          />
+        </ChartFrame>
 
-              <p
-                className={
-                  styles.panelDescription
-                }
-              >
-                Frequently used
-                administrative areas.
-              </p>
-            </div>
-          </header>
-
-          <div
-            className={
-              styles.managementList
-            }
-          >
-            {managementLinks.map(
-              (item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={
-                    styles.managementItem
-                  }
-                >
-                  <div
-                    className={
-                      styles.managementContent
-                    }
-                  >
-                    <strong>
-                      {item.label}
-                    </strong>
-
-                    <span>
-                      {item.description}
-                    </span>
-                  </div>
-
-                  <span
-                    className={
-                      styles.managementArrow
-                    }
-                    aria-hidden="true"
-                  >
-                    <Icon
-                      icon={
-                        ArrowRight01Icon
-                      }
-                      size={18}
-                    />
-                  </span>
-                </Link>
-              ),
-            )}
-          </div>
-        </section>
-
-        <section
-          className={styles.panel}
+        <ChartFrame
+          title="Website messages"
+          description="Per week, over the last 12 weeks."
+          table={<WeeksTable weeks={data.messagesByWeek} />}
         >
-          <header
-            className={
-              styles.panelHeader
-            }
-          >
-            <div>
-              <h3
-                className={
-                  styles.panelTitle
-                }
-              >
-                Recent activity
-              </h3>
+          <MessagesTrend weeks={data.messagesByWeek} />
+        </ChartFrame>
+      </div>
 
-              <p
-                className={
-                  styles.panelDescription
-                }
-              >
-                Latest administrative and
-                platform changes.
-              </p>
-            </div>
-          </header>
+      <div className={styles.breakdowns}>
+        <ChartFrame
+          title="Agreements by status"
+          description={`${data.counts.agreements} agreements in total.`}
+          table={<SlicesTable slices={data.agreementsByStatus} heading="Status" />}
+        >
+          <StackedShare slices={data.agreementsByStatus} />
+        </ChartFrame>
 
-          <div
-            className={
-              styles.emptyActivity
-            }
-          >
-            <span
-              className={
-                styles.emptyIcon
-              }
-              aria-hidden="true"
-            >
-              <Icon
-                icon={File01Icon}
-                size={22}
-              />
-            </span>
+        <ChartFrame
+          title="Portfolio by category"
+          description={`${data.counts.publishedPortfolios} of ${data.counts.portfolios} published.`}
+          table={<SlicesTable slices={data.portfoliosByCategory} heading="Category" />}
+        >
+          <RankedBars slices={data.portfoliosByCategory} />
+        </ChartFrame>
 
-            <div>
-              <strong>
-                No activity available yet
-              </strong>
-
-              <p>
-                Recent activity will appear
-                here once the dashboard API
-                is connected.
-              </p>
-            </div>
-          </div>
+        <section className={styles.recent} aria-labelledby="recent-payments-title">
+          <h2 id="recent-payments-title">Recent payments</h2>
+          <RecentPayments payments={data.recentPayments} currency={data.currency} />
         </section>
       </div>
     </div>
