@@ -27,6 +27,9 @@ import {
   AUTH_ROUTES,
 } from "@/constants/routes/auth-routes";
 import {
+  ERROR_ROUTES,
+} from "@/constants/routes/error-routes";
+import {
   listClients,
 } from "@/endpoints/client/list-clients";
 import {
@@ -83,11 +86,18 @@ export default async function ClientPage({
     );
 
   if (
-    result.status === 401 ||
+    result.status === 401
+  ) {
+    redirect(
+      ERROR_ROUTES.unauthorized,
+    );
+  }
+
+  if (
     result.status === 403
   ) {
     redirect(
-      AUTH_ROUTES.login,
+      ERROR_ROUTES.forbidden,
     );
   }
 
