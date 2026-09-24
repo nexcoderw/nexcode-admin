@@ -1,0 +1,123 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  padding-block: var(--space-4);
+
+  border-block: var(--border-width) solid var(--color-border-subtle);
+}
+
+/* The two ways to remind, as a flat segmented choice. */
+.modes {
+  display: inline-flex;
+  align-self: flex-start;
+
+  margin: 0;
+  padding: 0;
+
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+
+  overflow: hidden;
+}
+
+.mode {
+  position: relative;
+
+  cursor: pointer;
+}
+
+.mode + .mode {
+  border-left: var(--border-width) solid var(--color-border);
+}
+
+/* The native radio stays for keyboard and screen readers, but hidden. */
+.mode input {
+  position: absolute;
+
+  opacity: 0;
+}
+
+.mode span {
+  display: block;
+
+  padding: var(--space-2) var(--space-4);
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.mode input:checked + span {
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+}
+
+.mode input:focus-visible + span {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: calc(var(--focus-ring-offset) * -1);
+}
+
+.modes:disabled .mode {
+  cursor: not-allowed;
+  opacity: var(--opacity-disabled);
+}
+
+/* The fields on one row, the button closing it; wraps when narrow. */
+.fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  align-items: end;
+  gap: var(--space-4);
+}
+
+.submit {
+  justify-self: start;
+}
+
+.hint {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+.srOnly {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (hover: hover) {
+  .mode input:not(:checked) + span:hover {
+    color: var(--color-text-primary);
+  }
+}
+
+@media (max-width: 30rem) {
+  .modes {
+    align-self: stretch;
+  }
+
+  .mode {
+    flex: 1 1 0;
+
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mode span {
+    transition: none;
+  }
+}
