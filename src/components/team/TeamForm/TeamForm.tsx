@@ -5,6 +5,7 @@ import {
   GithubIcon,
   Linkedin01Icon,
   SendIcon,
+  SortingIcon,
   UserIcon,
   WorkIcon,
 } from "@hugeicons/core-free-icons";
@@ -36,7 +37,7 @@ interface TeamFormProps {
 
 type TextField = "name" | "position" | "linkedin" | "github";
 type MediaField = "image" | "image_png";
-type TeamField = TextField | MediaField;
+type TeamField = TextField | MediaField | "display_order";
 
 type TextValues = Record<TextField, string>;
 type MediaFiles = Record<MediaField, File | null>;
@@ -109,6 +110,7 @@ const MEDIA_FIELDS = [
 
 const BACKEND_FIELD_ERRORS: Record<string, [TeamField, string]> = {
   name: ["name", "Enter a valid team member name."],
+  display_order: ["display_order", "Enter a whole number, 0 or higher."],
   position: ["position", "Enter a valid position."],
   linkedin: ["linkedin", "Enter a valid LinkedIn URL."],
   github: ["github", "Enter a valid GitHub URL."],
@@ -151,6 +153,11 @@ export function TeamForm({
     image_png: false,
   });
 
+  // Empty on a new member: the backend then places them after everyone else.
+  const [displayOrder, setDisplayOrder] = useState(
+    teamMember ? String(teamMember.displayOrder) : "",
+  );
+
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -183,7 +190,7 @@ export function TeamForm({
 
     setFormError(null);
 
-    const validationErrors = validate(values, files);
+    const validationErrors = validate(values, files, displayOrder);
 
     if (Object.keys(validationErrors).length > 0) {
       reportErrors(validationErrors);
@@ -201,7 +208,7 @@ export function TeamForm({
           : TEAM_API_ROUTES.update(teamMember!.id),
         {
           method: mode === "add" ? "POST" : "PATCH",
-          body: buildFormData(mode, values, files, removals),
+          body: buildFormData(mode, values, files, removals, displayOrder),
           credentials: "same-origin",
           headers: { Accept: "application/json" },
         },
@@ -281,7 +288,33 @@ export function TeamForm({
       )}
 
       <Section index="01" title="Identity" hint="Name and role">
-        <div className={styles.grid}>{renderTextFields(IDENTITY_FIELDS)}</div>
+        <div className={styles.grid}>
+          {renderTextFields(IDENTITY_FIELDS)}
+
+          <Input
+            label="Display order"
+            name="display_order"
+            type="number"
+            inputMode="numeric"
+            min={0}
+            step={1}
+            showOptional={mode === "add"}
+            placeholder={mode === "add" ? "Last" : undefined}
+            helperText={
+              mode === "add"
+                ? "Lower numbers appear first. Leave empty to place this member last."
+                : "Lower numbers appear first on the website."
+            }
+            value={displayOrder}
+            disabled={submitting}
+            error={errors.display_order}
+            leftIcon={<Icon icon={SortingIcon} size={18} />}
+            onChange={(event) => {
+              setDisplayOrder(event.target.value);
+              clearError("display_order");
+            }}
+          />
+        </div>
       </Section>
 
       <Section index="02" title="Profiles" hint="Professional links, optional">
@@ -381,8 +414,13 @@ function buildFormData(
   values: TextValues,
   files: MediaFiles,
   removals: MediaRemovals,
+  displayOrder: string,
 ) {
   const formData = new FormData();
+
+  if (displayOrder.trim()) {
+    formData.set("display_order", displayOrder.trim());
+  }
 
   for (const [field, value] of Object.entries(values)) {
     formData.set(field, value.trim());
@@ -403,8 +441,16 @@ function buildFormData(
   return formData;
 }
 
-function validate(values: TextValues, files: MediaFiles): FieldErrors {
+function validate(
+  values: TextValues,
+  files: MediaFiles,
+  displayOrder: string,
+): FieldErrors {
   const errors: FieldErrors = {};
+
+  if (displayOrder.trim() && !/^\d+$/.test(displayOrder.trim())) {
+    errors.display_order = "Enter a whole number, 0 or higher.";
+  }
 
   if (!values.name.trim()) {
     errors.name = "Enter the team member's name.";
