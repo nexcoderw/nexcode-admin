@@ -145,6 +145,8 @@ export function toBackendReminderPayload(
             event: "event",
             timing: "timing",
             days: "days",
+            remindOn:
+                "remind_on",
             channel: "channel",
             isEnabled:
                 "is_enabled",
