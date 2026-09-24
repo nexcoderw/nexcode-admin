@@ -25,6 +25,24 @@ export function isString(
     return typeof value === "string";
 }
 
+/*
+ * Money arrives as the backend's decimal string (up to 16 whole digits
+ * and 2 decimal places, as DecimalField(max_digits=18, decimal_places=2)
+ * stores it), e.g. "1000000.00". It stays a string so no precision is
+ * lost to floating point.
+ */
+const MONEY_PATTERN =
+    /^-?\d{1,16}(\.\d{1,2})?$/;
+
+export function isMoney(
+    value: unknown,
+): value is string {
+    return (
+        typeof value === "string" &&
+        MONEY_PATTERN.test(value)
+    );
+}
+
 export function isNullableString(
     value: unknown,
 ): value is string | null {
