@@ -7,6 +7,10 @@ export interface TeamMember {
     imagePng: string | null;
     linkedin: string | null;
     github: string | null;
+
+    /** Lower numbers appear first, on the site and in the admin. */
+    displayOrder: number;
+
     createdAt: string;
     updatedAt: string;
 }
@@ -33,6 +37,8 @@ export interface TeamListQuery {
 }
 
 export type TeamOrdering =
+    | "display_order"
+    | "-display_order"
     | "name"
     | "-name"
     | "position"
