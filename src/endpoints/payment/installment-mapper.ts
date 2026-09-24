@@ -7,6 +7,7 @@ import {
 import {
     asRecord,
     isBoolean,
+    isMoney,
     isNullableString,
     isNumber,
     isOneOf,
@@ -58,7 +59,7 @@ export function mapInstallment(
             item.installment_type,
             PAYMENT_INSTALLMENT_TYPES,
         ) ||
-        !isString(item.amount) ||
+        !isMoney(item.amount) ||
         !isOneOf(
             item.due_type,
             PAYMENT_DUE_TYPES,
@@ -193,13 +194,13 @@ function mapFinancialState(
 
     if (
         !item ||
-        !isString(
+        !isMoney(
             item.expected_amount,
         ) ||
-        !isString(
+        !isMoney(
             item.paid_amount,
         ) ||
-        !isString(
+        !isMoney(
             item.outstanding_amount,
         ) ||
         !isOneOf(
