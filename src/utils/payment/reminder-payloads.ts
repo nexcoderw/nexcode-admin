@@ -10,6 +10,7 @@ import {
     copyBoolean,
     copyChoice,
     copyNumber,
+    copyString,
     record,
 } from "@/utils/payment/payload-helpers";
 
@@ -42,6 +43,11 @@ export function sanitizeReminderPayload(
             raw,
             output,
             "days",
+        ) ||
+        !copyString(
+            raw,
+            output,
+            "remindOn",
         ) ||
         !copyChoice(
             raw,
