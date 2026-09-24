@@ -17,6 +17,7 @@ import { CLIENT_ROUTES } from '@/constants/routes/client-routes';
 import { CONTACT_ROUTES } from '@/constants/routes/contact-routes';
 import { PORTFOLIO_ROUTES } from '@/constants/routes/portfolio-routes';
 import { TEAM_ROUTES } from '@/constants/routes/team-routes';
+import { PAYMENT_ROUTES } from './routes/payment-routes';
 
 export interface AdminNavigationItem {
   label: string;
@@ -131,7 +132,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
     items: [
       {
         label: 'Payments',
-        href: ADMIN_ROUTES.payments,
+        href: PAYMENT_ROUTES.list,
         exact: true,
         icon: (
           <Icon
