@@ -1,7 +1,15 @@
+import {
+  REMINDER_CHANNEL_OPTIONS,
+  REMINDER_EVENT_OPTIONS,
+} from "@/constants/payment/payment-options";
 import type {
   PaymentAgreementStatus,
   PaymentAgreementType,
 } from "@/types/payment/agreement";
+import type {
+  PaymentReminderChannel,
+  PaymentReminderRule,
+} from "@/types/payment/reminder";
 import type {
   PaymentCurrency,
 } from "@/types/payment/shared";
@@ -108,4 +116,36 @@ export function installmentTypeLabel(
     custom:
       "Custom",
   }[value] ?? value;
+}
+
+export function reminderChannelLabel(
+  channel: PaymentReminderChannel,
+) {
+  return (
+    REMINDER_CHANNEL_OPTIONS.find(
+      (option) => option.value === channel,
+    )?.label ?? channel
+  );
+}
+
+/**
+ * A reminder rule in words, e.g. "7 days before installment due".
+ */
+export function describeReminderRule(
+  rule: PaymentReminderRule,
+) {
+  const event = (
+    REMINDER_EVENT_OPTIONS.find(
+      (option) => option.value === rule.event,
+    )?.label ?? rule.event
+  ).toLowerCase();
+
+  if (rule.timing === "on") {
+    return `On the day of ${event}`;
+  }
+
+  const days =
+    `${rule.days} day${rule.days === 1 ? "" : "s"}`;
+
+  return `${days} ${rule.timing} ${event}`;
 }
