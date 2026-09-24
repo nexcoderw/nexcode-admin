@@ -25,36 +25,16 @@
   margin-top: calc(var(--space-2) * -1);
 }
 
-/* Flat: a single rule in the error colour marks the danger zone. */
-.danger {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-5);
-
-  padding: var(--space-4) 0 var(--space-4) var(--space-4);
-
-  border-left: var(--border-width-strong) solid var(--color-error);
-}
-
-.danger h2 {
-  font-size: var(--font-size-md);
-}
-
-.danger p {
-  max-width: 40rem;
-  margin-top: var(--space-1);
-
-  color: var(--color-text-muted);
-
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-relaxed);
+/* Tabs with a form and a short list read better narrower, centred. */
+.narrow {
+  width: 100%;
+  max-width: 56rem;
+  margin-inline: auto;
 }
 
 @media (max-width: 40rem) {
   .actions,
-  .primaryActions,
-  .danger {
+  .primaryActions {
     align-items: stretch;
     flex-direction: column;
   }
