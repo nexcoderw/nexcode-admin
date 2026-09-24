@@ -13,6 +13,8 @@ describe("payment detail tabs", () => {
     expect(resolvePaymentDetailTab(["reminders", "payments"])).toBe("reminders");
     expect(resolvePaymentDetailTab(undefined)).toBe("schedule");
     expect(resolvePaymentDetailTab("ledger")).toBe("schedule");
+    // The retired settings tab lands on the schedule.
+    expect(resolvePaymentDetailTab("settings")).toBe("schedule");
   });
 
   it("keeps the plain URL for the default tab", () => {
@@ -38,7 +40,6 @@ describe("payment detail tabs", () => {
       "Payments9",
       "Reminders",
       "Notifications",
-      "Settings",
     ]);
 
     const current = screen.getByRole("link", { current: "page" });
