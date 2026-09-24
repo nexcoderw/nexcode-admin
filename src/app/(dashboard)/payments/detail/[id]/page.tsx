@@ -110,6 +110,15 @@ export default async function PaymentDetailPage({
           </Button>
 
           <RecordPaymentDialog agreement={agreement} installments={installments} />
+
+          {/* Only an unused draft can be deleted, so only a draft offers it. */}
+          {agreement.status === "draft" && (
+            <DeleteAgreementDialog
+              agreementId={agreement.id}
+              title={agreement.title}
+              disabled={false}
+            />
+          )}
         </div>
       </nav>
 
@@ -147,29 +156,15 @@ function renderTab(tab: PaymentDetailTab, detail: LoadedDetail): ReactNode {
       return <PaymentRecordList records={detail.records} />;
 
     case "reminders":
-      return <PaymentReminderPanel agreementId={agreement.id} rules={detail.rules} />;
+      // A form and a short list: narrower and centred reads better.
+      return (
+        <div className={styles.narrow}>
+          <PaymentReminderPanel agreementId={agreement.id} rules={detail.rules} />
+        </div>
+      );
 
     case "notifications":
       return <PaymentNotificationPanel notifications={detail.notifications} />;
-
-    case "settings":
-      return (
-        <div className={styles.danger}>
-          <div>
-            <h2>Delete agreement</h2>
-            <p>
-              Only an unused draft agreement can be deleted. Once payments or a
-              schedule exist, its financial history must stay intact.
-            </p>
-          </div>
-
-          <DeleteAgreementDialog
-            agreementId={agreement.id}
-            title={agreement.title}
-            disabled={agreement.status !== "draft"}
-          />
-        </div>
-      );
 
     default:
       // Before a schedule exists, the builder is the next step; after,
@@ -178,7 +173,8 @@ function renderTab(tab: PaymentDetailTab, detail: LoadedDetail): ReactNode {
         <PaymentScheduleBuilder agreement={agreement} hasSchedule={false} />
       ) : (
         <PaymentInstallmentTimeline
-          installments={installments}
+          // Latest first, the oldest at the bottom.
+          installments={[...installments].reverse()}
           currency={agreement.currency}
         />
       );
