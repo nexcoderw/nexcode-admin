@@ -78,7 +78,7 @@ describe(
 
         await user.type(
           screen.getByLabelText(
-            "Name",
+            /^Name/,
           ),
           "  Acme Rwanda  ",
         );
@@ -208,7 +208,7 @@ describe(
 
         expect(
           screen.getByLabelText(
-            "Name",
+            /^Name/,
           ),
         ).toHaveAttribute(
           "aria-invalid",
