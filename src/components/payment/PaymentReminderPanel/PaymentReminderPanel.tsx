@@ -175,7 +175,7 @@ export function PaymentReminderPanel({
             min={today}
             value={remindOn}
             error={dateError}
-            helperText={DATE_HINTS[event]}
+            aria-describedby="reminder-date-hint"
             disabled={mutation.pending}
             onChange={(changeEvent) => {
               setRemindOn(changeEvent.target.value);
@@ -220,6 +220,13 @@ export function PaymentReminderPanel({
         >
           Add rule
         </Button>
+
+        {/* Below the row, so the fields above stay aligned. */}
+        {timing === "date" && (
+          <p id="reminder-date-hint" className={styles.hint}>
+            {DATE_HINTS[event]}
+          </p>
+        )}
       </form>
 
       {rules.length === 0 ? (
