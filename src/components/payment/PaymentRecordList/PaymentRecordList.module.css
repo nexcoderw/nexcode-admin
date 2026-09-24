@@ -1,0 +1,138 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+
+  padding-bottom: var(--space-3);
+
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+}
+
+.header span {
+  color: var(--color-primary);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.header h2 {
+  margin-top: var(--space-1);
+
+  font-size: var(--font-size-lg);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.record {
+  padding: var(--space-4);
+
+  background: var(--color-surface);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.primary {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.primary > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.primary strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.primary span,
+.meta dt {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  margin: var(--space-4) 0 0;
+}
+
+.meta div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.meta dd {
+  margin: 0;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-sm);
+}
+
+.allocations {
+  display: flex;
+  flex-direction: column;
+
+  margin: var(--space-4) 0 0;
+  padding: var(--space-3);
+
+  background: var(--color-surface-secondary);
+
+  border-radius: var(--radius-md);
+
+  list-style: none;
+}
+
+.allocations li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  padding: var(--space-2);
+}
+
+.allocations li + li {
+  border-top: var(--border-width) dashed var(--color-border-subtle);
+}
+
+.allocations span,
+.allocations strong {
+  font-size: var(--font-size-xs);
+}
+
+.empty {
+  padding: var(--space-6);
+
+  color: var(--color-text-muted);
+  text-align: center;
+
+  background: var(--color-surface);
+
+  border: var(--border-width) dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+@media (max-width: 38rem) {
+  .meta {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+}
