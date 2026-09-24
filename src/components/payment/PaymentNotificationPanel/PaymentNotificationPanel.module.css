@@ -1,14 +1,8 @@
+/* Flat: the section sits on the page, no card around it. */
 .panel {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-
-  padding: var(--space-5);
-
-  background: var(--color-surface);
-
-  border: var(--border-width) solid var(--color-border-subtle);
-  border-radius: var(--radius-xl);
+  gap: var(--space-3);
 }
 
 .header {
@@ -36,28 +30,29 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
 }
 
+/* One notification per row: text on the left, actions on the right. */
 .notification {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-1) var(--space-6);
 
-  padding: var(--space-4);
+  padding: var(--space-3) 0 var(--space-3) var(--space-3);
 
-  background: var(--color-surface-secondary);
-
-  border: var(--border-width) solid var(--color-border-subtle);
-  border-radius: var(--radius-lg);
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+  border-left: var(--border-width-strong) solid transparent;
 }
 
+/* Unread rows carry a brand rule; the badge says it in words. */
 .notification[data-unread] {
-  border-color: var(--color-primary-border);
+  border-left-color: var(--color-primary);
 }
 
 .notificationHeader {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
 }
@@ -65,7 +60,7 @@
 .notificationHeader > div {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 0.125rem;
 }
 
 .notificationHeader span {
@@ -75,6 +70,8 @@
 }
 
 .notification p {
+  grid-column: 1;
+
   color: var(--color-text-secondary);
 
   font-size: var(--font-size-sm);
@@ -83,15 +80,31 @@
 
 .notification footer {
   display: flex;
+  grid-row: 1 / span 2;
+  grid-column: 2;
   gap: var(--space-2);
 }
 
 .empty {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-2);
+
+  padding: var(--space-8) var(--space-4);
 
   color: var(--color-text-muted);
 
   font-size: var(--font-size-sm);
+}
+
+@media (max-width: 40rem) {
+  .notification {
+    grid-template-columns: 1fr;
+  }
+
+  .notification footer {
+    grid-row: auto;
+    grid-column: 1;
+  }
 }
