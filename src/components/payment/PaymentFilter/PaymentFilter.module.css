@@ -1,0 +1,32 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+
+  padding-top: var(--space-4);
+
+  border-top: var(--border-width) solid var(--color-border-subtle);
+}
+
+@media (max-width: 40rem) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
