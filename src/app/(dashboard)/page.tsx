@@ -15,6 +15,7 @@ import { CONTACT_ROUTES } from "@/constants/routes/contact-routes";
 import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 
 import styles from "./page.module.css";
+import { PAYMENT_ROUTES } from "@/constants/routes/payment-routes";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -80,7 +81,7 @@ const managementLinks = [
     label: "Payments",
     description:
       "Review portfolio payments and statuses.",
-    href: ADMIN_ROUTES.payments,
+    href: PAYMENT_ROUTES.list,
   },
   {
     label: "Contacts",
