@@ -148,6 +148,7 @@ export function makeTeamMember(
         imagePng: null,
         linkedin: null,
         github: null,
+        displayOrder: 1,
         createdAt:
             "2026-09-20T10:00:00Z",
         updatedAt:
