@@ -1,33 +1,22 @@
 import {
     CLIENT_ORDERINGS,
-    CLIENT_STATUSES,
 } from "@/constants/client/client-options";
 import type {
     ClientListQuery,
     ClientOrdering,
-    ClientStatus,
 } from "@/types/client/client";
 
 
 export function parseClientListQuery(
     params: URLSearchParams,
 ): ClientListQuery | null {
-    const status =
-        parseChoice(
-            params.get("status"),
-            CLIENT_STATUSES,
-        );
-
     const ordering =
         parseChoice(
             params.get("ordering"),
             CLIENT_ORDERINGS,
         );
 
-    if (
-        status === null ||
-        ordering === null
-    ) {
+    if (ordering === null) {
         return null;
     }
 
@@ -57,11 +46,6 @@ export function parseClientListQuery(
             params.get("search")
                 ?.trim() ||
             undefined,
-
-        status:
-            status as
-            | ClientStatus
-            | undefined,
 
         ordering:
             ordering as
