@@ -134,7 +134,7 @@ export default async function ClientPage({
           </h1>
 
           <p>
-            Keep every client's name, email and phone number in one place.
+            Keep every client&apos;s name, email and phone number in one place.
           </p>
         </div>
 
