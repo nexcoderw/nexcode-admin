@@ -162,8 +162,12 @@
   padding-top: var(--space-4);
 }
 
-/* Delete is pushed away from the two navigation actions. */
-.actions > :last-child {
+/*
+ * Delete is pushed away from the two navigation actions. It is wrapped
+ * because the delete action renders its own inline <dialog>, so a
+ * :last-child rule would land on the hidden dialog, not the button.
+ */
+.danger {
   margin-left: auto;
 }
 
