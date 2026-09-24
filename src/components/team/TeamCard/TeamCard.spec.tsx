@@ -41,6 +41,7 @@ const member: TeamMember = {
   imagePng: "/media/team/png/jane-doe/cutout.png",
   linkedin: "https://linkedin.com/in/jane",
   github: null,
+  displayOrder: 1,
   createdAt: "2026-09-20T10:00:00Z",
   updatedAt: "2026-09-20T10:00:00Z",
 };
