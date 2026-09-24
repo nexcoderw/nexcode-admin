@@ -15,28 +15,14 @@
   gap: var(--space-4);
 }
 
-.actions > div {
+.primaryActions {
   display: flex;
   gap: var(--space-2);
 }
 
-.layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(18rem, 0.75fr);
-  align-items: start;
-  gap: var(--space-6);
-}
-
-.main,
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-}
-
-.sidebar {
-  position: sticky;
-  top: var(--space-6);
+/* The active tab's section; its own components supply their surfaces. */
+.panel {
+  min-width: 0;
 }
 
 .danger {
@@ -58,26 +44,18 @@
 }
 
 .danger p {
+  max-width: 40rem;
   margin-top: var(--space-1);
 
   color: var(--color-text-muted);
 
   font-size: var(--font-size-sm);
-}
-
-@media (max-width: 68rem) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    position: static;
-  }
+  line-height: var(--line-height-relaxed);
 }
 
 @media (max-width: 40rem) {
   .actions,
-  .actions > div,
+  .primaryActions,
   .danger {
     align-items: stretch;
     flex-direction: column;
