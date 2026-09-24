@@ -39,25 +39,6 @@ interface ClientFiltersDialogProps {
   query: ResolvedClientListQuery;
 }
 
-const STATUS_OPTIONS = [
-  {
-    value: "",
-    label: "All statuses",
-  },
-  {
-    value: "active",
-    label: "Active",
-  },
-  {
-    value: "inactive",
-    label: "Inactive",
-  },
-  {
-    value: "archived",
-    label: "Archived",
-  },
-];
-
 const ORDER_OPTIONS = [
   {
     value: "-created_at",
@@ -76,14 +57,6 @@ const ORDER_OPTIONS = [
     label: "Name Z–A",
   },
   {
-    value: "company_name",
-    label: "Company A–Z",
-  },
-  {
-    value: "-company_name",
-    label: "Company Z–A",
-  },
-  {
     value: "-updated_at",
     label: "Recently updated",
   },
@@ -99,11 +72,6 @@ export function ClientFiltersDialog({
     Number(
       Boolean(
         query.search,
-      ),
-    ) +
-    Number(
-      Boolean(
-        query.status,
       ),
     ) +
     Number(
@@ -147,7 +115,7 @@ export function ClientFiltersDialog({
           setOpen(false)
         }
         title="Filter clients"
-        description="Search clients and narrow the directory by status or sort order."
+        description="Search clients by name, email or phone number, and choose their order."
         size="md"
         closeLabel="Close client filters"
       >
@@ -168,7 +136,7 @@ export function ClientFiltersDialog({
               defaultValue={
                 query.search
               }
-              placeholder="Name, company, email, phone or location"
+              placeholder="Name, email or phone number"
               maxLength={100}
               leftIcon={
                 <Icon
@@ -185,25 +153,6 @@ export function ClientFiltersDialog({
                 styles.grid
               }
             >
-              <Select
-                name="status"
-                label="Status"
-                options={
-                  STATUS_OPTIONS
-                }
-                defaultValue={
-                  query.status
-                }
-                leftIcon={
-                  <Icon
-                    icon={
-                      FilterHorizontalIcon
-                    }
-                    size={18}
-                  />
-                }
-              />
-
               <Select
                 name="ordering"
                 label="Sort by"
