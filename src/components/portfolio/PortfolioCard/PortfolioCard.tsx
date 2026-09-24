@@ -98,12 +98,14 @@ export function PortfolioCard({ portfolio }: PortfolioCardProps) {
             Edit
           </Button>
 
-          <PortfolioDeleteAction
-            resource="portfolio"
-            resourceId={portfolio.id}
-            name={portfolio.name}
-            compact
-          />
+          <div className={styles.danger}>
+            <PortfolioDeleteAction
+              resource="portfolio"
+              resourceId={portfolio.id}
+              name={portfolio.name}
+              compact
+            />
+          </div>
         </div>
       </div>
 
