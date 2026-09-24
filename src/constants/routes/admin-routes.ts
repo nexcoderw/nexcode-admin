@@ -10,8 +10,5 @@ export const ADMIN_ROUTES = {
   trainings: "/trainings",
   testimonials: "/testimonials",
 
-  payments: "/payments",
-  paymentStatuses: "/payments/statuses",
-
   settings: "/settings",
 } as const;
