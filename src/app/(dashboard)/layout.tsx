@@ -19,6 +19,17 @@ export default async function DashboardLayout({
     redirect(AUTH_ROUTES.login);
   }
 
+  // An ended session gets an explanation, not a silent jump to login.
+  if (currentAdmin.status === "expired") {
+    redirect(ERROR_ROUTES.unauthorized);
+  }
+
+  // Signed in but not an administrator: the login form cannot fix that,
+  // so it must never be where this lands.
+  if (currentAdmin.status === "forbidden") {
+    redirect(ERROR_ROUTES.forbidden);
+  }
+
   // The portal is up and the service behind it is not, which is a 503
   // the reader can act on — not a crash.
   if (currentAdmin.status === "unavailable") {
