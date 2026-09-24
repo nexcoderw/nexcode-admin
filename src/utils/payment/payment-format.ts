@@ -1,3 +1,4 @@
+import type { BadgeVariant } from "@/components/ui/Badge/Badge";
 import {
   REMINDER_CHANNEL_OPTIONS,
   REMINDER_EVENT_OPTIONS,
@@ -97,6 +98,23 @@ export function agreementStatusLabel(
     cancelled:
       "Cancelled",
   }[value];
+}
+
+/**
+ * The badge colour for an agreement's status; the label carries the
+ * meaning in words.
+ */
+const AGREEMENT_STATUS_VARIANTS: Record<PaymentAgreementStatus, BadgeVariant> = {
+  draft: "neutral",
+  active: "success",
+  completed: "primary",
+  cancelled: "error",
+};
+
+export function agreementStatusVariant(
+  status: PaymentAgreementStatus,
+) {
+  return AGREEMENT_STATUS_VARIANTS[status];
 }
 
 export function installmentTypeLabel(
