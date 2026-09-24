@@ -7,11 +7,11 @@ import {
     editClient,
 } from "@/endpoints/client/edit-client";
 import {
-    sanitizeClientFormData,
-} from "@/utils/client/client-form-data";
-import {
     parseClientId,
 } from "@/utils/client/client-id";
+import {
+    sanitizeClientPayload,
+} from "@/utils/client/client-json-payload";
 import {
     runClientMutation,
 } from "@/utils/client/client-mutation";
@@ -57,23 +57,21 @@ export async function PATCH(
         return clientInvalidRequest();
     }
 
-    let formData: FormData;
+    let raw: unknown;
 
     try {
-        const input =
-            await request.formData();
-
-        const sanitized =
-            sanitizeClientFormData(
-                input,
-            );
-
-        if (!sanitized) {
-            return clientInvalidRequest();
-        }
-
-        formData = sanitized;
+        raw =
+            await request.json();
     } catch {
+        return clientInvalidRequest();
+    }
+
+    const input =
+        sanitizeClientPayload(
+            raw,
+        );
+
+    if (!input) {
         return clientInvalidRequest();
     }
 
@@ -92,7 +90,7 @@ export async function PATCH(
                 (csrf) =>
                     editClient(
                         clientId,
-                        formData,
+                        input,
                         session.sessionId,
                         csrf,
                         forwarded,
