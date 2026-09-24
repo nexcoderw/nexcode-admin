@@ -2,8 +2,8 @@ import "server-only";
 
 import {
     asRecord,
+    isMoney,
     isNumber,
-    isString,
 } from "@/endpoints/payment/mapper-utils";
 import type {
     AgreementFinancialSummary,
@@ -19,28 +19,28 @@ export function mapAgreementSummary(
 
     if (
         !item ||
-        !isString(
+        !isMoney(
             item.total_amount,
         ) ||
-        !isString(
+        !isMoney(
             item.scheduled_amount,
         ) ||
-        !isString(
+        !isMoney(
             item.received_amount,
         ) ||
-        !isString(
+        !isMoney(
             item.allocated_amount,
         ) ||
-        !isString(
+        !isMoney(
             item.unallocated_amount,
         ) ||
-        !isString(
+        !isMoney(
             item.outstanding_amount,
         ) ||
-        !isString(
+        !isMoney(
             item.overpaid_amount,
         ) ||
-        !isString(
+        !isMoney(
             item.waived_amount,
         )
     ) {
@@ -83,16 +83,16 @@ export function mapPortfolioSummary(
 
     if (
         !item ||
-        !isString(
+        !isMoney(
             item.total_contracted,
         ) ||
-        !isString(
+        !isMoney(
             item.total_received,
         ) ||
-        !isString(
+        !isMoney(
             item.outstanding,
         ) ||
-        !isString(
+        !isMoney(
             item.overdue,
         ) ||
         !isNumber(
