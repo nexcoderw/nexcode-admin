@@ -5,8 +5,6 @@ import {
   DashboardSquare01Icon,
   File01Icon,
   Mail01Icon,
-  SecurityCheckIcon,
-  Settings01Icon,
   StarIcon,
   UserGroupIcon,
 } from '@hugeicons/core-free-icons';
