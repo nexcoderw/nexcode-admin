@@ -222,11 +222,13 @@ export function toBackendVoidPayload(
 }
 
 function mapFields(
-    input:
-        Record<string, unknown>,
+    input: object,
     mapping:
         Record<string, string>,
 ) {
+    const values =
+        input as Record<string, unknown>;
+
     const output:
         Record<string, unknown> = {};
 
@@ -240,7 +242,7 @@ function mapFields(
         )
     ) {
         const value =
-            input[source];
+            values[source];
 
         if (
             value !== undefined
