@@ -28,7 +28,6 @@ import {
 } from "@/constants/routes/auth-routes";
 import {
   CLIENT_API_ROUTES,
-  CLIENT_ROUTES,
 } from "@/constants/routes/client-routes";
 
 import styles from "./ClientDeleteAction.module.css";
@@ -37,12 +36,18 @@ interface ClientDeleteActionProps {
   clientId: number;
   name: string;
   compact?: boolean;
+
+  /**
+   * Called after a successful delete, so a surrounding dialog can close.
+   */
+  onDeleted?: () => void;
 }
 
 export function ClientDeleteAction({
   clientId,
   name,
   compact = false,
+  onDeleted,
 }: ClientDeleteActionProps) {
   const router =
     useRouter();
@@ -104,10 +109,8 @@ export function ClientDeleteAction({
 
       setOpen(false);
 
-      router.replace(
-        CLIENT_ROUTES.list,
-      );
-
+      // Refresh in place: the list keeps its current search and page.
+      onDeleted?.();
       router.refresh();
     } catch {
       setError(
