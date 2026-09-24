@@ -1,35 +1,3 @@
-import type {
-    ClientStatus,
-} from "@/types/client/client";
-
-export function getClientStatusLabel(
-    status: ClientStatus,
-) {
-    if (status === "active") {
-        return "Active";
-    }
-
-    if (status === "inactive") {
-        return "Inactive";
-    }
-
-    return "Archived";
-}
-
-export function getClientStatusVariant(
-    status: ClientStatus,
-) {
-    if (status === "active") {
-        return "success" as const;
-    }
-
-    if (status === "inactive") {
-        return "warning" as const;
-    }
-
-    return "neutral" as const;
-}
-
 export function formatClientDate(
     value: string,
 ) {
@@ -52,4 +20,22 @@ export function formatClientDate(
             year: "numeric",
         },
     ).format(date);
+}
+
+/**
+ * Up to two initials, used as the client's monogram now that clients
+ * carry no profile image.
+ */
+export function getClientInitials(
+    name: string,
+) {
+    const initials = name
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0]?.toUpperCase() ?? "")
+        .join("");
+
+    return initials || "?";
 }
