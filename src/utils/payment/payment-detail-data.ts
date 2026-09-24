@@ -25,7 +25,10 @@ export async function loadPaymentDetail(
       getPaymentAgreement(agreementId, sessionId, forwarded),
       listPaymentInstallments(agreementId, sessionId, forwarded),
       getAgreementFinancialSummary(agreementId, sessionId, forwarded),
-      listPaymentRecords(sessionId, forwarded, scoped),
+      listPaymentRecords(sessionId, forwarded, {
+        ...scoped,
+        ordering: "-paid_at",
+      }),
       listPaymentReminderRules(sessionId, forwarded, scoped),
       listPaymentNotifications(sessionId, forwarded, scoped),
     ]);
@@ -34,8 +37,13 @@ export async function loadPaymentDetail(
     status: agreement.status,
     agreement: agreement.ok ? agreement.data : null,
     summary: summary.ok ? summary.data : null,
+    // In due order: forms such as the payment allocation list read them
+    // first to last. The schedule tab shows them latest first.
     installments: (installments.ok && installments.data) || [],
-    records: (records.ok && records.data?.items) || [],
+    // Latest payment first, the oldest at the bottom.
+    records: [...((records.ok && records.data?.items) || [])].sort(
+      (a, b) => Date.parse(b.paidAt) - Date.parse(a.paidAt),
+    ),
     rules: (rules.ok && rules.data?.items) || [],
     notifications: (notifications.ok && notifications.data?.items) || [],
   };
