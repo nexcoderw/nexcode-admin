@@ -7,8 +7,8 @@ import {
     addClient,
 } from "@/endpoints/client/add-client";
 import {
-    sanitizeClientFormData,
-} from "@/utils/client/client-form-data";
+    sanitizeClientPayload,
+} from "@/utils/client/client-json-payload";
 import {
     runClientMutation,
 } from "@/utils/client/client-mutation";
@@ -35,23 +35,21 @@ export async function POST(
         return clientAuthenticationRequired();
     }
 
-    let formData: FormData;
+    let raw: unknown;
 
     try {
-        const input =
-            await request.formData();
-
-        const sanitized =
-            sanitizeClientFormData(
-                input,
-            );
-
-        if (!sanitized) {
-            return clientInvalidRequest();
-        }
-
-        formData = sanitized;
+        raw =
+            await request.json();
     } catch {
+        return clientInvalidRequest();
+    }
+
+    const input =
+        sanitizeClientPayload(
+            raw,
+        );
+
+    if (!input) {
         return clientInvalidRequest();
     }
 
@@ -69,7 +67,7 @@ export async function POST(
 
                 (csrf) =>
                     addClient(
-                        formData,
+                        input,
                         session.sessionId,
                         csrf,
                         forwarded,
