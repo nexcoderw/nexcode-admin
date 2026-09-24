@@ -10,8 +10,6 @@ export const ADMIN_ROUTES = {
   trainings: "/trainings",
   testimonials: "/testimonials",
 
-  contacts: "/contacts",
-
   payments: "/payments",
   paymentStatuses: "/payments/statuses",
 
