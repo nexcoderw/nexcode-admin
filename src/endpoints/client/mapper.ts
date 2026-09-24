@@ -1,56 +1,30 @@
 import "server-only";
 
-import {
-    CLIENT_STATUSES,
-} from "@/constants/client/client-options";
 import type {
-    ClientDetail,
+    Client,
     ClientListData,
     ClientPagination,
-    ClientStatus,
-    ClientSummary,
 } from "@/types/client/client";
-
 
 type UnknownRecord =
     Record<string, unknown>;
 
-
-export function mapClientSummary(
+export function mapClient(
     value: unknown,
-): ClientSummary | null {
+): Client | null {
     const item =
         asRecord(value);
 
-    if (!item) {
-        return null;
-    }
-
-    const status =
-        mapStatus(
-            item.status,
-        );
-
     if (
+        !item ||
         !isNumber(item.id) ||
         !isString(item.name) ||
-        !isString(item.slug) ||
-        !isString(
-            item.company_name,
-        ) ||
         !isNullableString(
             item.email,
         ) ||
         !isNullableString(
-            item.phone,
+            item.phone_number,
         ) ||
-        !isNullableString(
-            item.location,
-        ) ||
-        !isNullableString(
-            item.profile_image,
-        ) ||
-        !status ||
         !isString(
             item.created_at,
         ) ||
@@ -64,60 +38,15 @@ export function mapClientSummary(
     return {
         id: item.id,
         name: item.name,
-        slug: item.slug,
-
-        companyName:
-            item.company_name,
-
         email: item.email,
-        phone: item.phone,
-        location: item.location,
-
-        profileImage:
-            item.profile_image,
-
-        status,
-
+        phoneNumber:
+            item.phone_number,
         createdAt:
             item.created_at,
-
         updatedAt:
             item.updated_at,
     };
 }
-
-
-export function mapClientDetail(
-    value: unknown,
-): ClientDetail | null {
-    const item =
-        asRecord(value);
-
-    const summary =
-        mapClientSummary(value);
-
-    if (
-        !item ||
-        !summary ||
-        !isNullableString(
-            item.website,
-        ) ||
-        !isString(
-            item.notes,
-        )
-    ) {
-        return null;
-    }
-
-    return {
-        ...summary,
-        website:
-            item.website,
-        notes:
-            item.notes,
-    };
-}
-
 
 export function mapClientListData(
     items: unknown,
@@ -128,13 +57,11 @@ export function mapClientListData(
     }
 
     const mappedItems:
-        ClientSummary[] = [];
+        Client[] = [];
 
     for (const item of items) {
         const mapped =
-            mapClientSummary(
-                item,
-            );
+            mapClient(item);
 
         if (!mapped) {
             return null;
@@ -160,7 +87,6 @@ export function mapClientListData(
             mappedPagination,
     };
 }
-
 
 function mapPagination(
     value: unknown,
@@ -192,41 +118,18 @@ function mapPagination(
 
     return {
         page: item.page,
-
         pageSize:
             item.page_size,
-
         totalItems:
             item.total_items,
-
         totalPages:
             item.total_pages,
-
         hasNext:
             item.has_next,
-
         hasPrevious:
             item.has_previous,
     };
 }
-
-
-function mapStatus(
-    value: unknown,
-): ClientStatus | null {
-    if (
-        typeof value !== "string" ||
-        !(
-            CLIENT_STATUSES as
-            readonly string[]
-        ).includes(value)
-    ) {
-        return null;
-    }
-
-    return value as ClientStatus;
-}
-
 
 function asRecord(
     value: unknown,
@@ -240,7 +143,6 @@ function asRecord(
         : null;
 }
 
-
 function isString(
     value: unknown,
 ): value is string {
@@ -248,7 +150,6 @@ function isString(
         typeof value === "string"
     );
 }
-
 
 function isNullableString(
     value: unknown,
@@ -259,7 +160,6 @@ function isNullableString(
     );
 }
 
-
 function isNumber(
     value: unknown,
 ): value is number {
@@ -268,7 +168,6 @@ function isNumber(
         Number.isFinite(value)
     );
 }
-
 
 function isBoolean(
     value: unknown,
