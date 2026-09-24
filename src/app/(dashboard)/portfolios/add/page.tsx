@@ -6,6 +6,7 @@ import { PortfolioWorkspace } from "@/components/portfolio/PortfolioWorkspace/Po
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { ERROR_ROUTES } from "@/constants/routes/error-routes";
 import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import {
   getPortfolioServerContext,
@@ -27,8 +28,12 @@ export default async function AddPortfolioPage() {
 
   const teams = await listPortfolioTeamMembers(context);
 
-  if (teams.status === 401 || teams.status === 403) {
-    redirect(AUTH_ROUTES.login);
+  if (teams.status === 401) {
+    redirect(ERROR_ROUTES.unauthorized);
+  }
+
+  if (teams.status === 403) {
+    redirect(ERROR_ROUTES.forbidden);
   }
 
   return (
