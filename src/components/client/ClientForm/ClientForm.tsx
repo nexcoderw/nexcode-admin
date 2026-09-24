@@ -3,6 +3,7 @@
 import {
   Call02Icon,
   Mail01Icon,
+  SendIcon,
   UserIcon,
 } from "@hugeicons/core-free-icons";
 
@@ -143,6 +144,7 @@ export function ClientForm({
           type="submit"
           isLoading={form.saving}
           loadingLabel="Saving client"
+          leftIcon={<Icon icon={SendIcon} size={18} />}
         >
           {mode === "add" ? "Add client" : "Save changes"}
         </Button>
