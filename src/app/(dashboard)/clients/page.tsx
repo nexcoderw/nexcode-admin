@@ -1,6 +1,3 @@
-import {
-  UserGroupIcon,
-} from "@hugeicons/core-free-icons";
 import type {
   Metadata,
 } from "next";
@@ -15,6 +12,9 @@ import {
   ClientFiltersDialog,
 } from "@/components/client/ClientFiltersDialog/ClientFiltersDialog";
 import {
+  ClientFormDialogTrigger,
+} from "@/components/client/ClientFormDialog/ClientFormDialog";
+import {
   ClientGrid,
 } from "@/components/client/ClientGrid/ClientGrid";
 import {
@@ -24,17 +24,8 @@ import {
   Alert,
 } from "@/components/ui/Alert/Alert";
 import {
-  Button,
-} from "@/components/ui/Button/Button";
-import {
-  Icon,
-} from "@/components/ui/Icon/Icon";
-import {
   AUTH_ROUTES,
 } from "@/constants/routes/auth-routes";
-import {
-  CLIENT_ROUTES,
-} from "@/constants/routes/client-routes";
 import {
   listClients,
 } from "@/endpoints/client/list-clients";
@@ -107,7 +98,6 @@ export default async function ClientPage({
 
   const filtered =
     Boolean(query.search) ||
-    Boolean(query.status) ||
     query.ordering !==
       "-created_at";
 
@@ -134,7 +124,7 @@ export default async function ClientPage({
           </h1>
 
           <p>
-            Manage client identity, contact information, lifecycle status and internal notes.
+            Keep every client's name, email and phone number in one place.
           </p>
         </div>
 
@@ -147,21 +137,9 @@ export default async function ClientPage({
             query={query}
           />
 
-          <Button
-            href={
-              CLIENT_ROUTES.add
-            }
-            leftIcon={
-              <Icon
-                icon={
-                  UserGroupIcon
-                }
-                size={17}
-              />
-            }
-          >
-            Add client
-          </Button>
+          <ClientFormDialogTrigger
+            mode="add"
+          />
         </div>
       </header>
 
