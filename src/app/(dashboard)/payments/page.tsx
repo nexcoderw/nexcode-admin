@@ -22,7 +22,7 @@ import {
 } from "@/constants/routes/error-routes";
 import {
   listPaymentAgreements,
-} from "@/endpoints/payment/list-agreements";
+} from "@/endpoints/payment/list-agreement";
 import {
   resolvePaymentAgreementQuery,
   toPaymentAgreementEndpointQuery,
