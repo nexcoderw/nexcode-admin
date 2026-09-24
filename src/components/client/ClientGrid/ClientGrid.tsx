@@ -2,21 +2,22 @@ import {
   ClientCard,
 } from "@/components/client/ClientCard/ClientCard";
 import type {
-  ClientSummary,
+  Client,
 } from "@/types/client/client";
 
 import styles from "./ClientGrid.module.css";
 
 interface ClientGridProps {
-  items: ClientSummary[];
+  items: Client[];
 }
 
 export function ClientGrid({
   items,
 }: ClientGridProps) {
   return (
-    <div
+    <section
       className={styles.grid}
+      aria-label="Clients"
     >
       {items.map(
         (client) => (
@@ -26,6 +27,6 @@ export function ClientGrid({
           />
         ),
       )}
-    </div>
+    </section>
   );
 }
