@@ -2,6 +2,9 @@
  * Shared checks for the payment payload sanitizers: each copy helper
  * copies one field when it has the expected type, and reports false
  * when a field is present with the wrong type.
+ *
+ * Targets are typed as object because the payment input interfaces have
+ * no index signature, so they are not assignable to Record<string, unknown>.
  */
 
 export type RecordValue =
@@ -33,7 +36,7 @@ export function oneOf<T extends string>(
 
 export function copyString(
     source: RecordValue,
-    target: RecordValue,
+    target: object,
     key: string,
 ) {
     if (!(key in source)) {
@@ -47,7 +50,7 @@ export function copyString(
         return false;
     }
 
-    target[key] =
+    (target as RecordValue)[key] =
         source[key];
 
     return true;
@@ -55,7 +58,7 @@ export function copyString(
 
 export function copyNumber(
     source: RecordValue,
-    target: RecordValue,
+    target: object,
     key: string,
 ) {
     if (!(key in source)) {
@@ -72,7 +75,7 @@ export function copyNumber(
         return false;
     }
 
-    target[key] =
+    (target as RecordValue)[key] =
         source[key];
 
     return true;
@@ -80,7 +83,7 @@ export function copyNumber(
 
 export function copyBoolean(
     source: RecordValue,
-    target: RecordValue,
+    target: object,
     key: string,
 ) {
     if (!(key in source)) {
@@ -94,7 +97,7 @@ export function copyBoolean(
         return false;
     }
 
-    target[key] =
+    (target as RecordValue)[key] =
         source[key];
 
     return true;
@@ -104,7 +107,7 @@ export function copyChoice<
     T extends string,
 >(
     source: RecordValue,
-    target: RecordValue,
+    target: object,
     key: string,
     choices: readonly T[],
 ) {
@@ -121,7 +124,7 @@ export function copyChoice<
         return false;
     }
 
-    target[key] =
+    (target as RecordValue)[key] =
         source[key];
 
     return true;
