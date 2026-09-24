@@ -80,6 +80,7 @@ export const PAYMENT_REMINDER_TIMINGS = [
     "before",
     "on",
     "after",
+    "date",
 ] as const;
 
 export const PAYMENT_REMINDER_CHANNELS = [
