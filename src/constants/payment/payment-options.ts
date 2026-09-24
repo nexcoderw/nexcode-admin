@@ -137,6 +137,10 @@ export const REMINDER_TIMING_OPTIONS = [
     value: "after",
     label: "After",
   },
+  {
+    value: "date",
+    label: "On a set date",
+  },
 ] as const;
 
 export const REMINDER_CHANNEL_OPTIONS = [
