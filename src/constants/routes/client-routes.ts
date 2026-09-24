@@ -1,5 +1,17 @@
 export const CLIENT_ROUTES = {
   list: "/clients",
+
+  add: "/clients/add",
+
+  detail: (
+    clientId: number,
+  ) =>
+    `/clients/detail/${clientId}`,
+
+  edit: (
+    clientId: number,
+  ) =>
+    `/clients/edit/${clientId}`,
 } as const;
 
 export const CLIENT_API_ROUTES = {
