@@ -86,12 +86,6 @@ function buildPath(
 
     set(
         params,
-        "status",
-        query.status,
-    );
-
-    set(
-        params,
         "ordering",
         query.ordering,
     );
