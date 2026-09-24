@@ -9,6 +9,7 @@ import { TeamGrid } from "@/components/team/TeamGrid/TeamGrid";
 import { TeamPagination } from "@/components/team/TeamPagination/TeamPagination";
 import { Alert } from "@/components/ui/Alert/Alert";
 import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { ERROR_ROUTES } from "@/constants/routes/error-routes";
 import { listTeam } from "@/endpoints/team/list-team";
 import { ADMIN_SESSION_COOKIE_NAME } from "@/utils/auth/session";
 import {
@@ -53,8 +54,12 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
     result = null;
   }
 
-  if (result && (result.status === 401 || result.status === 403)) {
-    redirect(AUTH_ROUTES.login);
+  if (result?.status === 401) {
+    redirect(ERROR_ROUTES.unauthorized);
+  }
+
+  if (result?.status === 403) {
+    redirect(ERROR_ROUTES.forbidden);
   }
 
   const data = result?.ok ? result.data : null;
