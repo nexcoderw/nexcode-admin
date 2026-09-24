@@ -4,11 +4,14 @@ import {
     backendRequest,
 } from "@/endpoints/client";
 import {
-    mapClientDetail,
+    mapClient,
 } from "@/endpoints/client/mapper";
 import {
     getClientErrorFields,
 } from "@/endpoints/client/mutation-errors";
+import {
+    toBackendClientPayload,
+} from "@/endpoints/client/payload";
 import {
     clientRequestHeaders,
 } from "@/endpoints/client/request-headers";
@@ -16,6 +19,9 @@ import type {
     ClientMutationCsrf,
     ClientMutationResult,
 } from "@/endpoints/client/types";
+import type {
+    ClientInput,
+} from "@/types/client/client";
 
 
 interface BackendResponse {
@@ -29,7 +35,7 @@ interface BackendResponse {
 
 export async function editClient(
     clientId: number,
-    formData: FormData,
+    input: ClientInput,
     sessionId: string,
     csrf: ClientMutationCsrf,
     forwarded: Headers,
@@ -47,7 +53,10 @@ export async function editClient(
                         csrf,
                     ),
 
-                formData,
+                body:
+                    toBackendClientPayload(
+                        input,
+                    ),
             },
         );
 
@@ -65,7 +74,7 @@ export async function editClient(
     }
 
     const client =
-        mapClientDetail(
+        mapClient(
             result.data?.data
                 ?.client,
         );
