@@ -144,6 +144,10 @@ export function TeamDetailsDialog({
                   />
                   <DetailRow label="Profile handle" value={`@${member.slug}`} />
                   <DetailRow
+                    label="Display order"
+                    value={`No. ${member.displayOrder}`}
+                  />
+                  <DetailRow
                     label="Joined"
                     value={formatDate(member.createdAt)}
                   />
