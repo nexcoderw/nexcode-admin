@@ -15,7 +15,10 @@ import { Icon } from "@/components/ui/Icon/Icon";
 import { Input } from "@/components/ui/Input/Input";
 import { Select } from "@/components/ui/Select/Select";
 import { TEAM_ROUTES } from "@/constants/routes/team-routes";
-import type { ResolvedTeamListQuery } from "@/utils/team/team-list-query";
+import {
+  DEFAULT_TEAM_ORDERING,
+  type ResolvedTeamListQuery,
+} from "@/utils/team/team-list-query";
 
 import styles from "./TeamFiltersDialog.module.css";
 
@@ -23,9 +26,8 @@ interface TeamFiltersDialogProps {
   query: ResolvedTeamListQuery;
 }
 
-const DEFAULT_ORDERING = "-created_at";
-
 const TEAM_ORDERING_OPTIONS = [
+  { value: "display_order", label: "Display order" },
   { value: "-created_at", label: "Newest first" },
   { value: "created_at", label: "Oldest first" },
   { value: "name", label: "Name A–Z" },
@@ -39,7 +41,7 @@ export function TeamFiltersDialog({ query }: TeamFiltersDialogProps) {
 
   const activeCount =
     Number(Boolean(query.search)) +
-    Number(query.ordering !== DEFAULT_ORDERING);
+    Number(query.ordering !== DEFAULT_TEAM_ORDERING);
 
   return (
     <>
