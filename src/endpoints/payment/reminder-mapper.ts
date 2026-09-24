@@ -49,6 +49,9 @@ export function mapReminderRule(
             PAYMENT_REMINDER_TIMINGS,
         ) ||
         !isNumber(item.days) ||
+        !isNullableString(
+            item.remind_on,
+        ) ||
         !isOneOf(
             item.channel,
             PAYMENT_REMINDER_CHANNELS,
@@ -76,6 +79,9 @@ export function mapReminderRule(
         event: item.event,
         timing: item.timing,
         days: item.days,
+
+        remindOn:
+            item.remind_on,
 
         channel:
             item.channel,
