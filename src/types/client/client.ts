@@ -1,43 +1,30 @@
-export type ClientStatus =
-    | "active"
-    | "inactive"
-    | "archived";
-
 export type ClientOrdering =
     | "name"
     | "-name"
-    | "company_name"
-    | "-company_name"
-    | "status"
-    | "-status"
     | "created_at"
     | "-created_at"
     | "updated_at"
     | "-updated_at";
 
-export interface ClientSummary {
+export interface Client {
     id: number;
     name: string;
-    slug: string;
-
-    companyName: string;
 
     email: string | null;
-    phone: string | null;
-    location: string | null;
-
-    profileImage: string | null;
-
-    status: ClientStatus;
+    phoneNumber: string | null;
 
     createdAt: string;
     updatedAt: string;
 }
 
-export interface ClientDetail
-    extends ClientSummary {
-    website: string | null;
-    notes: string;
+/**
+ * The editable fields of a client. On update, a field left undefined is
+ * not sent and keeps its stored value; an empty string clears it.
+ */
+export interface ClientInput {
+    name?: string;
+    email?: string;
+    phoneNumber?: string;
 }
 
 export interface ClientPagination {
@@ -50,13 +37,12 @@ export interface ClientPagination {
 }
 
 export interface ClientListData {
-    items: ClientSummary[];
+    items: Client[];
     pagination: ClientPagination;
 }
 
 export interface ClientListQuery {
     search?: string;
-    status?: ClientStatus;
     ordering?: ClientOrdering;
     page?: number;
     pageSize?: number;
