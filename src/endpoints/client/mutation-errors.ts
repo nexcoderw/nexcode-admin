@@ -45,17 +45,16 @@ export function getClientErrorFields(
     return Object.keys(
         errors,
     )
-        .map(
-            (field) =>
-                CLIENT_FIELDS[
-                    field as
-                    keyof typeof CLIENT_FIELDS
-                ],
-        )
         .filter(
             (
                 field,
-            ): field is string =>
-                Boolean(field),
+            ): field is keyof typeof CLIENT_FIELDS =>
+                field in CLIENT_FIELDS,
+        )
+        .map(
+            (field) =>
+                CLIENT_FIELDS[
+                    field
+                ],
         );
 }
