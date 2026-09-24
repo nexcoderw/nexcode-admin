@@ -129,16 +129,23 @@ export function reminderChannelLabel(
 }
 
 /**
- * A reminder rule in words, e.g. "7 days before installment due".
+ * A reminder rule in words, e.g. "7 days before installment due" or
+ * "On 28 Sep 2026: Installment due".
  */
 export function describeReminderRule(
   rule: PaymentReminderRule,
 ) {
-  const event = (
+  const label =
     REMINDER_EVENT_OPTIONS.find(
       (option) => option.value === rule.event,
-    )?.label ?? rule.event
-  ).toLowerCase();
+    )?.label ?? rule.event;
+
+  // "On 28 Sep 2026: Installment due"
+  if (rule.timing === "date") {
+    return `On ${formatPaymentDate(rule.remindOn)}: ${label}`;
+  }
+
+  const event = label.toLowerCase();
 
   if (rule.timing === "on") {
     return `On the day of ${event}`;
