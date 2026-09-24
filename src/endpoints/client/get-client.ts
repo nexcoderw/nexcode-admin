@@ -4,7 +4,7 @@ import {
     backendRequest,
 } from "@/endpoints/client";
 import {
-    mapClientDetail,
+    mapClient,
 } from "@/endpoints/client/mapper";
 import {
     clientRequestHeaders,
@@ -50,7 +50,7 @@ export async function getClient(
     }
 
     const client =
-        mapClientDetail(
+        mapClient(
             result.data?.data
                 ?.client,
         );
