@@ -1,20 +1,26 @@
+/*
+ * Flat figures in one band: a single surface, divided by thin rules
+ * rather than a card per figure.
+ */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--space-3);
+
+  background: var(--color-surface);
+
+  border-radius: var(--radius-lg);
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
 
-  padding: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+}
 
-  background: var(--color-surface);
-
-  border: var(--border-width) solid var(--color-border-subtle);
-  border-radius: var(--radius-lg);
+.card + .card {
+  border-left: var(--border-width) solid var(--color-border-subtle);
 }
 
 .card span {
@@ -24,18 +30,34 @@
 }
 
 .card strong {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
   font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-tight);
 }
 
 @media (max-width: 62rem) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  /* Two per row: only the second of each pair keeps a left rule. */
+  .card:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .card:nth-child(n + 3) {
+    border-top: var(--border-width) solid var(--color-border-subtle);
+  }
 }
 
 @media (max-width: 32rem) {
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .card + .card {
+    border-top: var(--border-width) solid var(--color-border-subtle);
+    border-left: 0;
   }
 }
