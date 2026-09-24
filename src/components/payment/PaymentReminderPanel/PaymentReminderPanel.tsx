@@ -36,6 +36,25 @@ interface PaymentReminderPanelProps {
 
 const MAX_DAYS = 3650;
 
+/*
+ * Dates are chosen in Kigali time, where the team works. Formatting
+ * with a fixed zone also keeps server and browser renders identical.
+ */
+const KIGALI_DATE = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Africa/Kigali",
+});
+
+// What a set-date reminder is about, for each event.
+const DATE_HINTS: Record<PaymentReminderEvent, string> = {
+  installment_due: "Reminds you about the next unpaid installment.",
+  milestone_expected: "Reminds you about the next unconfirmed milestone.",
+  agreement_expiry: "Reminds you that the agreement is ending.",
+};
+
+function kigaliDate(offsetDays = 0) {
+  return KIGALI_DATE.format(Date.now() + offsetDays * 86_400_000);
+}
+
 function parseDays(value: string) {
   const days = Number(value);
 
@@ -53,12 +72,27 @@ export function PaymentReminderPanel({
   const [event, setEvent] = useState<PaymentReminderEvent>("installment_due");
   const [timing, setTiming] = useState<PaymentReminderTiming>("before");
   const [days, setDays] = useState("7");
+  const [remindOn, setRemindOn] = useState(() => kigaliDate(1));
   const [channel, setChannel] = useState<PaymentReminderChannel>("in_app");
   const [daysInvalid, setDaysInvalid] = useState(false);
+  const [dateInvalid, setDateInvalid] = useState(false);
+
+  const today = kigaliDate();
 
   const enabledCount = rules.filter((rule) => rule.isEnabled).length;
 
   async function addRule() {
+    if (timing === "date") {
+      // ISO dates compare correctly as strings.
+      if (!remindOn || remindOn < today) {
+        setDateInvalid(true);
+        return;
+      }
+
+      await submit({ remindOn, days: 0 });
+      return;
+    }
+
     const parsedDays = timing === "on" ? 0 : parseDays(days);
 
     if (parsedDays === null) {
@@ -66,16 +100,25 @@ export function PaymentReminderPanel({
       return;
     }
 
+    await submit({ days: parsedDays });
+  }
+
+  async function submit(timingFields: { days: number; remindOn?: string }) {
     await mutation.mutate(PAYMENT_API_ROUTES.reminderRuleAdd(agreementId), {
       method: "POST",
       failureMessage: "The reminder rule could not be created.",
-      body: { event, timing, days: parsedDays, channel, isEnabled: true },
+      body: { event, timing, ...timingFields, channel, isEnabled: true },
     });
   }
 
   const daysError =
     daysInvalid || mutation.fields.includes("days")
       ? `Enter a whole number of days from 1 to ${MAX_DAYS}.`
+      : undefined;
+
+  const dateError =
+    dateInvalid || mutation.fields.includes("remindOn")
+      ? "Choose today or a later date."
       : undefined;
 
   return (
@@ -125,7 +168,23 @@ export function PaymentReminderPanel({
           }
         />
 
-        {timing !== "on" && (
+        {timing === "date" && (
+          <Input
+            label="Remind on"
+            type="date"
+            min={today}
+            value={remindOn}
+            error={dateError}
+            helperText={DATE_HINTS[event]}
+            disabled={mutation.pending}
+            onChange={(changeEvent) => {
+              setRemindOn(changeEvent.target.value);
+              setDateInvalid(false);
+            }}
+          />
+        )}
+
+        {(timing === "before" || timing === "after") && (
           <Input
             label="Days"
             type="number"
