@@ -10,7 +10,6 @@ export const PAYMENT_DETAIL_TABS = [
   { id: "payments", label: "Payments" },
   { id: "reminders", label: "Reminders" },
   { id: "notifications", label: "Notifications" },
-  { id: "settings", label: "Settings" },
 ] as const;
 
 export type PaymentDetailTab = (typeof PAYMENT_DETAIL_TABS)[number]["id"];
