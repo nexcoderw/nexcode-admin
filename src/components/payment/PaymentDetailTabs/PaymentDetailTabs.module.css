@@ -1,0 +1,106 @@
+/* A segmented bar matching the portfolio workspace tabs. */
+.tabs {
+  display: flex;
+  gap: var(--space-1);
+
+  max-width: 100%;
+  padding: var(--space-1);
+
+  overflow-x: auto;
+
+  background: var(--color-surface-secondary);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-round);
+
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: inline-flex;
+  flex: 1 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+
+  min-height: var(--control-height-md);
+  padding-inline: var(--space-5);
+
+  color: var(--color-text-muted);
+
+  border-radius: var(--radius-round);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.tab:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.tab[data-selected] {
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+}
+
+.count {
+  display: inline-grid;
+  place-items: center;
+
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding-inline: var(--space-1);
+
+  background: var(--color-surface-tertiary);
+
+  border-radius: var(--radius-round);
+
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Counts that need attention, such as unread notifications. */
+.count[data-highlight="true"] {
+  color: var(--color-text-on-primary);
+  background: var(--color-warning);
+}
+
+.tab[data-selected] .count {
+  color: var(--color-text-on-primary);
+  background: rgb(0 0 0 / 0.16);
+}
+
+@media (hover: hover) {
+  .tab:not([data-selected]):hover {
+    color: var(--color-text-primary);
+    background: var(--color-surface-hover);
+  }
+}
+
+@media (max-width: 40rem) {
+  .tabs {
+    border-radius: var(--radius-lg);
+  }
+
+  .tab {
+    flex: 0 0 auto;
+    padding-inline: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab {
+    transition: none;
+  }
+}
