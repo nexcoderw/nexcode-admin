@@ -236,6 +236,8 @@ export default async function EditPaymentPage({
           portfolios.ok
             ? portfolios.items
             : [
+                // Without the portfolio list, the agreement's own portfolio
+                // is still offered so the form keeps its current value.
                 {
                   id:
                     agreement
@@ -244,28 +246,6 @@ export default async function EditPaymentPage({
                   name:
                     agreement
                       .portfolio.name,
-
-                  slug:
-                    agreement
-                      .portfolio.slug,
-
-                  summary: "",
-                  category:
-                    "web_application",
-                  projectType:
-                    "client_project",
-                  status: "draft",
-                  coverImage: null,
-                  teamMemberCount:
-                    0,
-                  projectInitiationDate:
-                    null,
-                  deadlineDate:
-                    null,
-                  publishedAt:
-                    null,
-                  createdAt: "",
-                  updatedAt: "",
                 },
               ]
         }
