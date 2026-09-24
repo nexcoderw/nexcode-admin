@@ -1,11 +1,10 @@
+/* Uses the full content width, so rows and forms can lie flat. */
 .page {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
 
   width: 100%;
-  max-width: 90rem;
-  margin-inline: auto;
 }
 
 .actions {
@@ -20,23 +19,22 @@
   gap: var(--space-2);
 }
 
-/* The active tab's section; its own components supply their surfaces. */
+/* The active tab's section, directly under the tab bar. */
 .panel {
   min-width: 0;
+  margin-top: calc(var(--space-2) * -1);
 }
 
+/* Flat: a single rule in the error colour marks the danger zone. */
 .danger {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-5);
 
-  padding: var(--space-5);
+  padding: var(--space-4) 0 var(--space-4) var(--space-4);
 
-  background: var(--color-error-subtle);
-
-  border: var(--border-width) solid var(--color-error-border);
-  border-radius: var(--radius-xl);
+  border-left: var(--border-width-strong) solid var(--color-error);
 }
 
 .danger h2 {
