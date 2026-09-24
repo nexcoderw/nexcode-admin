@@ -79,6 +79,9 @@ const PAYMENT_FIELDS = {
     days:
         "days",
 
+    remind_on:
+        "remindOn",
+
     channel:
         "channel",
 
