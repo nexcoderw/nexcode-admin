@@ -1,7 +1,11 @@
 import {
+  FilterResetIcon,
   UserGroupIcon,
 } from "@hugeicons/core-free-icons";
 
+import {
+  ClientFormDialogTrigger,
+} from "@/components/client/ClientFormDialog/ClientFormDialog";
 import {
   Button,
 } from "@/components/ui/Button/Button";
@@ -49,35 +53,29 @@ export function ClientEmptyState({
 
         <p>
           {filtered
-            ? "Change or reset the active client filters."
-            : "Add the first client to the NEXCODE client directory."}
+            ? "No client matches this search. Try a different name, email or phone number."
+            : "Add your first client to keep their name and contact details in one place."}
         </p>
       </div>
 
-      <Button
-        href={
-          filtered
-            ? CLIENT_ROUTES.list
-            : CLIENT_ROUTES.add
-        }
-        variant={
-          filtered
-            ? "secondary"
-            : "primary"
-        }
-        leftIcon={
-          <Icon
-            icon={
-              UserGroupIcon
-            }
-            size={17}
-          />
-        }
-      >
-        {filtered
-          ? "Reset filters"
-          : "Add client"}
-      </Button>
+      {filtered ? (
+        <Button
+          href={CLIENT_ROUTES.list}
+          variant="secondary"
+          leftIcon={
+            <Icon
+              icon={
+                FilterResetIcon
+              }
+              size={17}
+            />
+          }
+        >
+          Reset filters
+        </Button>
+      ) : (
+        <ClientFormDialogTrigger mode="add" />
+      )}
     </section>
   );
 }
