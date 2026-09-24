@@ -3,16 +3,8 @@ import "server-only";
 
 const CLIENT_FIELDS = {
     name: "name",
-    company_name: "companyName",
     email: "email",
-    phone: "phone",
-    website: "website",
-    location: "location",
-    profile_image: "profileImage",
-    notes: "notes",
-    status: "status",
-    remove_profile_image:
-        "removeProfileImage",
+    phone_number: "phoneNumber",
     __all__: "__all__",
 } as const;
 
