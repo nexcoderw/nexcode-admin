@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import AddPortfolioPage from "@/app/(dashboard)/portfolios/add/page";
@@ -99,6 +100,8 @@ describe("Portfolio administration pages", () => {
   });
 
   it("renders Portfolio editing as an actual page", async () => {
+    const user = userEvent.setup();
+
     render(
       await EditPortfolioPage({
         params: Promise.resolve({
@@ -116,11 +119,16 @@ describe("Portfolio administration pages", () => {
 
     expect(screen.getByTestId("portfolio-form-edit")).toBeInTheDocument();
 
-    expect(screen.getByTestId("image-manager")).toBeInTheDocument();
+    // The workspace shows one section at a time; each tab opens its manager.
+    for (const [tab, manager] of [
+      ["Images", "image-manager"],
+      ["Documents", "document-manager"],
+      ["Repositories", "repository-manager"],
+    ]) {
+      await user.click(screen.getByRole("tab", { name: new RegExp(`^${tab}`) }));
 
-    expect(screen.getByTestId("document-manager")).toBeInTheDocument();
-
-    expect(screen.getByTestId("repository-manager")).toBeInTheDocument();
+      expect(screen.getByTestId(manager)).toBeInTheDocument();
+    }
   });
 
   it("renders details as a dedicated route", async () => {
