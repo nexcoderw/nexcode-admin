@@ -1,14 +1,8 @@
+/* Flat: the section sits on the page, no card around it. */
 .panel {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
-
-  padding: var(--space-5);
-
-  background: var(--color-surface);
-
-  border: var(--border-width) solid var(--color-border-subtle);
-  border-radius: var(--radius-xl);
+  gap: var(--space-4);
 }
 
 .panel header > span {
@@ -27,7 +21,8 @@
 }
 
 .panel header p {
-  margin-top: var(--space-2);
+  max-width: 48rem;
+  margin-top: var(--space-1);
 
   color: var(--color-text-muted);
 
@@ -35,8 +30,27 @@
   line-height: var(--line-height-relaxed);
 }
 
+/*
+ * All fields on one row on wide screens, the button closing it, so the
+ * form stays short instead of stacking every field.
+ */
 .form {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  align-items: end;
   gap: var(--space-4);
+
+  padding-top: var(--space-4);
+
+  border-top: var(--border-width) solid var(--color-border-subtle);
+}
+
+/* Messages span the row above the fields. */
+.form > [role="alert"],
+.form > [role="status"] {
+  grid-column: 1 / -1;
+}
+
+.form > button {
+  justify-self: start;
 }
