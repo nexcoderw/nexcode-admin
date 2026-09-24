@@ -38,7 +38,7 @@ export async function runPaymentMutation<
         return null;
     }
 
-    let result =
+    const result =
         await mutation(
             csrf,
         );
