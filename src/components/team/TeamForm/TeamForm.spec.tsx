@@ -36,6 +36,7 @@ const member: TeamMember = {
   imagePng: null,
   linkedin: "https://linkedin.com/in/jane",
   github: "https://github.com/jane",
+  displayOrder: 1,
   createdAt: "2026-09-20T10:00:00Z",
   updatedAt: "2026-09-20T10:00:00Z",
 };
