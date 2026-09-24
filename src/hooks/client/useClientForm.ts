@@ -1,306 +1,131 @@
 "use client";
 
-import {
-    useRouter,
-} from "next/navigation";
-import {
-    useState,
-} from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-import {
-    AUTH_ROUTES,
-} from "@/constants/routes/auth-routes";
-import {
-    CLIENT_API_ROUTES,
-    CLIENT_ROUTES,
-} from "@/constants/routes/client-routes";
-import type {
-    ClientDetail,
-    ClientStatus,
-} from "@/types/client/client";
+import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { CLIENT_API_ROUTES } from "@/constants/routes/client-routes";
+import type { Client, ClientInput } from "@/types/client/client";
+
+export type ClientFormValues = Required<ClientInput>;
+
+export type ClientFormField = keyof ClientFormValues;
 
 interface UseClientFormOptions {
-    mode: "add" | "edit";
-    client?: ClientDetail;
+  mode: "add" | "edit";
+  client?: Client;
+
+  /**
+   * Called once the client is saved, so the dialog can close.
+   */
+  onSaved: () => void;
 }
 
-export function useClientForm({
-    mode,
-    client,
-}: UseClientFormOptions) {
-    const router =
-        useRouter();
+type SaveOutcome =
+  | { kind: "saved" }
+  | { kind: "unauthenticated" }
+  | { kind: "invalid"; fields: string[] }
+  | { kind: "failed" };
 
-    const [values, setValues] =
-        useState(
-            initialValues(
-                client,
-            ),
-        );
+export function useClientForm({ mode, client, onSaved }: UseClientFormOptions) {
+  const router = useRouter();
 
-    const [profileImage, setProfileImage] =
-        useState<File | null>(
-            null,
-        );
+  const [values, setValues] = useState<ClientFormValues>(() => ({
+    name: client?.name ?? "",
+    email: client?.email ?? "",
+    phoneNumber: client?.phoneNumber ?? "",
+  }));
 
-    const [
-        removeProfileImage,
-        setRemoveProfileImage,
-    ] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [fields, setFields] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-    const [saving, setSaving] =
-        useState(false);
+  function setValue(field: ClientFormField, value: string) {
+    setValues((current) => ({ ...current, [field]: value }));
 
-    const [fields, setFields] =
-        useState<string[]>([]);
+    // Editing a field clears its error, so the message never outlives
+    // the value it was about.
+    setFields((current) => current.filter((name) => name !== field));
+  }
 
-    const [error, setError] =
-        useState<string | null>(
-            null,
-        );
-
-    const [success, setSuccess] =
-        useState(false);
-
-    function setValue(
-        key:
-            keyof typeof values,
-        value: string,
-    ) {
-        setValues(
-            (current) => ({
-                ...current,
-                [key]: value,
-            }),
-        );
+  async function submit() {
+    // The one rule worth checking before a round trip: a name is required.
+    if (!values.name.trim()) {
+      setFields(["name"]);
+      return;
     }
 
-    function selectImage(
-        file: File | null,
-    ) {
-        setProfileImage(file);
+    setSaving(true);
+    setError(null);
+    setFields([]);
 
-        if (file) {
-            setRemoveProfileImage(
-                false,
-            );
-        }
+    const outcome = await saveClient(mode, client?.id, values);
+
+    setSaving(false);
+
+    if (outcome.kind === "unauthenticated") {
+      router.replace(AUTH_ROUTES.login);
+      return;
     }
 
-    function setRemoveImage(
-        value: boolean,
-    ) {
-        setRemoveProfileImage(
-            value,
-        );
-
-        if (value) {
-            setProfileImage(null);
-        }
+    if (outcome.kind === "invalid") {
+      setFields(outcome.fields);
+      setError("Check the highlighted fields and try again.");
+      return;
     }
 
-    async function submit() {
-        setSaving(true);
-        setError(null);
-        setSuccess(false);
-        setFields([]);
-
-        try {
-            const response =
-                await fetch(
-                    mode === "add"
-                        ? CLIENT_API_ROUTES.add
-                        : CLIENT_API_ROUTES.update(
-                            client!.id,
-                        ),
-                    {
-                        method:
-                            mode === "add"
-                                ? "POST"
-                                : "PATCH",
-
-                        credentials:
-                            "same-origin",
-
-                        headers: {
-                            Accept:
-                                "application/json",
-                        },
-
-                        body:
-                            buildFormData(
-                                values,
-                                profileImage,
-                                removeProfileImage,
-                            ),
-                    },
-                );
-
-            if (
-                response.status === 401 ||
-                response.status === 403
-            ) {
-                router.replace(
-                    AUTH_ROUTES.login,
-                );
-
-                return;
-            }
-
-            const result =
-                await response.json();
-
-            if (!response.ok) {
-                setFields(
-                    Array.isArray(
-                        result.fields,
-                    )
-                        ? result.fields
-                        : [],
-                );
-
-                setError(
-                    "Check the highlighted client fields.",
-                );
-
-                return;
-            }
-
-            if (mode === "add") {
-                router.replace(
-                    CLIENT_ROUTES.detail(
-                        result.data.client.id,
-                    ),
-                );
-
-                return;
-            }
-
-            setSuccess(true);
-            router.refresh();
-        } catch {
-            setError(
-                "The client could not be saved.",
-            );
-        } finally {
-            setSaving(false);
-        }
+    if (outcome.kind === "failed") {
+      setError("The client could not be saved. Please try again shortly.");
+      return;
     }
 
-    return {
-        values,
-        profileImage,
-        removeProfileImage,
-        saving,
-        fields,
-        error,
-        success,
-        setValue,
-        selectImage,
-        setRemoveImage,
-        submit,
-    };
+    onSaved();
+    router.refresh();
+  }
+
+  return { values, setValue, submit, saving, fields, error };
 }
 
-function initialValues(
-    client?: ClientDetail,
-) {
-    return {
-        name:
-            client?.name ?? "",
-
-        companyName:
-            client?.companyName ??
-            "",
-
-        email:
-            client?.email ?? "",
-
-        phone:
-            client?.phone ?? "",
-
-        website:
-            client?.website ?? "",
-
-        location:
-            client?.location ?? "",
-
-        notes:
-            client?.notes ?? "",
-
-        status:
-            (
-                client?.status ??
-                "active"
-            ) as ClientStatus,
-    };
-}
-
-function buildFormData(
-    values:
-        ReturnType<
-            typeof initialValues
-        >,
-    profileImage: File | null,
-    removeProfileImage: boolean,
-) {
-    const data =
-        new FormData();
-
-    data.set(
-        "name",
-        values.name,
+async function saveClient(
+  mode: "add" | "edit",
+  clientId: number | undefined,
+  values: ClientFormValues,
+): Promise<SaveOutcome> {
+  try {
+    const response = await fetch(
+      mode === "add"
+        ? CLIENT_API_ROUTES.add
+        : CLIENT_API_ROUTES.update(clientId!),
+      {
+        method: mode === "add" ? "POST" : "PATCH",
+        credentials: "same-origin",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: values.name.trim(),
+          email: values.email.trim(),
+          phoneNumber: values.phoneNumber.trim(),
+        }),
+      },
     );
 
-    data.set(
-        "companyName",
-        values.companyName,
-    );
-
-    data.set(
-        "email",
-        values.email,
-    );
-
-    data.set(
-        "phone",
-        values.phone,
-    );
-
-    data.set(
-        "website",
-        values.website,
-    );
-
-    data.set(
-        "location",
-        values.location,
-    );
-
-    data.set(
-        "notes",
-        values.notes,
-    );
-
-    data.set(
-        "status",
-        values.status,
-    );
-
-    if (profileImage) {
-        data.set(
-            "profileImage",
-            profileImage,
-            profileImage.name,
-        );
+    if (response.status === 401 || response.status === 403) {
+      return { kind: "unauthenticated" };
     }
 
-    if (removeProfileImage) {
-        data.set(
-            "removeProfileImage",
-            "true",
-        );
+    if (response.status === 400) {
+      const result = await response.json().catch(() => null);
+
+      return {
+        kind: "invalid",
+        fields: Array.isArray(result?.fields) ? result.fields : [],
+      };
     }
 
-    return data;
+    return response.ok ? { kind: "saved" } : { kind: "failed" };
+  } catch {
+    return { kind: "failed" };
+  }
 }
