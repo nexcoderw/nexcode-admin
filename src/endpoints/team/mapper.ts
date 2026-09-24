@@ -15,6 +15,7 @@ export interface BackendTeamMember {
     image_png: string | null;
     linkedin: string | null;
     github: string | null;
+    display_order: number;
     created_at: string;
     updated_at: string;
 }
@@ -44,6 +45,7 @@ export function mapTeamMember(
         imagePng: value.image_png,
         linkedin: value.linkedin,
         github: value.github,
+        displayOrder: value.display_order,
         createdAt: value.created_at,
         updatedAt: value.updated_at,
     };
@@ -136,6 +138,8 @@ function isBackendTeamMember(
         isNullableString(
             member.github,
         ) &&
+        typeof member.display_order ===
+        "number" &&
         typeof member.created_at ===
         "string" &&
         typeof member.updated_at ===
