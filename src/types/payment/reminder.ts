@@ -10,7 +10,8 @@ export type PaymentReminderEvent =
 export type PaymentReminderTiming =
     | "before"
     | "on"
-    | "after";
+    | "after"
+    | "date";
 
 export type PaymentReminderChannel =
     | "in_app"
@@ -45,6 +46,12 @@ export interface PaymentReminderRule {
 
     days: number;
 
+    /**
+     * The day a "date"-timed rule fires (YYYY-MM-DD); null otherwise.
+     */
+    remindOn:
+        string | null;
+
     channel:
         PaymentReminderChannel;
 
@@ -65,6 +72,8 @@ export interface PaymentReminderRuleInput {
         PaymentReminderTiming;
 
     days?: number;
+
+    remindOn?: string;
 
     channel?:
         PaymentReminderChannel;
