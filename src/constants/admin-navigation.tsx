@@ -56,7 +56,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
     ],
   },
   {
-    label: 'Management',
+    label: 'Portfolios',
     icon: (
       <Icon
         icon={Briefcase01Icon}
@@ -67,6 +67,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
       {
         label: 'Portfolios',
         href: PORTFOLIO_ROUTES.list,
+        exact: true,
         icon: (
           <Icon
             icon={Briefcase01Icon}
@@ -74,19 +75,43 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
           />
         ),
       },
+    ],
+  },
+  {
+    label: 'Clients',
+    icon: (
+      <Icon
+        icon={UserGroupIcon}
+        size={16}
+      />
+    ),
+    items: [
       {
-        label: 'Clients',
+        label: 'Portfolios',
         href: CLIENT_ROUTES.list,
+        exact: true,
         icon: (
           <Icon
-            icon={UserGroupIcon}
+            icon={Briefcase01Icon}
             size={18}
           />
         ),
       },
+    ],
+  },
+  {
+    label: 'Team',
+    icon: (
+      <Icon
+        icon={UserGroupIcon}
+        size={16}
+      />
+    ),
+    items: [
       {
         label: 'Team',
         href: TEAM_ROUTES.list,
+        exact: true,
         icon: (
           <Icon
             icon={UserGroupIcon}
@@ -97,40 +122,21 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
     ],
   },
   {
-    label: 'Content',
+    label: 'Payments',
     icon: (
       <Icon
-        icon={File01Icon}
+        icon={CreditCardIcon}
         size={16}
       />
     ),
     items: [
       {
-        label: 'Blogs',
-        href: ADMIN_ROUTES.blogs,
+        label: 'Payments',
+        href: ADMIN_ROUTES.payments,
+        exact: true,
         icon: (
           <Icon
-            icon={File01Icon}
-            size={18}
-          />
-        ),
-      },
-      {
-        label: 'Trainings',
-        href: ADMIN_ROUTES.trainings,
-        icon: (
-          <Icon
-            icon={BookOpen01Icon}
-            size={18}
-          />
-        ),
-      },
-      {
-        label: 'Testimonials',
-        href: ADMIN_ROUTES.testimonials,
-        icon: (
-          <Icon
-            icon={StarIcon}
+            icon={CreditCardIcon}
             size={18}
           />
         ),
@@ -157,42 +163,31 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
         ),
       },
       {
-        label: 'Payments',
-        href: ADMIN_ROUTES.payments,
+        label: 'Blogs',
+        href: ADMIN_ROUTES.blogs,
         icon: (
           <Icon
-            icon={CreditCardIcon}
+            icon={File01Icon}
             size={18}
           />
         ),
       },
       {
-        label: 'Payment statuses',
-        href: ADMIN_ROUTES.paymentStatuses,
+        label: 'Trainings',
+        href: ADMIN_ROUTES.trainings,
         icon: (
           <Icon
-            icon={SecurityCheckIcon}
+            icon={BookOpen01Icon}
             size={18}
           />
         ),
       },
-    ],
-  },
-  {
-    label: 'Settings',
-    icon: (
-      <Icon
-        icon={Settings01Icon}
-        size={16}
-      />
-    ),
-    items: [
       {
-        label: 'Settings',
-        href: ADMIN_ROUTES.settings,
+        label: 'Testimonials',
+        href: ADMIN_ROUTES.testimonials,
         icon: (
           <Icon
-            icon={Settings01Icon}
+            icon={StarIcon}
             size={18}
           />
         ),
