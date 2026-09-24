@@ -21,7 +21,16 @@ export type CurrentAdminResult =
         admin: AdminIdentity;
     }
     | {
+        /** No session at all: the visitor has not signed in. */
         status: "unauthenticated";
+    }
+    | {
+        /** A session existed, but the backend no longer accepts it. */
+        status: "expired";
+    }
+    | {
+        /** Signed in, but not an administrator of this portal. */
+        status: "forbidden";
     }
     | {
         status: "unavailable";
@@ -59,12 +68,19 @@ export async function getCurrentAdmin():
             forwarded,
         );
 
-        if (
-            result.status === 401 ||
-            result.status === 403
-        ) {
+        // A 401 and a 403 mean different things and lead to different
+        // pages: an ended session can be fixed by signing in again, but
+        // a refused administrator cannot, so sending them to the login
+        // form would only loop them back here.
+        if (result.status === 401) {
             return {
-                status: "unauthenticated",
+                status: "expired",
+            };
+        }
+
+        if (result.status === 403) {
+            return {
+                status: "forbidden",
             };
         }
 
