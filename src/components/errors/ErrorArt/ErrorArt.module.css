@@ -77,6 +77,174 @@
   animation: flicker 1.8s ease-in-out infinite;
 }
 
+/* 404 — a map pin over a sweeping search ring. */
+.ring,
+.ringInner {
+  fill: none;
+  stroke: var(--color-border-strong);
+  stroke-width: 2;
+}
+
+.ring {
+  stroke-dasharray: 6 8;
+}
+
+.ringInner {
+  opacity: 0.5;
+}
+
+/* Rotates about the ring's centre, in the drawing's own coordinates. */
+.sweep {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 4;
+  stroke-linecap: round;
+
+  transform-origin: 160px 150px;
+
+  animation: sweep 2.8s linear infinite;
+}
+
+.pinShadow {
+  fill: var(--color-surface-tertiary);
+}
+
+.pin {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+
+  animation: hover 2.4s ease-in-out infinite;
+}
+
+.pinBody {
+  fill: var(--color-primary);
+}
+
+.pinHole {
+  fill: var(--color-surface);
+}
+
+/* 401 — a key that approaches a lock and is turned away. */
+.lockShackle {
+  fill: none;
+  stroke: var(--color-border-strong);
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+.keyhole {
+  fill: var(--color-surface);
+}
+
+.lock {
+  transform-box: fill-box;
+  transform-origin: center;
+
+  animation: refuse 3.2s ease-in-out infinite;
+}
+
+.key {
+  transform-box: fill-box;
+  transform-origin: right center;
+
+  animation: approach 3.2s ease-in-out infinite;
+}
+
+.keyBow,
+.keyShaft {
+  fill: var(--color-primary);
+}
+
+.keyBowHole {
+  fill: var(--color-surface);
+}
+
+/* 403 — a shield with the bar drawn across it as the screen appears. */
+.shieldInner {
+  fill: var(--color-surface-secondary);
+}
+
+/* Drawn by scaling from its left end: a transform, never a stroke change. */
+.bar {
+  stroke: var(--color-error);
+  stroke-width: 12;
+  stroke-linecap: round;
+
+  transform-box: fill-box;
+  transform-origin: left center;
+
+  animation: draw 700ms cubic-bezier(0.2, 0.8, 0.2, 1) 250ms both;
+}
+
+@keyframes sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hover {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* The key reaches the lock at 40%, is refused, and backs away. */
+@keyframes approach {
+  0%,
+  15% {
+    transform: translateX(0) rotate(0);
+  }
+
+  40% {
+    transform: translateX(30px) rotate(0);
+  }
+
+  52% {
+    transform: translateX(18px) rotate(-10deg);
+  }
+
+  75%,
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@keyframes refuse {
+  0%,
+  38%,
+  56%,
+  100% {
+    transform: translateX(0);
+  }
+
+  42% {
+    transform: translateX(4px);
+  }
+
+  46% {
+    transform: translateX(-4px);
+  }
+
+  50% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes draw {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
 @keyframes pulse {
   0%,
   100% {
@@ -100,11 +268,21 @@
   }
 }
 
+/*
+ * Motion is decoration: each screen states its problem in words. The one
+ * exception is the 403 bar, which is part of the drawing — with its
+ * animation removed it simply rests at full length.
+ */
 @media (prefers-reduced-motion: reduce) {
   .wave,
   .waveMid,
   .waveFar,
-  .spark {
+  .spark,
+  .sweep,
+  .pin,
+  .lock,
+  .key,
+  .bar {
     animation: none;
   }
 }
