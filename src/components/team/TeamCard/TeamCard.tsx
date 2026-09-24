@@ -55,7 +55,7 @@ export function TeamCard({ member }: TeamCardProps) {
           <header className={styles.header}>
             <div className={styles.identity}>
               <span className={styles.eyebrow}>
-                Team member · No. {member.displayOrder}
+                Team member
               </span>
 
               <h2 className={styles.name}>{name}</h2>
