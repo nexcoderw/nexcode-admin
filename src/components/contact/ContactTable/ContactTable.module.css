@@ -1,0 +1,237 @@
+.frame {
+  overflow: hidden;
+
+  background: var(--color-surface);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+}
+
+.scroller {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 68rem;
+
+  border-collapse: collapse;
+
+  font-size: var(--font-size-sm);
+}
+
+.srOnly {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.table th {
+  padding: var(--space-3) var(--space-4);
+
+  color: var(--color-text-muted);
+  background: var(--color-surface-secondary);
+
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--space-4);
+
+  color: var(--color-text-secondary);
+
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table tbody tr {
+  transition: background-color var(--transition-fast);
+}
+
+/*
+ * Unanswered messages carry an accent at the row's start; the "New"
+ * badge says the same in words, so colour is never the only signal.
+ */
+.unanswered td:first-child {
+  box-shadow: inset var(--border-width-strong) 0 0 var(--color-primary);
+}
+
+.unanswered .sender strong {
+  color: var(--color-text-primary);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+
+  min-width: 0;
+}
+
+.stack strong,
+.stack a,
+.stack span,
+.stack small {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stack strong {
+  color: var(--color-text-secondary);
+
+  font-weight: var(--font-weight-semibold);
+}
+
+.stack small {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+.sender {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  max-width: 15rem;
+}
+
+.sender a {
+  width: fit-content;
+  max-width: 100%;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+
+  text-decoration: none;
+}
+
+.sender a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.monogram {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+
+  width: var(--avatar-size-md);
+  height: var(--avatar-size-md);
+
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+
+  border: var(--border-width) solid var(--color-primary-border);
+  border-radius: var(--radius-round);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.message {
+  max-width: 22rem;
+}
+
+/* Two lines of the message, so rows stay a steady height. */
+.message .preview {
+  display: -webkit-box;
+
+  color: var(--color-text-muted);
+
+  line-height: var(--line-height-snug);
+  white-space: normal;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.device {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  max-width: 13rem;
+}
+
+.deviceIcon {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+
+  width: 2.25rem;
+  height: 2.25rem;
+
+  color: var(--color-text-secondary);
+  background: var(--color-surface-tertiary);
+
+  border-radius: var(--radius-md);
+}
+
+.ip {
+  display: inline-block;
+
+  padding: var(--space-1) var(--space-2);
+
+  color: var(--color-text-secondary);
+  background: var(--color-surface-tertiary);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+
+  font-family: var(--font-family-monospace);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.missing {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+time.stack {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.actionHead,
+.action {
+  width: 1%;
+
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (hover: hover) {
+  .table tbody tr:hover {
+    background: var(--color-surface-hover);
+  }
+
+  .sender a:hover {
+    color: var(--color-primary);
+  }
+}
