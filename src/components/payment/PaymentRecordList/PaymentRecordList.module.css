@@ -1,17 +1,13 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 .header {
   display: flex;
   align-items: end;
   justify-content: space-between;
-
-  padding-bottom: var(--space-3);
-
-  border-bottom: var(--border-width) solid var(--color-border-subtle);
 }
 
 .header span {
@@ -29,25 +25,31 @@
   font-size: var(--font-size-lg);
 }
 
+/* Flat rows divided by thin rules, one payment per row. */
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
 }
 
 .record {
-  padding: var(--space-4);
+  display: grid;
+  grid-template-columns:
+    minmax(13rem, 1fr)
+    minmax(0, 1.6fr)
+    minmax(0, 1.4fr);
+  align-items: center;
+  gap: var(--space-2) var(--space-6);
 
-  background: var(--color-surface);
+  padding-block: var(--space-3);
 
-  border: var(--border-width) solid var(--color-border-subtle);
-  border-radius: var(--radius-lg);
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
 }
 
 .primary {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 .primary > div {
@@ -56,6 +58,8 @@
 }
 
 .primary strong {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
   font-variant-numeric: tabular-nums;
 }
 
@@ -69,34 +73,39 @@
 .meta {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
 
-  margin: var(--space-4) 0 0;
+  margin: 0;
 }
 
 .meta div {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+
+  min-width: 0;
 }
 
 .meta dd {
+  overflow: hidden;
+
   margin: 0;
 
   color: var(--color-text-secondary);
 
   font-size: var(--font-size-sm);
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  white-space: nowrap;
 }
 
+/* Which installments the payment covered, as a compact list. */
 .allocations {
   display: flex;
   flex-direction: column;
+  gap: 0.125rem;
 
-  margin: var(--space-4) 0 0;
-  padding: var(--space-3);
-
-  background: var(--color-surface-secondary);
-
-  border-radius: var(--radius-md);
+  margin: 0;
+  padding: 0;
 
   list-style: none;
 }
@@ -105,12 +114,6 @@
   display: flex;
   justify-content: space-between;
   gap: var(--space-3);
-
-  padding: var(--space-2);
-}
-
-.allocations li + li {
-  border-top: var(--border-width) dashed var(--color-border-subtle);
 }
 
 .allocations span,
@@ -118,21 +121,39 @@
   font-size: var(--font-size-xs);
 }
 
+.allocations span {
+  color: var(--color-text-muted);
+}
+
+.allocations strong {
+  font-variant-numeric: tabular-nums;
+}
+
 .empty {
-  padding: var(--space-6);
+  padding: var(--space-8) var(--space-4);
 
   color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
   text-align: center;
+}
 
-  background: var(--color-surface);
+@media (max-width: 64rem) {
+  .record {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  }
 
-  border: var(--border-width) dashed var(--color-border);
-  border-radius: var(--radius-lg);
+  .allocations {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 38rem) {
-  .meta {
+  .record {
     grid-template-columns: 1fr;
-    gap: var(--space-3);
+  }
+
+  .meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
