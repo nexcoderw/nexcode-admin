@@ -1,6 +1,5 @@
 import {
     CLIENT_ORDERINGS,
-    CLIENT_STATUSES,
 } from "@/constants/client/client-options";
 import {
     CLIENT_ROUTES,
@@ -8,15 +7,10 @@ import {
 import type {
     ClientListQuery,
     ClientOrdering,
-    ClientStatus,
 } from "@/types/client/client";
 
 export interface ResolvedClientListQuery {
     search: string;
-
-    status:
-    | ClientStatus
-    | "";
 
     ordering:
     ClientOrdering;
@@ -36,9 +30,6 @@ type PageSearchParams =
 export function resolveClientListQuery(
     params: PageSearchParams,
 ): ResolvedClientListQuery {
-    const status =
-        value(params.status);
-
     const ordering =
         value(params.ordering);
 
@@ -47,14 +38,6 @@ export function resolveClientListQuery(
             value(params.search)
                 .trim()
                 .slice(0, 100),
-
-        status:
-            isChoice(
-                status,
-                CLIENT_STATUSES,
-            )
-                ? status
-                : "",
 
         ordering:
             isChoice(
@@ -82,10 +65,6 @@ export function toClientEndpointQuery(
             query.search ||
             undefined,
 
-        status:
-            query.status ||
-            undefined,
-
         ordering:
             query.ordering,
 
@@ -108,12 +87,6 @@ export function buildClientListHref(
         params,
         "search",
         query.search,
-    );
-
-    set(
-        params,
-        "status",
-        query.status,
     );
 
     if (
