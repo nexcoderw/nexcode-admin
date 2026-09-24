@@ -1,0 +1,85 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.actions > div {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(18rem, 0.75fr);
+  align-items: start;
+  gap: var(--space-6);
+}
+
+.main,
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.sidebar {
+  position: sticky;
+  top: var(--space-6);
+}
+
+.danger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+
+  padding: var(--space-5);
+
+  background: var(--color-error-subtle);
+
+  border: var(--border-width) solid var(--color-error-border);
+  border-radius: var(--radius-xl);
+}
+
+.danger h2 {
+  font-size: var(--font-size-md);
+}
+
+.danger p {
+  margin-top: var(--space-1);
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 68rem) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 40rem) {
+  .actions,
+  .actions > div,
+  .danger {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
