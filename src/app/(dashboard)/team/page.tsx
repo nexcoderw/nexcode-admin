@@ -13,6 +13,7 @@ import { ERROR_ROUTES } from "@/constants/routes/error-routes";
 import { listTeam } from "@/endpoints/team/list-team";
 import { ADMIN_SESSION_COOKIE_NAME } from "@/utils/auth/session";
 import {
+  DEFAULT_TEAM_ORDERING,
   parseTeamListQuery,
   toTeamEndpointQuery,
 } from "@/utils/team/team-list-query";
@@ -64,7 +65,8 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
 
   const data = result?.ok ? result.data : null;
 
-  const filtered = Boolean(query.search) || query.ordering !== "-created_at";
+  const filtered =
+    Boolean(query.search) || query.ordering !== DEFAULT_TEAM_ORDERING;
 
   return (
     <div className={styles.page}>
