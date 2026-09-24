@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { ADMIN_ROUTES } from "@/constants/routes/admin-routes";
 import { CLIENT_ROUTES } from "@/constants/routes/client-routes";
+import { CONTACT_ROUTES } from "@/constants/routes/contact-routes";
 import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 
 import styles from "./page.module.css";
@@ -85,7 +86,7 @@ const managementLinks = [
     label: "Contacts",
     description:
       "Review messages received from the website.",
-    href: ADMIN_ROUTES.contacts,
+    href: CONTACT_ROUTES.list,
   },
 ];
 
