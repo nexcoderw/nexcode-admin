@@ -4,13 +4,16 @@ import type {
   TeamOrdering,
 } from "@/types/team/team";
 
-const DEFAULT_ORDERING: TeamOrdering =
-  "-created_at";
+/** The order the public site shows, so the admin list matches it. */
+export const DEFAULT_TEAM_ORDERING: TeamOrdering =
+  "display_order";
 
 const DEFAULT_PAGE_SIZE = 20;
 
 const ORDERINGS =
   new Set<TeamOrdering>([
+    "display_order",
+    "-display_order",
     "name",
     "-name",
     "position",
@@ -103,7 +106,7 @@ export function buildTeamListHref(
 
   if (
     query.ordering !==
-    DEFAULT_ORDERING
+    DEFAULT_TEAM_ORDERING
   ) {
     params.set(
       "ordering",
@@ -130,7 +133,7 @@ function resolveOrdering(
   value: string | undefined,
 ): TeamOrdering {
   if (!value) {
-    return DEFAULT_ORDERING;
+    return DEFAULT_TEAM_ORDERING;
   }
 
   if (
@@ -141,7 +144,7 @@ function resolveOrdering(
     return value as TeamOrdering;
   }
 
-  return DEFAULT_ORDERING;
+  return DEFAULT_TEAM_ORDERING;
 }
 
 function firstValue(
