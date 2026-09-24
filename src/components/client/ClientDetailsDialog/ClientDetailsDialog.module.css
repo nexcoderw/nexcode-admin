@@ -1,0 +1,186 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+
+  padding-bottom: var(--space-5);
+
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+}
+
+.monogram {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+
+  width: 3.5rem;
+  height: 3.5rem;
+
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+
+  border: var(--border-width) solid var(--color-primary-border);
+  border-radius: var(--radius-round);
+
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.identityText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+
+  min-width: 0;
+}
+
+.identityText strong {
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.identityText small {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  margin: 0;
+}
+
+/* One row per contact method: what it is, the value, and a copy action. */
+.contact {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  padding: var(--space-3) var(--space-4);
+
+  background: var(--color-surface-secondary);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.contactIcon {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+
+  width: 2.25rem;
+  height: 2.25rem;
+
+  color: var(--color-text-secondary);
+  background: var(--color-surface-tertiary);
+
+  border-radius: var(--radius-md);
+}
+
+.contactText {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.contactText dt {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.contactText dd {
+  margin: 0.125rem 0 0;
+
+  overflow: hidden;
+
+  font-size: var(--font-size-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contactText a {
+  color: var(--color-text-primary);
+
+  transition: color var(--transition-fast);
+}
+
+.contactText a:hover {
+  color: var(--color-primary);
+}
+
+.contactText a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+
+  border-radius: var(--radius-sm);
+}
+
+.missing {
+  color: var(--color-text-muted);
+
+  font-style: italic;
+}
+
+.meta {
+  margin: 0;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+/* Delete sits apart on the left; the confirm pair stays on the right. */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  width: 100%;
+}
+
+.footerEnd {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+@media (max-width: 30rem) {
+  .footer,
+  .footerEnd {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .footer > *,
+  .footerEnd > * {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contactText a {
+    transition: none;
+  }
+}
