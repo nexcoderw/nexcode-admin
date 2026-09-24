@@ -1,0 +1,62 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* A read-only "To" line, styled like an email client's header. */
+.recipient {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  min-width: 0;
+  padding: var(--space-3) var(--space-4);
+
+  color: var(--color-text-muted);
+  background: var(--color-surface-secondary);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+
+  font-size: var(--font-size-sm);
+}
+
+.recipientLabel {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+
+  text-transform: uppercase;
+}
+
+.recipientValue {
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+
+  padding-top: var(--space-4);
+
+  border-top: var(--border-width) solid var(--color-border-subtle);
+}
+
+@media (max-width: 30rem) {
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .actions > * {
+    width: 100%;
+  }
+}
