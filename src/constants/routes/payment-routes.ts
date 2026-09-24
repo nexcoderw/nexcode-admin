@@ -1,5 +1,17 @@
 export const PAYMENT_ROUTES = {
-    list: "/payments",
+  list: "/payments",
+
+  add: "/payments/add",
+
+  detail: (
+    agreementId: number,
+  ) =>
+    `/payments/detail/${agreementId}`,
+
+  edit: (
+    agreementId: number,
+  ) =>
+    `/payments/edit/${agreementId}`,
 } as const;
 
 export const PAYMENT_API_ROUTES = {
