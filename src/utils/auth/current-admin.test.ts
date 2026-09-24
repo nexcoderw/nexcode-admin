@@ -140,7 +140,7 @@ describe(
         );
 
         it(
-            "treats a rejected backend session as unauthenticated",
+            "treats a rejected backend session as expired",
             async () => {
                 mockedCookies.mockResolvedValue(
                     {
@@ -165,7 +165,38 @@ describe(
                     getCurrentAdmin(),
                 ).resolves.toEqual({
                     status:
-                        "unauthenticated",
+                        "expired",
+                });
+            },
+        );
+
+        it(
+            "treats a signed-in non-administrator as forbidden",
+            async () => {
+                mockedCookies.mockResolvedValue(
+                    {
+                        get: vi.fn(
+                            () => ({
+                                value:
+                                    "django-session",
+                            }),
+                        ),
+                    } as never,
+                );
+
+                mockedGetAdminMe.mockResolvedValue(
+                    {
+                        ok: false,
+                        status: 403,
+                        admin: null,
+                    },
+                );
+
+                await expect(
+                    getCurrentAdmin(),
+                ).resolves.toEqual({
+                    status:
+                        "forbidden",
                 });
             },
         );
