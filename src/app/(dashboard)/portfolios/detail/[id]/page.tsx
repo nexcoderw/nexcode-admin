@@ -87,6 +87,7 @@ export default async function PortfolioDetailsPage({
             href={PORTFOLIO_ROUTES.edit(portfolio.id)}
             variant="secondary"
             size="sm"
+            aria-label="Edit portfolio"
             leftIcon={<Icon icon={File01Icon} size={16} />}
           >
             Edit
