@@ -11,6 +11,7 @@ import { PortfolioTeamSection } from "@/components/portfolio/PortfolioTeamSectio
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { ERROR_ROUTES } from "@/constants/routes/error-routes";
 import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import { getPortfolio } from "@/endpoints/portfolio/get-portfolio";
 import { parsePortfolioResourceId } from "@/utils/portfolio/portfolio-id";
@@ -55,8 +56,12 @@ export default async function PortfolioDetailsPage({
     notFound();
   }
 
-  if (result.status === 401 || result.status === 403) {
-    redirect(AUTH_ROUTES.login);
+  if (result.status === 401) {
+    redirect(ERROR_ROUTES.unauthorized);
+  }
+
+  if (result.status === 403) {
+    redirect(ERROR_ROUTES.forbidden);
   }
 
   if (!result.ok || !result.portfolio) {
