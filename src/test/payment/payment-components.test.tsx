@@ -9,8 +9,8 @@ import {
 } from "vitest";
 
 import {
-  PaymentAgreementCard,
-} from "@/components/payment/PaymentAgreementCard/PaymentAgreementCard";
+  PaymentAgreementList,
+} from "@/components/payment/PaymentAgreementList/PaymentAgreementList";
 import {
   PaymentSummaryCards,
 } from "@/components/payment/PaymentSummaryCards/PaymentSummaryCards";
@@ -72,10 +72,25 @@ describe(
       "renders agreement identity and exact value",
       () => {
         render(
-          <PaymentAgreementCard
-            agreement={
-              agreement
-            }
+          <PaymentAgreementList
+            data={{
+              items: [agreement],
+              pagination: {
+                page: 1,
+                pageSize: 12,
+                totalItems: 1,
+                totalPages: 1,
+                hasNext: false,
+                hasPrevious: false,
+              },
+            }}
+            query={{
+              search: "",
+              ordering: "-created_at",
+              page: 1,
+              pageSize: 12,
+            }}
+            filtered={false}
           />,
         );
 
