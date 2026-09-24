@@ -8,6 +8,7 @@ import { Alert } from "@/components/ui/Alert/Alert";
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { AUTH_ROUTES } from "@/constants/routes/auth-routes";
+import { ERROR_ROUTES } from "@/constants/routes/error-routes";
 import { PORTFOLIO_ROUTES } from "@/constants/routes/portfolio-routes";
 import { getPortfolio } from "@/endpoints/portfolio/get-portfolio";
 import { parsePortfolioResourceId } from "@/utils/portfolio/portfolio-id";
@@ -60,8 +61,12 @@ export default async function EditPortfolioPage({
     notFound();
   }
 
-  if (portfolioResult.status === 401 || portfolioResult.status === 403) {
-    redirect(AUTH_ROUTES.login);
+  if (portfolioResult.status === 401) {
+    redirect(ERROR_ROUTES.unauthorized);
+  }
+
+  if (portfolioResult.status === 403) {
+    redirect(ERROR_ROUTES.forbidden);
   }
 
   if (!portfolioResult.ok || !portfolioResult.portfolio) {
