@@ -1,6 +1,7 @@
 import { AUTH_MESSAGES } from "@/constants/messages/auth-messages";
 import { CLIENT_MESSAGES } from "@/constants/messages/client-messages";
 import { COMMON_MESSAGES } from "@/constants/messages/common-messages";
+import { CONTACT_MESSAGES } from "@/constants/messages/contact-messages";
 import { PORTFOLIO_MESSAGES } from "@/constants/messages/portfolio-messages";
 import { TEAM_MESSAGES } from "@/constants/messages/team-messages";
 
@@ -20,6 +21,7 @@ export const MESSAGES = {
     ...TEAM_MESSAGES,
     ...PORTFOLIO_MESSAGES,
     ...CLIENT_MESSAGES,
+    ...CONTACT_MESSAGES,
 } as const;
 
 export type MessageKey =
