@@ -16,6 +16,7 @@ import { Icon } from '../components/ui/Icon/Icon';
 
 import { ADMIN_ROUTES } from '@/constants/routes/admin-routes';
 import { CLIENT_ROUTES } from '@/constants/routes/client-routes';
+import { CONTACT_ROUTES } from '@/constants/routes/contact-routes';
 import { PORTFOLIO_ROUTES } from '@/constants/routes/portfolio-routes';
 import { TEAM_ROUTES } from '@/constants/routes/team-routes';
 
@@ -154,7 +155,7 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
     items: [
       {
         label: 'Contacts',
-        href: ADMIN_ROUTES.contacts,
+        href: CONTACT_ROUTES.list,
         icon: (
           <Icon
             icon={Mail01Icon}
