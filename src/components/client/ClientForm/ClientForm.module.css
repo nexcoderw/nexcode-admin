@@ -1,0 +1,125 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+
+  width: 100%;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+
+  padding: var(--space-6);
+
+  background: var(--color-surface);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+}
+
+.sectionHeader {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-4);
+
+  padding-bottom: var(--space-4);
+
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+}
+
+.sectionHeader div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.sectionHeader h2 {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-tight);
+}
+
+.sectionHeader p {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.index {
+  color: var(--color-primary);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.sectionBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(16rem, 1fr)
+    );
+
+  gap: var(--space-4);
+}
+
+.actions {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-raised);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+
+  padding: var(--space-4) var(--space-5);
+
+  background: var(--color-surface-elevated);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+}
+
+.actionsHint {
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+}
+
+.actionsButtons {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--space-3);
+}
+
+@media (max-width: 42rem) {
+  .section {
+    padding: var(--space-4);
+  }
+
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+
+    padding: var(--space-4);
+  }
+
+  .actionsHint {
+    order: 2;
+  }
+
+  .actionsButtons > * {
+    flex: 1;
+  }
+}
