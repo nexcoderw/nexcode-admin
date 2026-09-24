@@ -7,6 +7,7 @@ import {
 } from "@/constants/payment/payment-query";
 import {
     asRecord,
+    isMoney,
     isNullableString,
     isNumber,
     isOneOf,
@@ -48,7 +49,7 @@ export function mapPaymentAgreement(
             item.currency,
             PAYMENT_CURRENCIES,
         ) ||
-        !isString(
+        !isMoney(
             item.total_amount,
         ) ||
         !isString(
