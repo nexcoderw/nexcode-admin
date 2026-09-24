@@ -1,0 +1,47 @@
+/*
+ * Flat sections: no cards, a thin rule between them. The name sits on
+ * the left and the fields fill the right, several to a row.
+ */
+.section {
+  display: grid;
+  grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+  gap: var(--space-8);
+
+  padding-block: var(--space-6);
+
+  border-top: var(--border-width) solid var(--color-border-subtle);
+}
+
+.sectionText h2 {
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.sectionText p {
+  margin-top: var(--space-1);
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  align-items: start;
+  gap: var(--space-4) var(--space-5);
+}
+
+.wideFields {
+  display: grid;
+}
+
+@media (max-width: 52rem) {
+  .section {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}
