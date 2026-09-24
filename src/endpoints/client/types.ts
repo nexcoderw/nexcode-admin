@@ -1,7 +1,7 @@
 import "server-only";
 
 import type {
-    ClientDetail,
+    Client,
     ClientListData,
 } from "@/types/client/client";
 
@@ -15,13 +15,13 @@ export interface ClientListResult {
 export interface ClientDetailResult {
     ok: boolean;
     status: number;
-    client: ClientDetail | null;
+    client: Client | null;
 }
 
 export interface ClientMutationResult {
     ok: boolean;
     status: number;
-    client: ClientDetail | null;
+    client: Client | null;
     fields: string[];
 }
 
