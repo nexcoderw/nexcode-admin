@@ -3,7 +3,6 @@ import {
   Calendar03Icon,
   Invoice01Icon,
   Notification03Icon,
-  Settings02Icon,
 } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
@@ -21,7 +20,6 @@ const TAB_ICONS: Record<PaymentDetailTab, typeof Calendar03Icon> = {
   payments: Invoice01Icon,
   reminders: AlarmClockIcon,
   notifications: Notification03Icon,
-  settings: Settings02Icon,
 };
 
 interface PaymentDetailTabsProps {
