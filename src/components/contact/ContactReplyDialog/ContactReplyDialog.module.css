@@ -1,0 +1,157 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* The sender's message, set apart from the reply by the brand accent. */
+.original {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  padding: var(--space-5);
+
+  background: var(--color-surface-secondary);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-left: var(--border-width-strong) solid var(--color-primary);
+  border-radius: var(--radius-lg);
+}
+
+.sender {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  min-width: 0;
+}
+
+.monogram {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+
+  width: var(--avatar-size-md);
+  height: var(--avatar-size-md);
+
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+
+  border: var(--border-width) solid var(--color-primary-border);
+  border-radius: var(--radius-round);
+
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.senderText {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+.senderText strong,
+.senderText a {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.senderText strong {
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.senderText a {
+  width: fit-content;
+  max-width: 100%;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
+
+  text-decoration: none;
+}
+
+.senderText a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.received {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.received small {
+  color: var(--color-text-muted);
+}
+
+.subject {
+  color: var(--color-text-primary);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+/* Long messages scroll inside the card, keeping the reply form in reach. */
+.message {
+  max-height: 12rem;
+  overflow-y: auto;
+
+  color: var(--color-text-secondary);
+
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+
+  padding-top: var(--space-3);
+
+  border-top: var(--border-width) solid var(--color-border-subtle);
+}
+
+.ip {
+  font-family: var(--font-family-monospace);
+}
+
+@media (max-width: 30rem) {
+  .sender {
+    flex-wrap: wrap;
+  }
+
+  .received {
+    flex-direction: row;
+    gap: var(--space-2);
+
+    width: 100%;
+  }
+}
+
+@media (hover: hover) {
+  .senderText a:hover {
+    color: var(--color-primary);
+  }
+}
