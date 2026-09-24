@@ -5,6 +5,7 @@ const TEXT_FIELDS = [
     "position",
     "linkedin",
     "github",
+    "display_order",
     "remove_image",
     "remove_image_png",
 ] as const;
