@@ -367,6 +367,31 @@
   --content-width-sm: 30rem;
   --content-width-md: 42rem;
   --content-width-lg: 64rem;
+
+  /* =========================================================
+
+* Charts
+*
+* Series colours are used in this fixed order, never cycled. They
+* were validated against --color-surface (#1e1d1e) for lightness,
+* chroma, colour-blind separation and contrast. The lime brand
+* colour is too light to sit among them, so it is used only as the
+* single accent of one-series charts, never as a series slot.
+* ======================================================= */
+
+  --chart-series-1: #3987e5;
+  --chart-series-2: #d95926;
+  --chart-series-3: #199e70;
+  --chart-series-4: #c98500;
+
+  --chart-accent: var(--color-primary);
+  --chart-accent-wash: rgba(208, 255, 113, 0.1);
+
+  /* Context marks (targets, past periods) that recede behind data. */
+  --chart-context: #3a3937;
+
+  --chart-grid: #2c2c2a;
+  --chart-baseline: #383835;
 }
 
 /* =========================================================
