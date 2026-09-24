@@ -2,124 +2,97 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
-
-  width: 100%;
 }
 
-.section {
+/* Live preview of the client's identity, updated as the name is typed. */
+.preview {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-
-  padding: var(--space-6);
-
-  background: var(--color-surface);
-
-  border: var(--border-width) solid var(--color-border-subtle);
-  border-radius: var(--radius-xl);
-}
-
-.sectionHeader {
-  display: grid;
-  grid-template-columns: auto 1fr;
+  align-items: center;
   gap: var(--space-4);
 
-  padding-bottom: var(--space-4);
+  padding: var(--space-4);
 
-  border-bottom: var(--border-width) solid var(--color-border-subtle);
+  background: var(--color-surface-secondary);
+
+  border: var(--border-width) solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
 }
 
-.sectionHeader div {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
+.monogram {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
 
-.sectionHeader h2 {
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-tight);
-}
+  width: 3rem;
+  height: 3rem;
 
-.sectionHeader p {
-  color: var(--color-text-muted);
-
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-relaxed);
-}
-
-.index {
   color: var(--color-primary);
+  background: var(--color-primary-subtle);
 
-  font-size: var(--font-size-xs);
+  border: var(--border-width) solid var(--color-primary-border);
+  border-radius: var(--radius-round);
+
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
-
   letter-spacing: var(--letter-spacing-wide);
 }
 
-.sectionBody {
+.previewText {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: 0.125rem;
+
+  min-width: 0;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(16rem, 1fr)
-    );
+.previewText strong,
+.previewText small {
+  overflow: hidden;
 
-  gap: var(--space-4);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.actions {
-  position: sticky;
-  bottom: 0;
-  z-index: var(--z-raised);
+.previewText strong {
+  color: var(--color-text-primary);
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-
-  padding: var(--space-4) var(--space-5);
-
-  background: var(--color-surface-elevated);
-
-  border: var(--border-width) solid var(--color-border-subtle);
-  border-radius: var(--radius-xl);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
 }
 
-.actionsHint {
+.previewText small {
   color: var(--color-text-muted);
 
   font-size: var(--font-size-xs);
 }
 
-.actionsButtons {
-  display: flex;
-  flex: 0 0 auto;
-  gap: var(--space-3);
+/* Name takes the full width; the two contact fields share a row. */
+.fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--space-4);
 }
 
-@media (max-width: 42rem) {
-  .section {
-    padding: var(--space-4);
-  }
+.fields > :first-child {
+  grid-column: 1 / -1;
+}
 
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+
+  padding-top: var(--space-4);
+
+  border-top: var(--border-width) solid var(--color-border-subtle);
+}
+
+@media (max-width: 30rem) {
   .actions {
-    align-items: stretch;
-    flex-direction: column;
-
-    padding: var(--space-4);
+    flex-direction: column-reverse;
   }
 
-  .actionsHint {
-    order: 2;
-  }
-
-  .actionsButtons > * {
-    flex: 1;
+  .actions > * {
+    width: 100%;
   }
 }
