@@ -1,0 +1,18 @@
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+@media print {
+  .actions {
+    display: none;
+  }
+}
+
+@media (max-width: 32rem) {
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
