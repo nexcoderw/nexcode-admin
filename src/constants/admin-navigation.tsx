@@ -141,6 +141,17 @@ export const ADMIN_NAVIGATION: AdminNavigationGroup[] = [
           />
         ),
       },
+      {
+        label: 'Payment Reports',
+        href: PAYMENT_ROUTES.reports,
+        exact: true,
+        icon: (
+          <Icon
+            icon={CreditCardIcon}
+            size={18}
+          />
+        ),
+      },
     ],
   },
   {
