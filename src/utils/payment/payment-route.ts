@@ -24,6 +24,10 @@ import {
     getPaymentRequestSession,
 } from "@/utils/payment/payment-session";
 
+import type {
+    BackendBinaryResult,
+} from "@/endpoints/client";
+
 export async function handlePaymentRead<T>(
     request: NextRequest,
     operation: (
@@ -132,6 +136,96 @@ export async function readPaymentJson(
             ok: false as const,
             value: null,
         };
+    }
+}
+
+export async function handlePaymentBinaryRead(
+    request: NextRequest,
+
+    operation: (
+        sessionId: string,
+        forwarded: Headers,
+    ) =>
+        Promise<
+            BackendBinaryResult
+        >,
+
+    notFound:
+        PaymentNotFoundKind,
+
+    filename: string,
+) {
+    const session =
+        getPaymentRequestSession(
+            request,
+        );
+
+    if (!session) {
+        return (
+            paymentAuthenticationRequired()
+        );
+    }
+
+    try {
+        const result =
+            await operation(
+                session.sessionId,
+                new Headers(
+                    request.headers,
+                ),
+            );
+
+        if (
+            result.status === 401 ||
+            result.status === 403
+        ) {
+            return (
+                paymentAuthenticationRequired()
+            );
+        }
+
+        if (
+            result.status === 404
+        ) {
+            return paymentNotFound(
+                notFound,
+            );
+        }
+
+        if (
+            !result.ok ||
+            !result.body
+        ) {
+            return (
+                paymentServiceUnavailable()
+            );
+        }
+
+        return new Response(
+            result.body,
+            {
+                status: 200,
+
+                headers: {
+                    "Content-Type":
+                        result.contentType ??
+                        "application/pdf",
+
+                    "Content-Disposition":
+                        `attachment; filename="${filename}"`,
+
+                    "Cache-Control":
+                        "no-store",
+
+                    "X-Content-Type-Options":
+                        "nosniff",
+                },
+            },
+        );
+    } catch {
+        return (
+            paymentServiceUnavailable()
+        );
     }
 }
 
