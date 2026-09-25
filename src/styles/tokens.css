@@ -392,6 +392,35 @@
 
   --chart-grid: #2c2c2a;
   --chart-baseline: #383835;
+
+  /* =========================================================
+
+* Glass (dashboard only)
+*
+* Frosted panels over the dashboard's ambient light. Kept to the
+* dashboard: the rest of the admin stays flat.
+* ======================================================= */
+
+  --glass-fill: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.075),
+    rgba(255, 255, 255, 0.02)
+  );
+  --glass-fill-strong: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.11),
+    rgba(255, 255, 255, 0.035)
+  );
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.7);
+  --glass-blur: blur(22px) saturate(150%);
+  --glass-radius: 1.25rem;
+
+  --glow-accent: 0 0 24px rgba(208, 255, 113, 0.35);
+
+  --ease-spring: cubic-bezier(0.22, 1.4, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* =========================================================
