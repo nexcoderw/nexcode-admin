@@ -1,4 +1,4 @@
-import { Add01Icon } from "@hugeicons/core-free-icons";
+import { Add01Icon, File01Icon } from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
@@ -21,7 +21,11 @@ interface PaymentHeaderProps {
   total?: number;
 }
 
-export function PaymentHeader({ query, portfolios, total }: PaymentHeaderProps) {
+export function PaymentHeader({
+  query,
+  portfolios,
+  total,
+}: PaymentHeaderProps) {
   return (
     <header className={styles.header}>
       <div>
@@ -43,6 +47,13 @@ export function PaymentHeader({ query, portfolios, total }: PaymentHeaderProps) 
           leftIcon={<Icon icon={Add01Icon} size={17} />}
         >
           Add agreement
+        </Button>
+        <Button
+          href={PAYMENT_ROUTES.reports}
+          variant="secondary"
+          leftIcon={<Icon icon={File01Icon} size={17} />}
+        >
+          Reports
         </Button>
       </div>
     </header>
