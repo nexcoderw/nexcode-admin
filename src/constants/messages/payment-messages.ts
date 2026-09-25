@@ -16,6 +16,9 @@ export const PAYMENT_MESSAGE_KEYS = {
 
     notificationNotFound:
         "payment.error.notification_not_found",
+
+    portfolioNotFound:
+        "payment.error.portfolio_not_found",
 } as const;
 
 export const PAYMENT_MESSAGES = {
@@ -36,4 +39,7 @@ export const PAYMENT_MESSAGES = {
 
     [PAYMENT_MESSAGE_KEYS.notificationNotFound]:
         "The payment notification could not be found.",
+
+    [PAYMENT_MESSAGE_KEYS.portfolioNotFound]:
+        "The Portfolio payment record could not be found.",
 } as const;
