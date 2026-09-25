@@ -1,4 +1,8 @@
-import { ArrowLeft01Icon, Edit02Icon } from "@hugeicons/core-free-icons";
+import {
+  ArrowLeft01Icon,
+  Edit02Icon,
+  File01Icon,
+} from "@hugeicons/core-free-icons";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import type { ReactNode } from "react";
@@ -101,6 +105,15 @@ export default async function PaymentDetailPage({
 
         <div className={styles.primaryActions}>
           <Button
+            href={PAYMENT_ROUTES.reportsForPortfolio(agreement.portfolio.id)}
+            size="sm"
+            variant="secondary"
+            leftIcon={<Icon icon={File01Icon} size={16} />}
+          >
+            Reports
+          </Button>
+
+          <Button
             href={PAYMENT_ROUTES.edit(agreement.id)}
             size="sm"
             variant="secondary"
@@ -109,9 +122,11 @@ export default async function PaymentDetailPage({
             Edit agreement
           </Button>
 
-          <RecordPaymentDialog agreement={agreement} installments={installments} />
+          <RecordPaymentDialog
+            agreement={agreement}
+            installments={installments}
+          />
 
-          {/* Only an unused draft can be deleted, so only a draft offers it. */}
           {agreement.status === "draft" && (
             <DeleteAgreementDialog
               agreementId={agreement.id}
@@ -159,7 +174,10 @@ function renderTab(tab: PaymentDetailTab, detail: LoadedDetail): ReactNode {
       // A form and a short list: narrower and centred reads better.
       return (
         <div className={styles.narrow}>
-          <PaymentReminderPanel agreementId={agreement.id} rules={detail.rules} />
+          <PaymentReminderPanel
+            agreementId={agreement.id}
+            rules={detail.rules}
+          />
         </div>
       );
 
