@@ -1,17 +1,30 @@
 export const PAYMENT_ROUTES = {
-  list: "/payments",
+    list: "/payments",
 
-  add: "/payments/add",
+    add: "/payments/add",
 
-  detail: (
-    agreementId: number,
-  ) =>
-    `/payments/detail/${agreementId}`,
+    detail: (
+        agreementId: number,
+    ) =>
+        `/payments/detail/${agreementId}`,
 
-  edit: (
-    agreementId: number,
-  ) =>
-    `/payments/edit/${agreementId}`,
+    edit: (
+        agreementId: number,
+    ) =>
+        `/payments/edit/${agreementId}`,
+
+    reports:
+        "/payments/reports",
+
+    statement: (
+        portfolioId: number,
+    ) =>
+        `/payments/reports/statement/${portfolioId}`,
+
+    receipt: (
+        paymentId: number,
+    ) =>
+        `/payments/reports/receipt/${paymentId}`,
 } as const;
 
 export const PAYMENT_API_ROUTES = {
@@ -142,4 +155,26 @@ export const PAYMENT_API_ROUTES = {
         id: number,
     ) =>
         `/api/payment/reminder/notification/retry/${id}`,
+
+    reportOverview:
+        "/api/payment/report/overview",
+
+    reportCollections:
+        "/api/payment/report/collections",
+
+    reportOutstanding:
+        "/api/payment/report/outstanding",
+
+    reportStatement: (
+        portfolioId: number,
+    ) =>
+        `/api/payment/report/statement/${portfolioId}`,
+
+    reportReceipt: (
+        paymentId: number,
+    ) =>
+        `/api/payment/report/receipt/${paymentId}`,
+
+    reportCsv:
+        "/api/payment/report/export/csv",
 } as const;
