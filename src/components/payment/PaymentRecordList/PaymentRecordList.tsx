@@ -1,14 +1,14 @@
+import { File01Icon } from "@hugeicons/core-free-icons";
+
 import { Badge } from "@/components/ui/Badge/Badge";
+import { Button } from "@/components/ui/Button/Button";
+import { Icon } from "@/components/ui/Icon/Icon";
+import { PAYMENT_ROUTES } from "@/constants/routes/payment-routes";
 import type { PaymentRecord } from "@/types/payment/record";
 import {
   formatPaymentDate,
   formatPaymentMoney,
 } from "@/utils/payment/payment-format";
-import { File01Icon } from "@hugeicons/core-free-icons";
-
-import { Button } from "@/components/ui/Button/Button";
-import { Icon } from "@/components/ui/Icon/Icon";
-import { PAYMENT_ROUTES } from "@/constants/routes/payment-routes";
 
 import styles from "./PaymentRecordList.module.css";
 
@@ -16,7 +16,9 @@ interface PaymentRecordListProps {
   records: PaymentRecord[];
 }
 
-export function PaymentRecordList({ records }: PaymentRecordListProps) {
+export function PaymentRecordList({
+  records,
+}: PaymentRecordListProps) {
   return (
     <section className={styles.section}>
       <header className={styles.header}>
@@ -36,19 +38,33 @@ export function PaymentRecordList({ records }: PaymentRecordListProps) {
       ) : (
         <div className={styles.list}>
           {records.map((payment) => (
-            <article key={payment.id} className={styles.record}>
+            <article
+              key={payment.id}
+              className={styles.record}
+            >
               <div className={styles.primary}>
                 <div>
                   <strong>
-                    {formatPaymentMoney(payment.amount, payment.currency)}
+                    {formatPaymentMoney(
+                      payment.amount,
+                      payment.currency,
+                    )}
                   </strong>
 
-                  <span>{formatPaymentDate(payment.paidAt)}</span>
+                  <span>
+                    {formatPaymentDate(
+                      payment.paidAt,
+                    )}
+                  </span>
                 </div>
 
                 <Badge
                   size="sm"
-                  variant={payment.status === "voided" ? "error" : "success"}
+                  variant={
+                    payment.status === "voided"
+                      ? "error"
+                      : "success"
+                  }
                 >
                   {payment.status}
                 </Badge>
@@ -58,13 +74,20 @@ export function PaymentRecordList({ records }: PaymentRecordListProps) {
                 <div>
                   <dt>Method</dt>
 
-                  <dd>{payment.paymentMethod.replaceAll("_", " ")}</dd>
+                  <dd>
+                    {payment.paymentMethod.replaceAll(
+                      "_",
+                      " ",
+                    )}
+                  </dd>
                 </div>
 
                 <div>
                   <dt>Reference</dt>
 
-                  <dd>{payment.reference ?? "Not set"}</dd>
+                  <dd>
+                    {payment.reference ?? "Not set"}
+                  </dd>
                 </div>
 
                 <div>
@@ -76,32 +99,44 @@ export function PaymentRecordList({ records }: PaymentRecordListProps) {
 
               {payment.allocations.length > 0 && (
                 <ul className={styles.allocations}>
-                  {payment.allocations.map((allocation) => (
-                    <li key={allocation.id}>
-                      <span>{allocation.installmentTitle}</span>
+                  {payment.allocations.map(
+                    (allocation) => (
+                      <li key={allocation.id}>
+                        <span>
+                          {allocation.installmentTitle}
+                        </span>
 
-                      <strong>
-                        {formatPaymentMoney(
-                          allocation.amount,
-                          payment.currency,
-                        )}
-                      </strong>
-                    </li>
-                  ))}
+                        <strong>
+                          {formatPaymentMoney(
+                            allocation.amount,
+                            payment.currency,
+                          )}
+                        </strong>
+                      </li>
+                    ),
+                  )}
                 </ul>
               )}
+
+              <footer className={styles.recordActions}>
+                <Button
+                  href={PAYMENT_ROUTES.receipt(
+                    payment.id,
+                  )}
+                  size="sm"
+                  variant="ghost"
+                  leftIcon={
+                    <Icon
+                      icon={File01Icon}
+                      size={16}
+                    />
+                  }
+                >
+                  Receipt
+                </Button>
+              </footer>
             </article>
           ))}
-          <footer className={styles.recordActions}>
-            <Button
-              href={PAYMENT_ROUTES.receipt(payment.id)}
-              size="sm"
-              variant="ghost"
-              leftIcon={<Icon icon={File01Icon} size={16} />}
-            >
-              Receipt
-            </Button>
-          </footer>
         </div>
       )}
     </section>
