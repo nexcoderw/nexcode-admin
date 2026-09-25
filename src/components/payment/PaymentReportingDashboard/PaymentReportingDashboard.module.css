@@ -1,21 +1,23 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-5);
 }
 
-.header {
+.currency {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.currencyHeader {
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: var(--space-4);
-
-  padding-bottom: var(--space-3);
-
-  border-bottom: var(--border-width) solid var(--color-border-subtle);
 }
 
-.header span {
+.currencyHeader span {
   color: var(--color-primary);
 
   font-size: var(--font-size-xs);
@@ -24,101 +26,106 @@
   text-transform: uppercase;
 }
 
-.header h2 {
+.currencyHeader h2 {
   margin-top: var(--space-1);
 
   font-size: var(--font-size-lg);
 }
 
-.header small {
+.currencyHeader small {
   color: var(--color-text-muted);
+
+  font-size: var(--font-size-xs);
 }
 
-.currencies {
+/*
+ * Same single-band visual language used by PaymentSummaryCards.
+ * Currency is never combined with another currency.
+ */
+.metrics {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-4);
-}
-
-.currency {
-  padding: var(--space-5);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 
   background: var(--color-surface);
 
-  border: var(--border-width) solid var(--color-border-subtle);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
 }
 
-.currency > header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-3);
-
-  padding-bottom: var(--space-3);
-
-  border-bottom: var(--border-width) solid var(--color-border-subtle);
-}
-
-.currency > header strong {
-  color: var(--color-primary);
-
-  font-size: var(--font-size-lg);
-}
-
-.currency > header span {
-  color: var(--color-text-muted);
-
-  font-size: var(--font-size-xs);
-}
-
-.metrics {
+.metric {
   display: flex;
   flex-direction: column;
+  gap: var(--space-1);
 
-  margin: var(--space-3) 0 0;
+  min-width: 0;
+  padding: var(--space-4) var(--space-5);
 }
 
-.metrics > div {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-4);
-
-  padding-block: var(--space-2);
+.metric + .metric {
+  border-left: var(--border-width) solid var(--color-border-subtle);
 }
 
-.metrics > div + div {
-  border-top: var(--border-width) dashed var(--color-border-subtle);
-}
-
-.metrics dt {
+.metric span {
   color: var(--color-text-muted);
 
   font-size: var(--font-size-xs);
 }
 
-.metrics dd {
-  margin: 0;
+.metric strong {
+  overflow: hidden;
 
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
   font-variant-numeric: tabular-nums;
-  text-align: right;
+  line-height: var(--line-height-tight);
+  text-overflow: ellipsis;
+}
+
+.metric[data-critical] strong {
+  color: var(--color-error);
 }
 
 .empty {
-  padding: var(--space-6);
+  padding: var(--space-8) var(--space-4);
 
   color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
   text-align: center;
-
-  background: var(--color-surface);
-
-  border: var(--border-width) dashed var(--color-border);
-  border-radius: var(--radius-xl);
 }
 
-@media (max-width: 52rem) {
-  .currencies {
+@media (max-width: 72rem) {
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metric:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .metric:nth-child(even) {
+    border-left: var(--border-width) solid var(--color-border-subtle);
+  }
+
+  .metric:nth-child(n + 3) {
+    border-top: var(--border-width) solid var(--color-border-subtle);
+  }
+}
+
+@media (max-width: 40rem) {
+  .currencyHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 32rem) {
+  .metrics {
     grid-template-columns: 1fr;
+  }
+
+  .metric + .metric,
+  .metric:nth-child(even) {
+    border-top: var(--border-width) solid var(--color-border-subtle);
+    border-left: 0;
   }
 }
