@@ -38,117 +38,149 @@ export function PaymentReportingDashboard({
       }
       aria-label="Financial position"
     >
-      <header
-        className={
-          styles.header
-        }
-      >
-        <div>
-          <span>
-            Position
-          </span>
-
-          <h2>
-            Financial overview
-          </h2>
-        </div>
-
-        <small>
-          As of{" "}
-          {formatPaymentDate(
-            overview.asOf,
-          )}
-        </small>
-      </header>
-
-      <div
-        className={
-          styles.currencies
-        }
-      >
-        {overview.currencies.map(
-          (summary) => (
-            <article
-              key={
-                summary.currency
-              }
+      {overview.currencies.map(
+        (summary) => (
+          <section
+            key={
+              summary.currency
+            }
+            className={
+              styles.currency
+            }
+          >
+            <header
               className={
-                styles.currency
+                styles.currencyHeader
               }
             >
-              <header>
-                <strong>
-                  {summary.currency}
-                </strong>
-
+              <div>
                 <span>
-                  {
-                    summary
-                      .activeAgreementCount
-                  }{" "}
-                  active of{" "}
-                  {
-                    summary
-                      .agreementCount
-                  }{" "}
-                  agreements
+                  Financial position
                 </span>
-              </header>
 
-              <dl
+                <h2>
+                  {summary.currency}
+                </h2>
+              </div>
+
+              <small>
+                {
+                  summary.activeAgreementCount
+                }{" "}
+                active of{" "}
+                {
+                  summary.agreementCount
+                }{" "}
+                agreements · As of{" "}
+                {formatPaymentDate(
+                  overview.asOf,
+                )}
+              </small>
+            </header>
+
+            <div
+              className={
+                styles.metrics
+              }
+            >
+              <article
                 className={
-                  styles.metrics
+                  styles.metric
                 }
               >
-                {[
-                  [
-                    "Contracted",
-                    summary.totalContracted,
-                  ],
-                  [
-                    "Received",
-                    summary.totalReceived,
-                  ],
-                  [
-                    "Outstanding",
-                    summary.outstanding,
-                  ],
-                  [
-                    "Overdue",
-                    summary.overdue,
-                  ],
-                  [
-                    `Due within ${overview.dueWithinDays} days`,
-                    summary.dueSoon,
-                  ],
-                ].map(
-                  ([
-                    label,
-                    value,
-                  ]) => (
-                    <div
-                      key={
-                        label
-                      }
-                    >
-                      <dt>
-                        {label}
-                      </dt>
+                <span>
+                  Contracted
+                </span>
 
-                      <dd>
-                        {formatPaymentMoney(
-                          value,
-                          summary.currency,
-                        )}
-                      </dd>
-                    </div>
-                  ),
-                )}
-              </dl>
-            </article>
-          ),
-        )}
-      </div>
+                <strong>
+                  {formatPaymentMoney(
+                    summary.totalContracted,
+                    summary.currency,
+                  )}
+                </strong>
+              </article>
+
+              <article
+                className={
+                  styles.metric
+                }
+              >
+                <span>
+                  Received
+                </span>
+
+                <strong>
+                  {formatPaymentMoney(
+                    summary.totalReceived,
+                    summary.currency,
+                  )}
+                </strong>
+              </article>
+
+              <article
+                className={
+                  styles.metric
+                }
+              >
+                <span>
+                  Outstanding
+                </span>
+
+                <strong>
+                  {formatPaymentMoney(
+                    summary.outstanding,
+                    summary.currency,
+                  )}
+                </strong>
+              </article>
+
+              <article
+                className={
+                  styles.metric
+                }
+                data-critical={
+                  Number(
+                    summary.overdue,
+                  ) > 0 ||
+                  undefined
+                }
+              >
+                <span>
+                  Overdue
+                </span>
+
+                <strong>
+                  {formatPaymentMoney(
+                    summary.overdue,
+                    summary.currency,
+                  )}
+                </strong>
+              </article>
+
+              <article
+                className={
+                  styles.metric
+                }
+              >
+                <span>
+                  Due within{" "}
+                  {
+                    overview.dueWithinDays
+                  }{" "}
+                  days
+                </span>
+
+                <strong>
+                  {formatPaymentMoney(
+                    summary.dueSoon,
+                    summary.currency,
+                  )}
+                </strong>
+              </article>
+            </div>
+          </section>
+        ),
+      )}
     </section>
   );
 }
