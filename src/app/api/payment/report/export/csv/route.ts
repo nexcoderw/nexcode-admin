@@ -1,148 +1,210 @@
 import type {
-    NextRequest,
+  NextRequest,
 } from "next/server";
 
 import {
-    getPaymentCollectionsReport,
+  getPaymentCollectionsReport,
 } from "@/endpoints/payment/get-collections-report";
 import {
-    getPaymentOutstandingReport,
+  getPaymentOutstandingReport,
 } from "@/endpoints/payment/get-outstanding-report";
+import type {
+  PaymentEndpointResult,
+} from "@/endpoints/payment/types";
+import type {
+  PaymentCollectionsReport,
+  PaymentOutstandingReport,
+} from "@/types/payment/report";
 import {
-    getPaymentRequestSession,
+  getPaymentRequestSession,
 } from "@/utils/payment/payment-session";
 import {
-    collectionsReportCsv,
-    outstandingReportCsv,
+  collectionsReportCsv,
+  outstandingReportCsv,
 } from "@/utils/payment/report-csv";
 import {
-    parsePaymentReportSearchParams,
+  parsePaymentReportSearchParams,
 } from "@/utils/payment/report-query";
 import {
-    paymentAuthenticationRequired,
-    paymentInvalidRequest,
-    paymentServiceUnavailable,
+  paymentAuthenticationRequired,
+  paymentInvalidRequest,
+  paymentServiceUnavailable,
 } from "@/utils/payment/payment-responses";
 
 export async function GET(
-    request: NextRequest,
+  request: NextRequest,
 ) {
-    const type =
-        request.nextUrl
-            .searchParams
-            .get("type");
+  const type =
+    request.nextUrl.searchParams.get(
+      "type",
+    );
 
-    if (
-        type !== "collections" &&
-        type !== "outstanding"
-    ) {
-        return (
-            paymentInvalidRequest()
+  if (
+    type !== "collections" &&
+    type !== "outstanding"
+  ) {
+    return paymentInvalidRequest();
+  }
+
+  const query =
+    parsePaymentReportSearchParams(
+      request.nextUrl.searchParams,
+    );
+
+  if (!query) {
+    return paymentInvalidRequest();
+  }
+
+  const session =
+    getPaymentRequestSession(
+      request,
+    );
+
+  if (!session) {
+    return (
+      paymentAuthenticationRequired()
+    );
+  }
+
+  const forwarded =
+    new Headers(
+      request.headers,
+    );
+
+  try {
+    if (type === "collections") {
+      const result =
+        await getPaymentCollectionsReport(
+          session.sessionId,
+          forwarded,
+          query,
         );
+
+      return collectionsResponse(
+        result,
+      );
     }
 
-    const query =
-        parsePaymentReportSearchParams(
-            request.nextUrl
-                .searchParams,
-        );
+    const result =
+      await getPaymentOutstandingReport(
+        session.sessionId,
+        forwarded,
+        query,
+      );
 
-    if (!query) {
-        return (
-            paymentInvalidRequest()
-        );
-    }
+    return outstandingResponse(
+      result,
+    );
+  } catch {
+    return paymentServiceUnavailable();
+  }
+}
 
-    const session =
-        getPaymentRequestSession(
-            request,
-        );
+function collectionsResponse(
+  result:
+    PaymentEndpointResult<
+      PaymentCollectionsReport
+    >,
+) {
+  const error =
+    reportErrorResponse(
+      result,
+    );
 
-    if (!session) {
-        return (
-            paymentAuthenticationRequired()
-        );
-    }
+  if (error) {
+    return error;
+  }
 
-    const forwarded =
-        new Headers(
-            request.headers,
-        );
+  const csv =
+    collectionsReportCsv(
+      result.data!,
+    );
 
-    try {
-        const result =
-            type === "collections"
-                ? await getPaymentCollectionsReport(
-                    session.sessionId,
-                    forwarded,
-                    query,
-                )
-                : await getPaymentOutstandingReport(
-                    session.sessionId,
-                    forwarded,
-                    query,
-                );
+  return csvResponse(
+    csv,
+    "payment-collections-report.csv",
+  );
+}
 
-        if (
-            result.status === 401 ||
-            result.status === 403
-        ) {
-            return (
-                paymentAuthenticationRequired()
-            );
-        }
+function outstandingResponse(
+  result:
+    PaymentEndpointResult<
+      PaymentOutstandingReport
+    >,
+) {
+  const error =
+    reportErrorResponse(
+      result,
+    );
 
-        if (
-            result.status === 400
-        ) {
-            return (
-                paymentInvalidRequest()
-            );
-        }
+  if (error) {
+    return error;
+  }
 
-        if (
-            !result.ok ||
-            !result.data
-        ) {
-            return (
-                paymentServiceUnavailable()
-            );
-        }
+  const csv =
+    outstandingReportCsv(
+      result.data!,
+    );
 
-        const csv =
-            type === "collections"
-                ? collectionsReportCsv(
-                    result.data,
-                )
-                : outstandingReportCsv(
-                    result.data,
-                );
+  return csvResponse(
+    csv,
+    "payment-outstanding-report.csv",
+  );
+}
 
-        return new Response(
-            `\uFEFF${csv}`,
-            {
-                status: 200,
+function reportErrorResponse(
+  result:
+    PaymentEndpointResult<
+      unknown
+    >,
+) {
+  if (
+    result.status === 401 ||
+    result.status === 403
+  ) {
+    return (
+      paymentAuthenticationRequired()
+    );
+  }
 
-                headers: {
-                    "Content-Type":
-                        "text/csv; charset=utf-8",
+  if (
+    result.status === 400
+  ) {
+    return paymentInvalidRequest();
+  }
 
-                    "Content-Disposition":
-                        (
-                            `attachment; filename="payment-${type}-report.csv"`
-                        ),
+  if (
+    !result.ok ||
+    !result.data
+  ) {
+    return paymentServiceUnavailable();
+  }
 
-                    "Cache-Control":
-                        "no-store",
+  return null;
+}
 
-                    "X-Content-Type-Options":
-                        "nosniff",
-                },
-            },
-        );
-    } catch {
-        return (
-            paymentServiceUnavailable()
-        );
-    }
+function csvResponse(
+  csv: string,
+  filename: string,
+) {
+  return new Response(
+    `\uFEFF${csv}`,
+    {
+      status: 200,
+
+      headers: {
+        "Content-Type":
+          "text/csv; charset=utf-8",
+
+        "Content-Disposition":
+          `attachment; filename="${filename}"`,
+
+        "Cache-Control":
+          "no-store",
+
+        "X-Content-Type-Options":
+          "nosniff",
+      },
+    },
+  );
 }
