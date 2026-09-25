@@ -20,6 +20,7 @@ import type {
   PaymentReminderEvent,
   PaymentReminderTiming,
 } from "@/types/payment/reminder";
+import { kigaliDate } from "@/utils/payment/payment-format";
 
 import styles from "./PaymentReminderRuleForm.module.css";
 
@@ -43,15 +44,6 @@ const DATE_HINTS: Record<PaymentReminderEvent, string> = {
   milestone_expected: "On that day you are reminded about the next unconfirmed milestone.",
   agreement_expiry: "On that day you are reminded that the agreement is ending.",
 };
-
-// Dates are chosen in Kigali time, where the team works.
-const KIGALI_DATE = new Intl.DateTimeFormat("en-CA", {
-  timeZone: "Africa/Kigali",
-});
-
-function kigaliDate(offsetDays = 0) {
-  return KIGALI_DATE.format(Date.now() + offsetDays * 86_400_000);
-}
 
 function parseDays(value: string) {
   const days = Number(value);

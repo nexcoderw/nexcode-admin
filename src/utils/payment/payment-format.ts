@@ -174,3 +174,26 @@ export function describeReminderRule(
 
   return `${days} ${rule.timing} ${event}`;
 }
+
+/*
+ * Payment dates are chosen in Kigali time, where the team works. A fixed
+ * zone also keeps server and browser renders identical.
+ */
+const KIGALI_DATE = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Africa/Kigali",
+});
+
+/**
+ * Today in Kigali as YYYY-MM-DD, or a day before or after it.
+ */
+export function kigaliDate(offsetDays = 0) {
+  return KIGALI_DATE.format(Date.now() + offsetDays * 86_400_000);
+}
+
+/**
+ * A chosen calendar day as a moment the backend stores: midday in
+ * Kigali, so the day never shifts when converted to UTC.
+ */
+export function kigaliMidday(date: string) {
+  return `${date}T12:00:00+02:00`;
+}

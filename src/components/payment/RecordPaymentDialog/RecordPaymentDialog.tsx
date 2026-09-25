@@ -42,6 +42,10 @@ import type {
   PaymentInstallment,
   PaymentMethod,
 } from "@/types/payment";
+import {
+  kigaliDate,
+  kigaliMidday,
+} from "@/utils/payment/payment-format";
 
 import styles from "./RecordPaymentDialog.module.css";
 
@@ -62,6 +66,10 @@ export function RecordPaymentDialog({
 
   const [amount, setAmount] =
     useState("");
+
+  // Defaults to today; an earlier date records a past payment.
+  const [paidOn, setPaidOn] =
+    useState(() => kigaliDate());
 
   const [
     paymentMethod,
@@ -130,6 +138,9 @@ export function RecordPaymentDialog({
             currency:
               agreement.currency,
 
+            paidAt:
+              kigaliMidday(paidOn),
+
             paymentMethod,
             reference,
             notes,
@@ -146,6 +157,7 @@ export function RecordPaymentDialog({
 
     setOpen(false);
     setAmount("");
+    setPaidOn(kigaliDate());
     setReference("");
     setNotes("");
     setAllocations({});
@@ -230,6 +242,23 @@ export function RecordPaymentDialog({
                 event,
               ) =>
                 setAmount(
+                  event.target
+                    .value,
+                )
+              }
+            />
+
+            <Input
+              label="Paid on"
+              type="date"
+              required
+              max={kigaliDate()}
+              value={paidOn}
+              helperText="Pick an earlier date for a past payment."
+              onChange={(
+                event,
+              ) =>
+                setPaidOn(
                   event.target
                     .value,
                 )
