@@ -13,6 +13,10 @@ import type {
   PaymentCurrency,
 } from "@/types/payment/shared";
 
+export type PaymentReportTab =
+  | "collections"
+  | "outstanding";
+
 export interface ResolvedPaymentReportQuery {
   portfolioId?: number;
 
@@ -24,13 +28,21 @@ export interface ResolvedPaymentReportQuery {
   dueWithinDays: number;
 
   outstandingKind:
-    PaymentOutstandingKind;
+  PaymentOutstandingKind;
+
+  tab:
+  PaymentReportTab;
 }
 
 const OUTSTANDING_KINDS = [
   "all",
   "overdue",
   "due_soon",
+] as const;
+
+const PAYMENT_REPORT_TABS = [
+  "collections",
+  "outstanding",
 ] as const;
 
 export function resolvePaymentReportQuery(
@@ -82,6 +94,12 @@ export function resolvePaymentReportQuery(
         params.outstandingKind,
         OUTSTANDING_KINDS,
       ) ?? "all",
+
+    tab:
+      choice(
+        params.tab,
+        PAYMENT_REPORT_TABS,
+      ) ?? "collections",
   };
 }
 
@@ -105,6 +123,9 @@ export function parsePaymentReportSearchParams(
 
   const outstandingKind =
     params.get("outstandingKind");
+
+  const tab =
+    params.get("tab");
 
   if (
     portfolioId &&
@@ -169,6 +190,16 @@ export function parsePaymentReportSearchParams(
     return null;
   }
 
+  if (
+    tab &&
+    !choice(
+      tab,
+      PAYMENT_REPORT_TABS,
+    )
+  ) {
+    return null;
+  }
+
   return resolvePaymentReportQuery({
     portfolioId:
       portfolioId ??
@@ -192,6 +223,10 @@ export function parsePaymentReportSearchParams(
 
     outstandingKind:
       outstandingKind ??
+      undefined,
+
+    tab:
+      tab ??
       undefined,
   });
 }
@@ -371,6 +406,17 @@ function buildBrowserSearch(
     );
   }
 
+  if (
+    query.tab !==
+    "collections"
+  ) {
+    setParam(
+      params,
+      "tab",
+      query.tab,
+    );
+  }
+
   return params;
 }
 
@@ -444,11 +490,11 @@ function dateValue(
 
   if (
     parsed.getUTCFullYear() !==
-      year ||
+    year ||
     parsed.getUTCMonth() !==
-      month - 1 ||
+    month - 1 ||
     parsed.getUTCDate() !==
-      day
+    day
   ) {
     return undefined;
   }
@@ -475,4 +521,17 @@ function choice<
   )
     ? value as T
     : undefined;
+}
+
+export function buildPaymentReportTabHref(
+  query:
+    ResolvedPaymentReportQuery,
+
+  tab:
+    PaymentReportTab,
+) {
+  return buildPaymentReportsHref({
+    ...query,
+    tab,
+  });
 }
