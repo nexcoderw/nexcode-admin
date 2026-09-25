@@ -22,7 +22,8 @@ export type PaymentNotFoundKind =
     | "installment"
     | "record"
     | "reminderRule"
-    | "notification";
+    | "notification"
+    | "portfolio";
 
 export function paymentAuthenticationRequired() {
     const response =
@@ -93,6 +94,10 @@ export function paymentNotFound(
         notification:
             PAYMENT_MESSAGE_KEYS
                 .notificationNotFound,
+
+        portfolio:
+            PAYMENT_MESSAGE_KEYS
+                .portfolioNotFound,
     } as const;
 
     return noStore(
