@@ -1,9 +1,13 @@
 import {
   ArrowLeft01Icon,
+  Calendar03Icon,
+  File01Icon,
+  Invoice01Icon,
 } from "@hugeicons/core-free-icons";
 import type {
   Metadata,
 } from "next";
+import Link from "next/link";
 import {
   redirect,
 } from "next/navigation";
@@ -47,13 +51,25 @@ import {
 import {
   getPaymentReportOverview,
 } from "@/endpoints/payment/get-report-overview";
-import {
-  resolvePaymentReportQuery,
+import type {
+  PaymentReportTab,
+  ResolvedPaymentReportQuery,
 } from "@/utils/payment/report-query";
+import {
+  buildPaymentReportTabHref,
+  resolvePaymentReportQuery,
+  toPaymentReportEndpointQuery,
+} from "@/utils/payment/report-query";
+import type {
+  PaymentServerContext,
+} from "@/utils/payment/payment-server-data";
 import {
   getPaymentServerContext,
   listPaymentPortfolios,
 } from "@/utils/payment/payment-server-data";
+import {
+  formatPaymentDate,
+} from "@/utils/payment/payment-format";
 
 import styles from "./page.module.css";
 
@@ -75,6 +91,25 @@ interface PaymentReportsPageProps {
     >;
 }
 
+const REPORT_TABS = [
+  {
+    id:
+      "collections",
+    label:
+      "Collections",
+    icon:
+      Invoice01Icon,
+  },
+  {
+    id:
+      "outstanding",
+    label:
+      "Outstanding",
+    icon:
+      Calendar03Icon,
+  },
+] as const;
+
 export default async function PaymentReportsPage({
   searchParams,
 }: PaymentReportsPageProps) {
@@ -92,43 +127,40 @@ export default async function PaymentReportsPage({
       await searchParams,
     );
 
+  const endpointQuery =
+    toPaymentReportEndpointQuery(
+      query,
+    );
+
   const [
     overview,
-    collections,
-    outstanding,
     portfolios,
+    selectedReport,
   ] = await Promise.all([
     getPaymentReportOverview(
       context.sessionId,
       context.forwarded,
-      query,
-    ),
-
-    getPaymentCollectionsReport(
-      context.sessionId,
-      context.forwarded,
-      query,
-    ),
-
-    getPaymentOutstandingReport(
-      context.sessionId,
-      context.forwarded,
-      query,
+      endpointQuery,
     ),
 
     listPaymentPortfolios(
       context,
     ),
+
+    loadSelectedReport(
+      query.tab,
+      context,
+      query,
+    ),
   ]);
 
-  const status = [
+  const statuses = [
     overview.status,
-    collections.status,
-    outstanding.status,
+    selectedReport.result.status,
   ];
 
   if (
-    status.includes(401)
+    statuses.includes(401)
   ) {
     redirect(
       ERROR_ROUTES.unauthorized,
@@ -136,12 +168,26 @@ export default async function PaymentReportsPage({
   }
 
   if (
-    status.includes(403)
+    statuses.includes(403)
   ) {
     redirect(
       ERROR_ROUTES.forbidden,
     );
   }
+
+  const portfolioItems =
+    portfolios.ok
+      ? portfolios.items
+      : [];
+
+  const selectedPortfolio =
+    query.portfolioId
+      ? portfolioItems.find(
+          (portfolio) =>
+            portfolio.id ===
+            query.portfolioId,
+        )
+      : undefined;
 
   return (
     <div
@@ -149,30 +195,76 @@ export default async function PaymentReportsPage({
         styles.page
       }
     >
-      <header
+      <nav
         className={
-          styles.header
+          styles.actions
+        }
+        aria-label="Payment report actions"
+      >
+        <Button
+          href={
+            PAYMENT_ROUTES.list
+          }
+          variant="ghost"
+          size="sm"
+          leftIcon={
+            <Icon
+              icon={
+                ArrowLeft01Icon
+              }
+              size={16}
+            />
+          }
+        >
+          Payments
+        </Button>
+
+        <div
+          className={
+            styles.primaryActions
+          }
+        >
+          {query.portfolioId && (
+            <Button
+              href={
+                PAYMENT_ROUTES.statement(
+                  query.portfolioId,
+                )
+              }
+              variant="secondary"
+              size="sm"
+              leftIcon={
+                <Icon
+                  icon={
+                    File01Icon
+                  }
+                  size={16}
+                />
+              }
+            >
+              Portfolio statement
+            </Button>
+          )}
+
+          <PaymentReportFilter
+            query={query}
+            portfolios={
+              portfolioItems
+            }
+          />
+        </div>
+      </nav>
+
+      <section
+        className={
+          styles.reportHeader
         }
       >
-        <div>
-          <Button
-            href={
-              PAYMENT_ROUTES.list
-            }
-            variant="ghost"
-            size="sm"
-            leftIcon={
-              <Icon
-                icon={
-                  ArrowLeft01Icon
-                }
-                size={16}
-              />
-            }
-          >
-            Payments
-          </Button>
-
+        <div
+          className={
+            styles.title
+          }
+        >
           <span>
             Financial reporting
           </span>
@@ -182,20 +274,69 @@ export default async function PaymentReportsPage({
           </h1>
 
           <p>
-            Review collections, outstanding obligations and overdue balances
-            without combining different currencies.
+            Collections, receivables and payment position based on the
+            financial ledger.
           </p>
         </div>
 
-        <PaymentReportFilter
-          query={query}
-          portfolios={
-            portfolios.ok
-              ? portfolios.items
-              : []
+        <dl
+          className={
+            styles.facts
           }
-        />
-      </header>
+        >
+          <div>
+            <dt>
+              Scope
+            </dt>
+
+            <dd>
+              {selectedPortfolio
+                ?.name ??
+                (
+                  query.portfolioId
+                    ? `Portfolio #${query.portfolioId}`
+                    : "All Portfolios"
+                )}
+            </dd>
+          </div>
+
+          <div>
+            <dt>
+              Currency
+            </dt>
+
+            <dd>
+              {query.currency ??
+                "All currencies"}
+            </dd>
+          </div>
+
+          <div>
+            <dt>
+              Collections
+            </dt>
+
+            <dd>
+              {reportPeriod(
+                query,
+              )}
+            </dd>
+          </div>
+
+          <div>
+            <dt>
+              Due soon
+            </dt>
+
+            <dd>
+              {
+                query.dueWithinDays
+              }{" "}
+              days
+            </dd>
+          </div>
+        </dl>
+      </section>
 
       {!overview.ok ||
       !overview.data ? (
@@ -213,39 +354,196 @@ export default async function PaymentReportsPage({
         />
       )}
 
-      {collections.ok &&
-      collections.data ? (
-        <PaymentCollectionsTable
-          report={
-            collections.data
-          }
-          query={query}
-        />
-      ) : (
-        <Alert
-          variant="error"
-          title="Collections unavailable"
-        >
-          Monthly collections could not be loaded.
-        </Alert>
-      )}
+      <nav
+        className={
+          styles.tabs
+        }
+        aria-label="Payment report sections"
+      >
+        {REPORT_TABS.map(
+          (tab) => {
+            const selected =
+              query.tab ===
+              tab.id;
 
-      {outstanding.ok &&
-      outstanding.data ? (
-        <PaymentOutstandingTable
-          report={
-            outstanding.data
-          }
-          query={query}
-        />
-      ) : (
-        <Alert
-          variant="error"
-          title="Outstanding report unavailable"
-        >
-          Outstanding obligations could not be loaded.
-        </Alert>
-      )}
+            return (
+              <Link
+                key={
+                  tab.id
+                }
+                href={
+                  buildPaymentReportTabHref(
+                    query,
+                    tab.id,
+                  )
+                }
+                className={
+                  styles.tab
+                }
+                aria-current={
+                  selected
+                    ? "page"
+                    : undefined
+                }
+                data-selected={
+                  selected ||
+                  undefined
+                }
+                scroll={false}
+              >
+                <Icon
+                  icon={
+                    tab.icon
+                  }
+                  size={17}
+                />
+
+                <span>
+                  {tab.label}
+                </span>
+              </Link>
+            );
+          },
+        )}
+      </nav>
+
+      <section
+        className={
+          styles.panel
+        }
+      >
+        {renderSelectedReport(
+          selectedReport,
+          query,
+        )}
+      </section>
     </div>
   );
+}
+
+async function loadSelectedReport(
+  tab: PaymentReportTab,
+  context:
+    PaymentServerContext,
+  query:
+    ResolvedPaymentReportQuery,
+) {
+  const endpointQuery =
+    toPaymentReportEndpointQuery(
+      query,
+    );
+
+  if (
+    tab ===
+    "outstanding"
+  ) {
+    return {
+      tab:
+        "outstanding" as const,
+
+      result:
+        await getPaymentOutstandingReport(
+          context.sessionId,
+          context.forwarded,
+          endpointQuery,
+        ),
+    };
+  }
+
+  return {
+    tab:
+      "collections" as const,
+
+    result:
+      await getPaymentCollectionsReport(
+        context.sessionId,
+        context.forwarded,
+        endpointQuery,
+      ),
+  };
+}
+
+function renderSelectedReport(
+  selected:
+    Awaited<
+      ReturnType<
+        typeof loadSelectedReport
+      >
+    >,
+
+  query:
+    ResolvedPaymentReportQuery,
+) {
+  if (
+    !selected.result.ok ||
+    !selected.result.data
+  ) {
+    return (
+      <Alert
+        variant="error"
+        title="Report unavailable"
+      >
+        The selected payment report could not be loaded.
+      </Alert>
+    );
+  }
+
+  if (
+    selected.tab ===
+    "outstanding"
+  ) {
+    return (
+      <PaymentOutstandingTable
+        report={
+          selected.result.data
+        }
+        query={query}
+      />
+    );
+  }
+
+  return (
+    <PaymentCollectionsTable
+      report={
+        selected.result.data
+      }
+      query={query}
+    />
+  );
+}
+
+function reportPeriod(
+  query:
+    ResolvedPaymentReportQuery,
+) {
+  if (
+    query.dateFrom &&
+    query.dateTo
+  ) {
+    return (
+      `${formatPaymentDate(
+        query.dateFrom,
+      )} – ${formatPaymentDate(
+        query.dateTo,
+      )}`
+    );
+  }
+
+  if (query.dateFrom) {
+    return (
+      `From ${formatPaymentDate(
+        query.dateFrom,
+      )}`
+    );
+  }
+
+  if (query.dateTo) {
+    return (
+      `Until ${formatPaymentDate(
+        query.dateTo,
+      )}`
+    );
+  }
+
+  return "All recorded payments";
 }
