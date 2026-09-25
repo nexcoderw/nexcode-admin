@@ -16,6 +16,11 @@ export const PAYMENT_ROUTES = {
     reports:
         "/payments/reports",
 
+    reportsForPortfolio: (
+        portfolioId: number,
+    ) =>
+        `/payments/reports?portfolioId=${portfolioId}`,
+
     statement: (
         portfolioId: number,
     ) =>
