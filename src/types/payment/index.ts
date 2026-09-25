@@ -5,3 +5,4 @@ export * from "@/types/payment/reminder";
 export * from "@/types/payment/schedule";
 export * from "@/types/payment/shared";
 export * from "@/types/payment/summary";
+export * from "@/types/payment/report";
