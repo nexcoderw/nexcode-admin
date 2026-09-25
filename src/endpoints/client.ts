@@ -50,39 +50,72 @@ export interface BackendBinaryResult {
     contentType: string | null;
 }
 
+export interface BackendBinaryRequestOptions {
+    forwarded?: Headers;
+    headers?: HeadersInit;
+    accept?: string;
+}
+
 export async function backendBinaryRequest(
     path: string,
+    options:
+        BackendBinaryRequestOptions = {},
 ): Promise<BackendBinaryResult> {
     const controller =
         new AbortController();
 
     const timeout = setTimeout(
-        () => controller.abort(),
+        () =>
+            controller.abort(),
         BACKEND_REQUEST_TIMEOUT_MS,
     );
 
-    try {
-        const response = await fetch(
-            buildBackendUrl(path),
-            {
-                method: "GET",
-                headers: {
-                    Accept:
-                        "image/avif,image/webp,image/png,image/jpeg",
-                },
-                cache: "no-store",
-                signal:
-                    controller.signal,
-            },
+    const headers =
+        new Headers(
+            options.headers,
         );
+
+    headers.set(
+        "Accept",
+        options.accept ??
+        "image/avif,image/webp,image/png,image/jpeg",
+    );
+
+    if (
+        options.forwarded
+    ) {
+        forwardRequestHeaders(
+            options.forwarded,
+            headers,
+        );
+    }
+
+    try {
+        const response =
+            await fetch(
+                buildBackendUrl(
+                    path,
+                ),
+                {
+                    method: "GET",
+                    headers,
+                    cache: "no-store",
+                    signal:
+                        controller.signal,
+                },
+            );
 
         return {
             ok: response.ok,
-            status: response.status,
 
-            body: response.ok
-                ? await response.arrayBuffer()
-                : null,
+            status:
+                response.status,
+
+            body:
+                response.ok
+                    ? await response
+                        .arrayBuffer()
+                    : null,
 
             contentType:
                 response.headers.get(
@@ -91,7 +124,7 @@ export async function backendBinaryRequest(
         };
     } catch (error) {
         console.error(
-            "Backend media request failed.",
+            "Backend binary request failed.",
             {
                 route: path,
 
@@ -104,7 +137,9 @@ export async function backendBinaryRequest(
 
         throw error;
     } finally {
-        clearTimeout(timeout);
+        clearTimeout(
+            timeout,
+        );
     }
 }
 
