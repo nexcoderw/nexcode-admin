@@ -40,6 +40,14 @@ export function PaymentHeader({
       </div>
 
       <div className={styles.actions}>
+        <Button
+          href={PAYMENT_ROUTES.reports}
+          variant="secondary"
+          leftIcon={<Icon icon={File01Icon} size={17} />}
+        >
+          Reports
+        </Button>
+
         <PaymentFilter query={query} portfolios={portfolios} />
 
         <Button
@@ -47,13 +55,6 @@ export function PaymentHeader({
           leftIcon={<Icon icon={Add01Icon} size={17} />}
         >
           Add agreement
-        </Button>
-        <Button
-          href={PAYMENT_ROUTES.reports}
-          variant="secondary"
-          leftIcon={<Icon icon={File01Icon} size={17} />}
-        >
-          Reports
         </Button>
       </div>
     </header>
