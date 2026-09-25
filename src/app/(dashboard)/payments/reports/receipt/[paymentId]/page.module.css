@@ -1,0 +1,29 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+
+  width: 100%;
+  max-width: 54rem;
+  margin-inline: auto;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+@media print {
+  .actions {
+    display: none;
+  }
+}
+
+@media (max-width: 36rem) {
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
