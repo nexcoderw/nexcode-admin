@@ -1,19 +1,8 @@
-import {
-  render,
-  screen,
-} from "@testing-library/react";
-import {
-  describe,
-  expect,
-  it,
-} from "vitest";
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
-import {
-  PaymentReceipt,
-} from "@/components/payment/PaymentReceipt/PaymentReceipt";
-import {
-  PaymentStatement,
-} from "@/components/payment/PaymentStatement/PaymentStatement";
+import { PaymentReceipt } from "@/components/payment/PaymentReceipt/PaymentReceipt";
+import { PaymentStatement } from "@/components/payment/PaymentStatement/PaymentStatement";
 import {
   PAYMENT_API_ROUTES,
   PAYMENT_ROUTES,
@@ -23,423 +12,221 @@ import type {
   PaymentReceipt as PaymentReceiptData,
 } from "@/types/payment/report";
 
-const receipt:
-  PaymentReceiptData = {
-    receiptNumber:
-      "NEX-PAY-000012",
+const receipt: PaymentReceiptData = {
+  receiptNumber: "NEX-PAY-000012",
 
-    issuedAt:
-      "2026-09-25T10:00:00Z",
+  issuedAt: "2026-09-25T10:00:00Z",
 
-    portfolio: {
-      id: 4,
-      name:
-        "Client Portal",
+  portfolio: {
+    id: 4,
+    name: "Client Portal",
+  },
+
+  agreement: {
+    id: 7,
+    title: "Development Contract",
+
+    reference: "NEX-2026-007",
+  },
+
+  payment: {
+    id: 12,
+
+    amount: "500000.00",
+
+    currency: "RWF",
+
+    paidAt: "2026-09-25T09:00:00Z",
+
+    paymentMethod: "bank_transfer",
+
+    reference: "BK-001",
+
+    status: "posted",
+
+    voidedAt: null,
+
+    voidReason: null,
+
+    recordedBy: "admin",
+  },
+
+  allocations: [
+    {
+      installmentId: 31,
+
+      installmentTitle: "Down payment",
+
+      amount: "500000.00",
     },
+  ],
+};
 
-    agreement: {
+const statement: PaymentPortfolioStatement = {
+  generatedAt: "2026-09-25T10:30:00Z",
+
+  portfolio: {
+    id: 4,
+    name: "Client Portal",
+
+    slug: "client-portal",
+  },
+
+  currencies: [
+    {
+      currency: "RWF",
+
+      totalContracted: "2000000.00",
+
+      totalReceived: "500000.00",
+
+      outstanding: "1500000.00",
+    },
+  ],
+
+  agreements: [
+    {
       id: 7,
-      title:
-        "Development Contract",
 
-      reference:
-        "NEX-2026-007",
+      title: "Development Contract",
+
+      reference: "NEX-2026-007",
+
+      status: "active",
+
+      currency: "RWF",
+
+      totalAmount: "2000000.00",
+
+      receivedAmount: "500000.00",
+
+      outstandingAmount: "1500000.00",
+
+      startDate: "2026-09-01",
+
+      endDate: null,
     },
+  ],
 
-    payment: {
+  payments: [
+    {
       id: 12,
 
-      amount:
-        "500000.00",
+      receiptNumber: "NEX-PAY-000012",
 
-      currency:
-        "RWF",
+      agreementId: 7,
 
-      paidAt:
-        "2026-09-25T09:00:00Z",
+      agreementTitle: "Development Contract",
 
-      paymentMethod:
-        "bank_transfer",
+      currency: "RWF",
 
-      reference:
-        "BK-001",
+      amount: "500000.00",
 
-      status:
-        "posted",
+      paidAt: "2026-09-25T09:00:00Z",
 
-      voidedAt:
-        null,
+      status: "posted",
 
-      voidReason:
-        null,
+      paymentMethod: "bank_transfer",
 
-      recordedBy:
-        "admin",
+      reference: "BK-001",
     },
+  ],
+};
 
-    allocations: [
-      {
-        installmentId: 31,
+describe("payment reporting routes", () => {
+  it("defines the reporting page", () => {
+    expect(PAYMENT_ROUTES.reports).toBe("/payments/reports");
+  });
 
-        installmentTitle:
-          "Down payment",
+  it("builds a Portfolio statement route", () => {
+    expect(PAYMENT_ROUTES.statement(4)).toBe("/payments/reports/statement/4");
+  });
 
-        amount:
-          "500000.00",
-      },
-    ],
-  };
+  it("builds a payment receipt route", () => {
+    expect(PAYMENT_ROUTES.receipt(12)).toBe("/payments/reports/receipt/12");
+  });
 
-const statement:
-  PaymentPortfolioStatement = {
-    generatedAt:
-      "2026-09-25T10:30:00Z",
+  it("builds a payment report portfolio route", () => {
+    expect(PAYMENT_ROUTES.reportsForPortfolio(4)).toBe(
+      "/payments/reports?portfolioId=4",
+    );
+  });
 
-    portfolio: {
-      id: 4,
-      name:
-        "Client Portal",
+  it("builds the statement BFF route", () => {
+    expect(PAYMENT_API_ROUTES.reportStatement(4)).toBe(
+      "/api/payment/report/statement/4",
+    );
+  });
 
-      slug:
-        "client-portal",
-    },
+  it("builds the receipt BFF route", () => {
+    expect(PAYMENT_API_ROUTES.reportReceipt(12)).toBe(
+      "/api/payment/report/receipt/12",
+    );
+  });
+});
 
-    currencies: [
-      {
-        currency:
-          "RWF",
+describe("PaymentReceipt", () => {
+  it("renders the receipt identity", () => {
+    render(<PaymentReceipt receipt={receipt} />);
 
-        totalContracted:
-          "2000000.00",
+    expect(screen.getByText("Payment receipt")).toBeInTheDocument();
 
-        totalReceived:
-          "500000.00",
+    expect(screen.getByText("NEX-PAY-000012")).toBeInTheDocument();
+  });
 
-        outstanding:
-          "1500000.00",
-      },
-    ],
+  it("renders the Portfolio and agreement", () => {
+    render(<PaymentReceipt receipt={receipt} />);
 
-    agreements: [
-      {
-        id: 7,
+    expect(screen.getByText("Client Portal")).toBeInTheDocument();
 
-        title:
-          "Development Contract",
+    expect(screen.getByText("Development Contract")).toBeInTheDocument();
+  });
 
-        reference:
-          "NEX-2026-007",
+  it("renders the payment allocation", () => {
+    render(<PaymentReceipt receipt={receipt} />);
 
-        status:
-          "active",
+    expect(screen.getByText("Down payment")).toBeInTheDocument();
+  });
 
-        currency:
-          "RWF",
+  it("renders the transaction reference", () => {
+    render(<PaymentReceipt receipt={receipt} />);
 
-        totalAmount:
-          "2000000.00",
+    expect(screen.getByText("BK-001")).toBeInTheDocument();
+  });
+});
 
-        receivedAmount:
-          "500000.00",
+describe("PaymentStatement", () => {
+  it("renders the Portfolio statement identity", () => {
+    render(<PaymentStatement statement={statement} />);
 
-        outstandingAmount:
-          "1500000.00",
+    expect(screen.getByText("Payment statement")).toBeInTheDocument();
 
-        startDate:
-          "2026-09-01",
+    expect(screen.getByText("Client Portal")).toBeInTheDocument();
+  });
 
-        endDate:
-          null,
-      },
-    ],
+  it("renders agreement information", () => {
+    render(<PaymentStatement statement={statement} />);
 
-    payments: [
-      {
-        id: 12,
-
-        receiptNumber:
-          "NEX-PAY-000012",
-
-        agreementId: 7,
-
-        agreementTitle:
-          "Development Contract",
-
-        currency:
-          "RWF",
-
-        amount:
-          "500000.00",
-
-        paidAt:
-          "2026-09-25T09:00:00Z",
-
-        status:
-          "posted",
-
-        paymentMethod:
-          "bank_transfer",
-
-        reference:
-          "BK-001",
-      },
-    ],
-  };
-
-describe(
-  "payment reporting routes",
-  () => {
-    it(
-      "defines the reporting page",
-      () => {
-        expect(
-          PAYMENT_ROUTES.reports,
-        ).toBe(
-          "/payments/reports",
-        );
-      },
+    expect(screen.getAllByText("Development Contract").length).toBeGreaterThan(
+      0,
     );
 
-    it(
-      "builds a Portfolio statement route",
-      () => {
-        expect(
-          PAYMENT_ROUTES.statement(
-            4,
-          ),
-        ).toBe(
-          "/payments/reports/statement/4",
-        );
-      },
-    );
+    expect(screen.getByText("active")).toBeInTheDocument();
+  });
 
-    it(
-      "builds a payment receipt route",
-      () => {
-        expect(
-          PAYMENT_ROUTES.receipt(
-            12,
-          ),
-        ).toBe(
-          "/payments/reports/receipt/12",
-        );
-      },
-    );
+  it("renders the receipt link", () => {
+    render(<PaymentStatement statement={statement} />);
 
-    it(
-      "builds the statement BFF route",
-      () => {
-        expect(
-          PAYMENT_API_ROUTES
-            .reportStatement(
-              4,
-            ),
-        ).toBe(
-          "/api/payment/report/statement/4",
-        );
-      },
-    );
+    const link = screen.getByRole("link", {
+      name: "NEX-PAY-000012",
+    });
 
-    it(
-      "builds the receipt BFF route",
-      () => {
-        expect(
-          PAYMENT_API_ROUTES
-            .reportReceipt(
-              12,
-            ),
-        ).toBe(
-          "/api/payment/report/receipt/12",
-        );
-      },
-    );
-  },
-);
+    expect(link).toHaveAttribute("href", "/payments/reports/receipt/12");
+  });
 
-describe(
-  "PaymentReceipt",
-  () => {
-    it(
-      "renders the receipt identity",
-      () => {
-        render(
-          <PaymentReceipt
-            receipt={receipt}
-          />,
-        );
+  it("keeps the currency visible", () => {
+    render(<PaymentStatement statement={statement} />);
 
-        expect(
-          screen.getByText(
-            "Payment receipt",
-          ),
-        ).toBeInTheDocument();
-
-        expect(
-          screen.getByText(
-            "NEX-PAY-000012",
-          ),
-        ).toBeInTheDocument();
-      },
-    );
-
-    it(
-      "renders the Portfolio and agreement",
-      () => {
-        render(
-          <PaymentReceipt
-            receipt={receipt}
-          />,
-        );
-
-        expect(
-          screen.getByText(
-            "Client Portal",
-          ),
-        ).toBeInTheDocument();
-
-        expect(
-          screen.getByText(
-            "Development Contract",
-          ),
-        ).toBeInTheDocument();
-      },
-    );
-
-    it(
-      "renders the payment allocation",
-      () => {
-        render(
-          <PaymentReceipt
-            receipt={receipt}
-          />,
-        );
-
-        expect(
-          screen.getByText(
-            "Down payment",
-          ),
-        ).toBeInTheDocument();
-      },
-    );
-
-    it(
-      "renders the transaction reference",
-      () => {
-        render(
-          <PaymentReceipt
-            receipt={receipt}
-          />,
-        );
-
-        expect(
-          screen.getByText(
-            "BK-001",
-          ),
-        ).toBeInTheDocument();
-      },
-    );
-  },
-);
-
-describe(
-  "PaymentStatement",
-  () => {
-    it(
-      "renders the Portfolio statement identity",
-      () => {
-        render(
-          <PaymentStatement
-            statement={
-              statement
-            }
-          />,
-        );
-
-        expect(
-          screen.getByText(
-            "Payment statement",
-          ),
-        ).toBeInTheDocument();
-
-        expect(
-          screen.getByText(
-            "Client Portal",
-          ),
-        ).toBeInTheDocument();
-      },
-    );
-
-    it(
-      "renders agreement information",
-      () => {
-        render(
-          <PaymentStatement
-            statement={
-              statement
-            }
-          />,
-        );
-
-        expect(
-          screen.getAllByText(
-            "Development Contract",
-          ).length,
-        ).toBeGreaterThan(0);
-
-        expect(
-          screen.getByText(
-            "active",
-          ),
-        ).toBeInTheDocument();
-      },
-    );
-
-    it(
-      "renders the receipt link",
-      () => {
-        render(
-          <PaymentStatement
-            statement={
-              statement
-            }
-          />,
-        );
-
-        const link =
-          screen.getByRole(
-            "link",
-            {
-              name:
-                "NEX-PAY-000012",
-            },
-          );
-
-        expect(
-          link,
-        ).toHaveAttribute(
-          "href",
-          "/payments/reports/receipt/12",
-        );
-      },
-    );
-
-    it(
-      "keeps the currency visible",
-      () => {
-        render(
-          <PaymentStatement
-            statement={
-              statement
-            }
-          />,
-        );
-
-        expect(
-          screen.getAllByText(
-            /RWF/,
-          ).length,
-        ).toBeGreaterThan(0);
-      },
-    );
-  },
-);
+    expect(screen.getAllByText(/RWF/).length).toBeGreaterThan(0);
+  });
+});
